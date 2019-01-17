@@ -34,8 +34,8 @@ class NewsLatestListAPI(APIView):
         return self.success(self.paginate_data(request, latest_news, NewsListSerializer))
 
 
-class ImportantNewsListAPI(APIView):
-    def get(self, request):
-        data = request.data
-        important_news = News.objects.filter(is_important=1)
-        return self.success(self.paginate_data(request, important_news, NewsListSerializer))
+# class ImportantNewsListAPI(APIView):
+#     def get(self, request):
+#         data = request.data
+#         important_news = News.objects.filter(is_important=1)
+#         return self.success(self.paginate_data(request, important_news, NewsListSerializer))

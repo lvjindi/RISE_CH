@@ -14,6 +14,7 @@ class Exchange(models.Model):
     image = models.TextField(null=True)
     sliderFlag = models.BooleanField(default=False)
     type = models.CharField(max_length=10)
+    news_id = models.IntegerField(null=True)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 

@@ -5,6 +5,7 @@ from exchanges.models import ExchangeType
 
 class ExchangeListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    news_id = serializers.IntegerField()
     title = serializers.CharField(max_length=128)
     type = serializers.ChoiceField(choices=[ExchangeType.Missions, ExchangeType.Visitors])
     create_time = serializers.DateTimeField()
@@ -12,6 +13,7 @@ class ExchangeListSerializer(serializers.Serializer):
 
 class ExchangeDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    news_id = serializers.IntegerField()
     content = serializers.CharField(max_length=1024 * 1024 * 8)
     type = serializers.ChoiceField(choices=[ExchangeType.Missions, ExchangeType.Visitors])
     views_number = serializers.IntegerField()
@@ -29,6 +31,7 @@ class CreateExchangeSerializer(serializers.Serializer):
 
 class ExchangeSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    news_id = serializers.IntegerField()
     title = serializers.CharField(max_length=128)
     content = serializers.CharField(max_length=1024 * 1024 * 8)
     type = serializers.ChoiceField(choices=[ExchangeType.Missions, ExchangeType.Visitors])

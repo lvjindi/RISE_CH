@@ -8,7 +8,8 @@ class News(models.Model):
     views_number = models.IntegerField(null=True)
     image = models.TextField(null=True)
     sliderFlag = models.BooleanField(default=False)
-    is_important = models.BooleanField(default=0)
+    type = models.TextField(null=True)
+    # is_important = models.BooleanField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 

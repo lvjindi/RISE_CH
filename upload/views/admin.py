@@ -7,7 +7,7 @@ from utils.api.api import APIView
 class UploadAdminAPI(APIView ):
     def post(self, request):
         # File=request.data['myfile']
-        File = request.FILES.get("myfile", None)
+        File = request.FILES['myfile']
         if File is None:
             return self.error("没有需要上传的文件")
         else:
