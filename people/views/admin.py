@@ -10,7 +10,7 @@ from utils.api.api import APIView, validate_serializer
 
 
 class PeopleAdminAPI(APIView):
-    @validate_serializer(CreatePeopleSerializer)
+    # @validate_serializer(CreatePeopleSerializer)
     @super_admin_required
     def post(self, request):
         "publish people "
@@ -18,7 +18,7 @@ class PeopleAdminAPI(APIView):
         people = People.objects.create(**data)
         return self.success(PeopleSerializer(people).data)
 
-    @validate_serializer(PeopleSerializer)
+    # @validate_serializer(PeopleSerializer)
     @login_required
     def put(self, request):
         "edit people：1.超级管理员可以全部修改2.不是管理员只能修改自己的"

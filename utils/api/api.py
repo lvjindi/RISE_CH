@@ -1,3 +1,4 @@
+import base64
 import functools
 import json
 import logging
@@ -23,6 +24,7 @@ class ContentType(object):
     json_response = "application/json;charset=UTF-8"
     url_encoded_request = "application/x-www-form-urlencoded"
     binary_response = "application/octet-stream"
+    mutipart_request = "multipart/form-data"
 
 
 class JSONParser(object):
@@ -39,6 +41,22 @@ class URLEncodedParser(object):
     @staticmethod
     def parse(body):
         return QueryDict(body)
+
+
+class MultipartFormDataParser(object):
+    content_type = ContentType.mutipart_request
+
+    @staticmethod
+    def parse(body, content, request):
+        file = request.FILES.get('file')
+        title = request.POST.get('title')
+        boundary = content.strip("multipart/form-data;")
+        print(boundary)
+        body = str(body, encoding="utf-8")
+        print(body)
+        newbody = body.strip(boundary)
+        print(newbody)
+        return newbody
 
 
 class JSONResponse(object):
@@ -60,7 +78,7 @@ class APIView(View):
      - self.response 返回一个django HttpResponse, 具体在self.response_class中实现
      - parse请求的类需要定义在request_parser中, 目前只支持json和urlencoded的类型, 用来解析请求的数据
     """
-    request_parsers = (JSONParser, URLEncodedParser)
+    request_parsers = (JSONParser, URLEncodedParser, MultipartFormDataParser)
     response_class = JSONResponse
 
     def _get_request_data(self, request):
@@ -76,6 +94,7 @@ class APIView(View):
             # else means the for loop is not interrupted by break
             else:
                 raise ValueError("unknown content_type '%s'" % content_type)
+            print(parser.content_type)
             if body:
                 return parser.parse(body)
             return {}
@@ -85,7 +104,7 @@ class APIView(View):
         return self.response_class.response(data)
 
     def success(self, data=None):
-        return self.response({"error": None, "data": data})
+        return self.response(data)
 
     def error(self, msg="error", err="error"):
         return self.response({"error": err, "data": msg})
@@ -133,14 +152,15 @@ class APIView(View):
             results = object_serializer(results, many=True).data
         else:
             count = query_set.count()
-        data = {"results": results,
-                "total": count}
+        data = results
         return data
 
+    @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         if self.request_parsers:
             try:
-                request.data = self._get_request_data(self.request)
+                if not request.META.get("CONTENT_TYPE").startswith('multipart/form-data'):
+                    request.data = self._get_request_data(self.request)
             except ValueError as e:
                 return self.error(err="invalid-request", msg=str(e))
         try:
@@ -167,19 +187,20 @@ def validate_serializer(serializer):
     def post(self, request):
         return self.success(request.data)
     """
-    def validate(view_method):
-        @functools.wraps(view_method)
-        def handle(*args, **kwargs):
-            self = args[0]
-            request = args[1]
-            s = serializer(data=request.data)
-            if s.is_valid():
-                request.data = s.data
-                request.serializer = s
-                return view_method(*args, **kwargs)
-            else:
-                return self.invalid_serializer(s)
 
-        return handle
-
-    return validate
+    # def validate(view_method):
+    #     @functools.wraps(view_method)
+    #     def handle(*args, **kwargs):
+    #         self = args[0]
+    #         request = args[1]
+    #         s = serializer(data=request.data)
+    #         if s.is_valid():
+    #             request.data = s.data
+    #             request.serializer = s
+    #             return view_method(*args, **kwargs)
+    #         else:
+    #             return self.invalid_serializer(s)
+    #
+    #     return handle
+    #
+    # return validate

@@ -9,8 +9,8 @@ from utils.api.api import APIView, validate_serializer
 
 
 class JoinAdminAPI(APIView):
-    @validate_serializer(CreateJoinSerializer)
-    @validate_serializer(CreateNewsSerializer)
+    # @validate_serializer(CreateJoinSerializer)
+    # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
         data = request.data
@@ -20,7 +20,7 @@ class JoinAdminAPI(APIView):
         join.save()
         return self.success(JoinDetailSerializer(join).data)
 
-    @validate_serializer(CreateJoinSerializer)
+    # @validate_serializer(CreateJoinSerializer)
     @super_admin_required
     def put(self, request):
         data = request.data

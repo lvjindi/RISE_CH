@@ -3,8 +3,8 @@ from django.db import models
 
 # Create your models here.
 class ExchangeType(object):
-    Missions = 'Missions'
-    Visitors = 'Visitors'
+    Missions = 'Mission'
+    Visitors = 'Visitor'
 
 
 class Exchange(models.Model):

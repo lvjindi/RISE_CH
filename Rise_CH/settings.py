@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -62,8 +62,8 @@ ROOT_URLCONF = 'Rise_CH.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'static').replace('\\', '/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,7 +72,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-
 
         },
     },
@@ -145,3 +144,14 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     )
 }
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
+STATICFILES_DIRS = (
+    ('css', os.path.join(STATIC_ROOT, 'css').replace('\\', '/')),
+    ('images', os.path.join(STATIC_ROOT, 'images').replace('\\', '/')),
+    ('time', os.path.join(STATIC_ROOT, 'time').replace('\\', '/')),
+    ('js', os.path.join(STATIC_ROOT, 'js').replace('\\', '/')),
+    ('ueditor', os.path.join(STATIC_ROOT, 'ueditor').replace('\\', '/')),
+)
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760

@@ -1,0 +1,138 @@
+<!DOCTYPE>
+<html>
+<head>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/css.css"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" charset="utf-8" src="ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="ueditor/ueditor.all.min.js"></script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="ueditor/lang/zh-cn/zh-cn.js"></script>
+    <link rel="stylesheet" href="time/css/BeatPicker.min.css"/>
+    <script src="time/js/jque ry-1.11.0.min.js"></script>
+    <script src="time/js/BeatPicker.min.js"></script>
+    <script src="time/documents/js/prism.js"></script>
+</head>
+
+<body onload="NavLink()">
+<!--HeadBegin-->
+<div id="Head">
+    <div id="Title"><img src="images/logo.png"/>RISE网站后台管理系统</div>
+    <div id="login" >登录</div>
+    <div id="exit"><img src="images/exit.png"/>退出</div>
+    <div id="Banner"><img src="images/index.png"/>首页预览</div>
+</div>
+
+<!--HeadEnd-->
+
+<!--MainBegin-->
+<div id="Main">
+    <div id="MainLeft">
+        <ul>
+            <li></li>
+            <li></li>
+            <li onclick="DisplaySecond()"></li>
+            <ul id="secondTile">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <li onclick="DisplayThird()"></li>
+            <ul id="thirdTile">
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <li></li>
+        </ul>
+
+    </div>
+
+    <div id="MainRight">
+        <div id="articleEditor">
+            <form id="newsForm" method="post" action="http://127.0.0.1:8000/api/admin/news" enctype="multipart/form-data">
+                <span>标题</span><input type="text" name="articleTitle" id="articleTitle"><br>
+                <span>分类</span>
+                <select id="type" name="articleClass" onchange="showSubclass(this.value);">
+                    <option value="zxdt">中心动态</option>
+                    <option value="xsbg">学术报告</option>
+                    <option value="xshy">学术会议</option>
+                    <option value="xsjl">学术交流</option>
+                    <option value="kxyj">科学研究</option>
+                    <option value="znxs">招纳贤士</option>
+                    <option value="gywm">关于我们</option>
+                </select>
+                <br>
+                <span>标题图片</span><input type="file" name="file" id="image"><br>
+                <span style="margin-top: 20px">新闻内容</span>
+                <div id="editor" type="text/plain" style="margin-left:110px;width:90%;height:400px;margin-top: -13px"
+                     name="myeditor"></div>
+                <input type="submit" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交">
+
+            </form>
+
+            <script type="text/javascript">
+                var ue = UE.getEditor('editor');//实例化编辑
+            </script>
+            <!--编辑器end-->
+            <script lang="text/javascript">
+                // var csrf = $('input[name=csrfmiddlewaretoken]').val();
+                // var title=document.getElementById("articleTitle").value
+                // var type=document.getElementById("type").value
+                // var image=document.getElementById("image").value
+                // var content=document.getElementById("editor").value
+                // var data = {
+                //     "title":title,
+                //     "type":type,
+                //     "image":image,
+                //     "content":content,
+                //     "csrfmiddlewaretoken":csrf
+                // };
+
+                // data = $('#newsForm').serialize();
+                var formData=new FormData();
+                formData.append('title',$('#title').val())
+                formData.append('type',$('#type').val())
+                formData.append('image',document.getElementById("image").files[0])
+                formData.append('content',$('#content').val())
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://127.0.0.1:8000/api/admin/news',
+                    data: formData,
+                    dataType: 'jsonp',
+                    contentType:false,
+                    processData:false,
+                    jsonpCallback:'callback',
+                    success: function (data) {
+                        console.log(data)
+                    },
+                    error: function (xhr, type) {
+
+                    }
+                })
+
+
+            </script>
+        </div>
+
+    </div>
+
+    <!--MainEnd-->
+
+    <!--Begin-->
+    <div id="bottom">
+
+    </div>
+
+    <!--End-->
+    <script src="js/admin.js"></script>
+</body>
+
+
+</html>

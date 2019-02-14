@@ -1,0 +1,15 @@
+
+var title=document.getElementById("MainLeft").getElementsByTagName("li");//获取标题的DIV
+var LinkArry=["htgl.php","xwfb.php","#","zxdt.php","xwfb.php","xwfb.php","xwfb.php","xwfb.php","xwfb.php"]; //创建超链接数组
+
+var n=title.length;
+
+for(i=0;i<n;i++){                                           //遍历添加超链接
+	
+    var a=document.createElement("a");
+	a.href=LinkArry[i];
+	a.innerHTML=title[i].innerHTML;
+	title[i].innerHTML="";
+	title[i].appendChild(a);
+};
+

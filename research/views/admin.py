@@ -10,7 +10,7 @@ from utils.api.api import APIView, validate_serializer
 
 
 class ResearchAdminAPI(APIView):
-    @validate_serializer(CreateResearchSerializer)
+    # @validate_serializer(CreateResearchSerializer)
     @super_admin_required
     def post(self, request):
         "publish research"
@@ -19,7 +19,7 @@ class ResearchAdminAPI(APIView):
                                                content=data['content'], title=data["title"])
         return self.success(IntroductionSerializer(research).data)
 
-    @validate_serializer(EditIntroductionSerializer)
+    # @validate_serializer(EditIntroductionSerializer)
     @super_admin_required
     def put(self, request):
         "edit research"
@@ -49,7 +49,7 @@ class ResearchAdminAPI(APIView):
 
 
 class ProjectAdminAPI(APIView):
-    @validate_serializer(CreateProjectSerializer)
+    # @validate_serializer(CreateProjectSerializer)
     @super_admin_required
     def post(self, request):
         'publish project'
@@ -60,7 +60,7 @@ class ProjectAdminAPI(APIView):
                                           abstract=data['abstract'])
         return self.success(ProjectSerializer(project).data)
 
-    @validate_serializer(CreateProjectSerializer)
+    # @validate_serializer(CreateProjectSerializer)
     @super_admin_required
     def put(self, request):
         'edit project'
@@ -91,7 +91,7 @@ class ProjectAdminAPI(APIView):
 
 
 class PublicationAdminAPI(APIView):
-    @validate_serializer(CreatePublicationSerializer)
+    # @validate_serializer(CreatePublicationSerializer)
     @super_admin_required
     def post(self, request):
         'publish Publications'
@@ -99,7 +99,7 @@ class PublicationAdminAPI(APIView):
         publication = Publications.objects.create(**data)
         return self.success(PublicationSerializer(publication).data)
 
-    @validate_serializer(CreatePublicationSerializer)
+    # @validate_serializer(CreatePublicationSerializer)
     @super_admin_required
     def put(self, request):
         'edit Publications'
@@ -135,7 +135,7 @@ class PublicationAdminAPI(APIView):
 
 
 class ReportAdminAPI(APIView):
-    @validate_serializer(CreateReportSerializer)
+    # @validate_serializer(CreateReportSerializer)
     @super_admin_required
     def post(self, request):
         'publish report'
@@ -143,7 +143,7 @@ class ReportAdminAPI(APIView):
         report = Reports.objects.create(**data)
         return self.success(ReportSerializer(report).data)
 
-    @validate_serializer(CreateReportSerializer)
+    # @validate_serializer(CreateReportSerializer)
     @super_admin_required
     def put(self, request):
         'edit report'

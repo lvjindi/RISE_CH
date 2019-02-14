@@ -9,8 +9,8 @@ from utils.api.api import APIView, validate_serializer
 
 
 class ExchangeAdminAPI(APIView):
-    @validate_serializer(CreateExchangeSerializer)
-    @validate_serializer(CreateNewsSerializer)
+    # @validate_serializer(CreateExchangeSerializer)
+    # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
         data = request.data
@@ -20,7 +20,7 @@ class ExchangeAdminAPI(APIView):
         exchange.save()
         return self.success(ExchangeSerializer(exchange).data)
 
-    @validate_serializer(CreateExchangeSerializer)
+    # @validate_serializer(CreateExchangeSerializer)
     @super_admin_required
     def put(self, request):
         data = request.data
@@ -35,9 +35,6 @@ class ExchangeAdminAPI(APIView):
             return self.success(ExchangeSerializer(exchange).data)
         except Exchange.DoesNotExist:
             return self.error("Exchange does not exist")
-
-    # def get(self, request):
-    #     return render(request, 'exchange.html')
 
     @login_required
     def get(self, request):
@@ -65,3 +62,8 @@ class ExchangeAdminAPI(APIView):
             exchange.delete()
             news.delete()
             return self.success()
+
+
+class ExchangeManageAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'exchangeManagement.html')

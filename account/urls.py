@@ -1,5 +1,5 @@
-
 from django.conf.urls import url
+
 
 from account.views.admin import UserLoginAPI, UserLogoutAPI, UserChangePasswordAPI, UserRegisterAPI, UserChangeRoleAPI
 

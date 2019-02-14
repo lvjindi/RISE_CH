@@ -4,6 +4,7 @@ from rest_framework import serializers
 class NewsListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField(max_length=128)
+    views_number = serializers.IntegerField()
     # is_important = serializers.BooleanField()
     create_time = serializers.DateTimeField()
 
@@ -16,6 +17,8 @@ class NewsDetailSerializer(serializers.Serializer):
     views_number = serializers.IntegerField()
     image = serializers.CharField(max_length=128)
     sliderFlag = serializers.BooleanField()
+    create_time = serializers.DateTimeField()
+
 
 class CreateNewsSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=128)

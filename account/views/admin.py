@@ -1,5 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import auth
 from rest_framework.exceptions import ValidationError
@@ -15,7 +16,7 @@ class UserLoginAPI(APIView):
     def get(self, request):
         return render(request, 'login/login.html')
 
-    @validate_serializer(UserLoginSerializer)
+    # @validate_serializer(UserLoginSerializer)
     def post(self, request):
         data = request.data
         username = request.POST.get('username')
@@ -29,7 +30,7 @@ class UserLoginAPI(APIView):
                 #     print("chenggong ")
                 # else:
                 #     print("shibai")
-                return self.success('Succeeded')
+                return HttpResponseRedirect('/api/admin/index')
             else:
                 return self.error("账户未激活")
         else:
@@ -44,7 +45,7 @@ class UserLogoutAPI(APIView):
 
 class UserChangePasswordAPI(APIView):
     @login_required
-    @validate_serializer(UserChangePasswordSerializer)
+    # @validate_serializer(UserChangePasswordSerializer)
     def post(self, request):
         data = request.data
         user = auth.authenticate(username=request.user.username, password=data['password'])
@@ -61,7 +62,7 @@ class UserRegisterAPI(APIView):
     def get(self, request):
         return render(request, 'login/register.html')
 
-    @validate_serializer(UserRegisterSerializer)
+    # @validate_serializer(UserRegisterSerializer)
     def post(self, request):
         """
         User register api
@@ -84,7 +85,7 @@ class UserRegisterAPI(APIView):
 
 
 class UserChangeRoleAPI(APIView):
-    @validate_serializer(ChangeUserRoleSerializer)
+    # @validate_serializer(ChangeUserRoleSerializer)
     @super_admin_required
     def put(self, request):
         data = request.data

@@ -7,6 +7,7 @@ class SeminarsListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     news_id = serializers.IntegerField()
     title = serializers.CharField(max_length=128)
+    views_number = serializers.IntegerField()
     create_time = serializers.DateTimeField()
 
 
@@ -15,7 +16,7 @@ class SeminarsDetailSerializer(serializers.Serializer):
     news_id = serializers.IntegerField()
     content = serializers.CharField(max_length=1024 * 1024 * 8)
     views_number = serializers.IntegerField()
-    image = serializers.CharField(max_length=128)
+    image = serializers.ImageField()
     sliderFlag = serializers.BooleanField()
 
 
@@ -28,5 +29,5 @@ class SeminarsSerializer(serializers.ModelSerializer):
 class CreateSeminarsSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=128)
     content = serializers.CharField(max_length=1024 * 1024 * 8)
-    image = serializers.CharField(max_length=128)
+    image = serializers.ImageField()
     sliderFlag = serializers.BooleanField()

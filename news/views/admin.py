@@ -1,3 +1,5 @@
+from django.shortcuts import render
+
 from account.decorators import super_admin_required, login_required
 from news.models import News
 from news.serializers import CreateNewsSerializer, NewsDetailSerializer
@@ -5,14 +7,14 @@ from utils.api.api import APIView, validate_serializer
 
 
 class NewsAdminAPI(APIView):
-    @validate_serializer(CreateNewsSerializer)
+    # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
         data = request.data
         news = News.objects.create(**data)
         return self.success(NewsDetailSerializer(news).data)
 
-    @validate_serializer(CreateNewsSerializer)
+    # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def put(self, request):
         data = request.data
@@ -44,3 +46,13 @@ class NewsAdminAPI(APIView):
         if news_id:
             News.objects.filter(id=news_id).delete()
             return self.success()
+
+
+class NewsPublicAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'newsPublic.html')
+
+
+class NewsManageAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'newsMangement.html')

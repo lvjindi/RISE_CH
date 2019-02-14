@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from account.decorators import super_admin_required, login_required
 from news.models import News
@@ -10,10 +11,12 @@ from utils.api.api import APIView, validate_serializer
 
 
 class SeminarAdminAPI(APIView):
-    @validate_serializer(CreateSeminarsSerializer)
-    @validate_serializer(CreateNewsSerializer)
+    @csrf_exempt
+    # @validate_serializer(CreateSeminarsSerializer)
+    # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
+        image = request.FILES.GET
         data = request.data
         seminar = Seminars.objects.create(**data)
         news = News.objects.create(**data)
@@ -21,8 +24,8 @@ class SeminarAdminAPI(APIView):
         seminar.save()
         return self.success(SeminarsSerializer(seminar).data)
 
-    @validate_serializer(CreateSeminarsSerializer)
-    @validate_serializer(CreateNewsSerializer)
+    # @validate_serializer(CreateSeminarsSerializer)
+    # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def put(self, request):
         data = request.data
@@ -37,9 +40,6 @@ class SeminarAdminAPI(APIView):
             return self.success(SeminarsSerializer(seminar).data)
         except Seminars.DoesNotExist:
             return self.error("Seminar does not exist")
-
-    # def get(self, request):
-    #     return render(request, 'seminars.html')
 
     @login_required
     def get(self, request):
@@ -63,3 +63,8 @@ class SeminarAdminAPI(APIView):
             seminars.delete()
             news.delete()
             return self.success()
+
+
+class SeminarManageAdminAPI(APIView):
+    def get(self,request):
+        return render(request, 'seminarsManagement.html')

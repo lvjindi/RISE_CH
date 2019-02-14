@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
+from django.shortcuts import render
+
 from account.decorators import super_admin_required
 from index.models import SliderPicture, MessageFromDirector
 from index.serializers import CreateSliderSerializer, SliderSerializer, EditSliderSerializer, CreateMessageSerializer, \
@@ -9,7 +11,7 @@ from utils.api.api import APIView, validate_serializer
 
 
 class SlideAdminAPI(APIView):
-    @validate_serializer(CreateSliderSerializer)
+    # @validate_serializer(CreateSliderSerializer)
     @super_admin_required
     def post(self, request):
         "publish slide picture"
@@ -19,7 +21,7 @@ class SlideAdminAPI(APIView):
                                                      image=data['image'])
         return self.success(SliderSerializer(slide_picture).data)
 
-    @validate_serializer(EditSliderSerializer)
+    # @validate_serializer(EditSliderSerializer)
     @super_admin_required
     def put(self, request):
         "edit slider"
@@ -46,7 +48,7 @@ class SlideAdminAPI(APIView):
         slider_picture = SliderPicture.objects.all().order_by('-create_time')
         return self.success(self.paginate_data(request, slider_picture, SliderSerializer))
 
-    @super_admin_required
+    # @super_admin_required
     def delete(self, request):
         if request.GET.get('id'):
             SliderPicture.objects.filter(id=request.GET['id']).delete()
@@ -54,7 +56,7 @@ class SlideAdminAPI(APIView):
 
 
 class DrMessageAdminAPI(APIView):
-    @validate_serializer(CreateMessageSerializer)
+    # @validate_serializer(CreateMessageSerializer)
     @super_admin_required
     def post(self, request):
         "create message"
@@ -64,7 +66,7 @@ class DrMessageAdminAPI(APIView):
                                                      image=data['image'])
         return self.success(MessageFromDrSerializer(message).data)
 
-    @validate_serializer(MessageFromDrSerializer)
+    # @validate_serializer(MessageFromDrSerializer)
     @super_admin_required
     def put(self, request):
         "edit message"
@@ -95,3 +97,8 @@ class DrMessageAdminAPI(APIView):
         if request.GET.get('id'):
             MessageFromDirector.objects.filter(id=request.GET.get('id')).delete()
         return self.success()
+
+
+class IndexAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'index.html')

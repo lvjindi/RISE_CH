@@ -9,8 +9,8 @@ from utils.api.api import APIView, validate_serializer
 
 
 class ConferenceAdminAPI(APIView):
-    @validate_serializer(CreateConferenceSerializer)
-    @validate_serializer(CreateNewsSerializer)
+    # @validate_serializer(CreateConferenceSerializer)
+    # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
         data = request.data
@@ -20,7 +20,7 @@ class ConferenceAdminAPI(APIView):
         conference.save()
         return self.success(ConferenceSerializer(conference).data)
 
-    @validate_serializer(CreateConferenceSerializer)
+    # @validate_serializer(CreateConferenceSerializer)
     @super_admin_required
     def put(self, request):
         data = request.data
@@ -35,9 +35,6 @@ class ConferenceAdminAPI(APIView):
             return self.success(ConferenceSerializer(conference).data)
         except Conference.DoesNotExist:
             return self.error("Conference does not exist")
-
-    # def get(self, request):
-    #     return render(request, 'conference.html')
 
     @login_required
     def get(self, request):
@@ -65,3 +62,8 @@ class ConferenceAdminAPI(APIView):
             conference.delete()
             news.delete()
             return self.success()
+
+
+class ConferenceManageAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'conferenceManagement.html')
