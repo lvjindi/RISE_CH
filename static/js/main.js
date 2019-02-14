@@ -102,6 +102,67 @@ function showConference(val) {
     }
 }
 
+function showPeople(val) {
+    var option = val;
+    var obj = document.getElementById('MainRight');
+    if (document.getElementById('tableStyle')) {
+        obj.removeChild(document.getElementById('tableStyle'))
+    }
+    var staffUrl = 'http://127.0.0.1:8000/api/admin/people?type=staff';
+    var studentUrl = 'http://127.0.0.1:8000/api/admin/people?type=student';
+    var professorUrl = 'http://127.0.0.1:8000/api/admin/people?type=adjunctProfessor';
+    var allUrl = 'http://127.0.0.1:8000/api/admin/people';
+    var peopleUrl;
+    if (option == '1') {
+        peopleUrl = staffUrl;
+    }
+    if (option == '2') {
+        peopleUrl = studentUrl;
+    }
+    if (option == '3') {
+        peopleUrl = professorUrl;
+    }
+    if (option == '4') {
+        peopleUrl = allUrl;
+    }
+    if (option != '5') {
+        var table = '';
+        table = ' <table class="tableStyle" id="tableStyle">' +
+            '            <tr>' +
+            '                <td>序号</td>' +
+            '                <td>姓名</td>' +
+            '                <td>类别</td>' +
+            '                <td>发布日期</td>' +
+            '                <td>点击</td>' +
+            '                <td>管理</td>' +
+            '            </tr>' +
+            '        </table>'
+        $("#MainRight").append(table)
+        $.ajax({
+            type: 'GET',
+            url: peopleUrl,
+            data: '',
+            contentType: false,
+            processData: false,
+            //jsonpCallback: 'callback',
+            success: function (data) {
+                console.log(data)
+                for (i = 0; i < data.length; i++) {
+                    var tr;
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].user_category + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#">编辑</a>&nbsp&nbsp<a href="#">删除</a>' + '</td>'
+                    $("#tableStyle").append('<tr>' + tr + '</tr>')
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+            },
+        })
+
+    }
+}
+
 function showExchange(val) {
     var option = val;
     var obj = document.getElementById('MainRight');
@@ -147,6 +208,99 @@ function showExchange(val) {
                 for (i = 0; i < data.length; i++) {
                     var tr;
                     tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#">编辑</a>&nbsp&nbsp<a href="#">删除</a>' + '</td>'
+                    $("#tableStyle").append('<tr>' + tr + '</tr>')
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+            },
+        })
+
+    }
+}
+
+function showResearch(val) {
+    var option = val;
+    var obj = document.getElementById('MainRight');
+    if (document.getElementById('tableStyle')) {
+        obj.removeChild(document.getElementById('tableStyle'))
+    }
+    var introductionUrl = 'http://127.0.0.1:8000/api/admin/introduction';
+    var projectUrl = 'http://127.0.0.1:8000/api/admin/project';
+    var publicationUrl = 'http://127.0.0.1:8000/api/admin/publication';
+    var reportUrl = 'http://127.0.0.1:8000/api/admin/report';
+    var researchUrl;
+    if (option == '1') {
+        researchUrl = introductionUrl;
+        var table = '';
+        table = ' <table class="tableStyle" id="tableStyle">' +
+            '            <tr>' +
+            '                <td>序号</td>' +
+            '                <td>标题</td>' +
+            '                <td>发布日期</td>' +
+            '                <td>点击</td>' +
+            '                <td>管理</td>' +
+            '            </tr>' +
+            '        </table>'
+        $("#MainRight").append(table)
+        $.ajax({
+            type: 'GET',
+            url: researchUrl,
+            data: '',
+            contentType: false,
+            processData: false,
+            //jsonpCallback: 'callback',
+            success: function (data) {
+                console.log(data)
+                for (i = 0; i < data.length; i++) {
+                    var tr;
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#">编辑</a>&nbsp&nbsp<a href="#">删除</a>' + '</td>'
+                    $("#tableStyle").append('<tr>' + tr + '</tr>')
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+            },
+        })
+    }
+    if (option == '2') {
+        researchUrl = projectUrl;
+    }
+    if (option == '3') {
+        researchUrl = publicationUrl;
+    }
+    if (option == '4') {
+        researchUrl = reportUrl;
+    }
+    if (option != '5' && option != '1') {
+        var table = '';
+        table = ' <table class="tableStyle" id="tableStyle">' +
+            '            <tr>' +
+            '                <td>序号</td>' +
+            '                <td>标题</td>' +
+            '                <td>作者</td>' +
+            '                <td>发布日期</td>' +
+            '                <td>点击</td>' +
+            '                <td>管理</td>' +
+            '            </tr>' +
+            '        </table>'
+        $("#MainRight").append(table)
+        $.ajax({
+            type: 'GET',
+            url: researchUrl,
+            data: '',
+            contentType: false,
+            processData: false,
+            //jsonpCallback: 'callback',
+            success: function (data) {
+                console.log(data)
+                for (i = 0; i < data.length; i++) {
+                    var tr;
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].author + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#">编辑</a>&nbsp&nbsp<a href="#">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
@@ -254,8 +408,8 @@ function xwfbSubmit() {
 function NavLink() {
     //设置后台导航
     var title = document.getElementById("MainLeft").getElementsByTagName("li");//获取导航的DIV
-    var LinkArry = ["htgl.php", "news_public", "#", "news_management", "seminar_management", "conference_management", "exchange_management", "xwgl.php?news=kxyj", "xwgl.php?news=znxs", "xwgl.php?news=gywm", "#", "cygl.php?member=zxjs", "cygl.php?member=zxxs", "cygl.php?member=tpjs", "xzgl.php"]; //创建超链接数组
-    var LinkNode = ["后台管理", "新闻发布", "新闻管理", "中心动态", "学术报告", "学术会议", "学术交流", "科学研究", "招纳贤士", "关于我们", "成员管理", "科研人员", "中心学生", "特聘教授", "下载管理"]
+    var LinkArry = ["htgl.php", "news_public", "#", "news_management", "seminar_management", "conference_management", "exchange_management", "research_management", "join_management", "xwgl.php?news=gywm", "people_management", "xzgl.php"]; //创建超链接数组
+    var LinkNode = ["后台管理", "新闻发布", "新闻管理", "中心动态", "学术报告", "学术会议", "学术交流", "科学研究", "招纳贤士", "关于我们", "成员管理", "下载管理"]
 
     var n = title.length;
 

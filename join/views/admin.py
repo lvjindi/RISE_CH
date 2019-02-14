@@ -36,7 +36,6 @@ class JoinAdminAPI(APIView):
         except Join.DoesNotExist:
             return self.error("Join does not exist")
 
-
     @login_required
     def get(self, request):
         join_id = request.GET.get('id')
@@ -59,3 +58,8 @@ class JoinAdminAPI(APIView):
             join.delete()
             news.delete()
             return self.success()
+
+
+class JoinManageAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'joinManagement.html')

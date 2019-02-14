@@ -30,6 +30,7 @@ class Projects(models.Model):
     project_schedule = models.TextField(null=True)
     other = models.TextField(null=True)
     abstract = models.TextField()
+    views_number = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -43,6 +44,7 @@ class Publications(models.Model):
     public_place = models.TextField()
     public_year = models.TextField()
     other = models.TextField(null=True)
+    views_number = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -57,6 +59,7 @@ class Reports(models.Model):
     report_time = models.TextField()
     report_year = models.TextField()
     pdf_path = models.TextField()
+    views_number = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 

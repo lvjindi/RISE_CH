@@ -5,7 +5,7 @@ from django.db import models
 
 class People(models.Model):
     name = models.TextField()
-    user_category = models.TextField()
+    user_category = models.TextField()# staff, student,adjundt professor
     office = models.TextField(null=True)
     phone = models.TextField(null=True)
     email = models.TextField(null=True)

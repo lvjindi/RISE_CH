@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
+from django.shortcuts import render
+
 from account.decorators import super_admin_required, login_required
 from research.models import Introduction, Projects, Publications, Reports
 from research.serializers import CreateResearchSerializer, IntroductionSerializer, EditIntroductionSerializer, \
@@ -180,3 +182,8 @@ class ReportAdminAPI(APIView):
         if report_id:
             Reports.objects.get(id=report_id).delete()
             return self.success()
+
+
+class ResearchManageAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'researchManagement.html')

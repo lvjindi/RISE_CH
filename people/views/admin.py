@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-
+from django.shortcuts import render
 
 from account.decorators import super_admin_required, login_required
 from people.models import People
@@ -38,14 +38,19 @@ class PeopleAdminAPI(APIView):
         user = self.request.user
         if user.is_super_admin():
             people_id = request.GET.get('id')
+            people_type = request.GET.get('type')
             if people_id:
                 try:
                     people = People.objects.get(id=people_id)
                     return self.success(PeopleSerializer(people).data)
                 except People.DoesNotExist:
                     return self.error("People does not exits")
-            people = People.objects.all()
-            return self.success(self.paginate_data(request, people, PeopleSerializer))
+            elif people_type:
+                people = People.objects.filter(user_category=people_type)
+                return self.success(self.paginate_data(request, people, PeopleSerializer))
+            else:
+                people = People.objects.all()
+                return self.success(self.paginate_data(request, people, PeopleSerializer))
         else:
             people = People.objects.filter(name=user.username)
             if people:
@@ -59,3 +64,8 @@ class PeopleAdminAPI(APIView):
         if people_id:
             People.objects.filter(id=people_id).delete()
             return self.success()
+
+
+class PeopleManageAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'peopleManagement.html')
