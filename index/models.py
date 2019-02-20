@@ -4,7 +4,7 @@ from django.db import models
 
 class SliderPicture(models.Model):
     flag = models.TextField(default=1);
-    image = models.TextField()
+    image = models.ImageField()
     articleId = models.TextField(null=True)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)

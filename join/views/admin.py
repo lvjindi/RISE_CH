@@ -13,9 +13,10 @@ class JoinAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        data = request.data
-        join = Join.objects.create(**data)
-        news = News.objects.create(**data)
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        join = Join.objects.create(title=title, content=content)
+        news = News.objects.create(title=title, content=content, type="jonn")
         join.news_id = news.id
         join.save()
         return self.success(JoinDetailSerializer(join).data)

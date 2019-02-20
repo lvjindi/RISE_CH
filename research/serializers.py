@@ -16,15 +16,28 @@ class EditIntroductionSerializer(serializers.Serializer):
     content = serializers.CharField(max_length=1024 * 1024 * 8)
 
 
-class ProjectSerializer(serializers.Serializer):
+class ProjectDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField(max_length=64)
+    author = serializers.CharField(max_length=128)
+    project_code=serializers.CharField(max_length=64)
+    project_fund = serializers.CharField(max_length=64)
+    project_schedule = serializers.CharField(max_length=32)
+    other = serializers.CharField(max_length=128)
+    abstract = serializers.CharField(max_length=1024 * 1024 * 8)
+    keywords = serializers.CharField(max_length=256)
+    views_number = serializers.IntegerField()
+    create_time = serializers.DateTimeField()
+
+
+class ProjectListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField(max_length=64)
     author = serializers.CharField(max_length=128)
     project_fund = serializers.CharField(max_length=64)
     project_schedule = serializers.CharField(max_length=32)
-    other = serializers.CharField(max_length=128)
     abstract = serializers.CharField(max_length=1024 * 1024 * 8)
-    views_number = serializers.IntegerField()
+    other = serializers.CharField(max_length=128)
     create_time = serializers.DateTimeField()
 
 
@@ -43,8 +56,6 @@ class ReportSerializer(serializers.ModelSerializer):
 class CreateResearchSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=64)
     content = serializers.CharField(max_length=1024 * 1024 * 8)
-    research_category = serializers.ChoiceField(
-        choices=[Category.Introduction, Category.Projects, Category.Publications, Category.Reports])
 
 
 class CreateProjectSerializer(serializers.Serializer):

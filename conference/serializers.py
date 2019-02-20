@@ -12,12 +12,14 @@ class ConferenceListSerializer(serializers.Serializer):
 
 class ConferenceDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    title = serializers.CharField(max_length=128)
     news_id = serializers.IntegerField()
     content = serializers.CharField(max_length=1024 * 1024 * 8)
     type = serializers.ChoiceField(choices=[ConferenceType.Domestic, ConferenceType.Foreign])
     views_number = serializers.IntegerField()
     image = serializers.CharField(max_length=128)
     sliderFlag = serializers.BooleanField()
+    create_time = serializers.DateTimeField()
 
 
 class CreateConferenceSerializer(serializers.Serializer):

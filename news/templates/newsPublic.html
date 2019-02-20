@@ -32,6 +32,7 @@
         <ul>
             <li></li>
             <li></li>
+            <li></li>
             <li onclick="DisplaySecond()"></li>
             <ul id="secondTile">
                 <li></li>
@@ -53,71 +54,42 @@
 
     <div id="MainRight">
         <div id="articleEditor">
-            <form id="newsForm" method="post" action="http://127.0.0.1:8000/api/admin/news"
-                  enctype="multipart/form-data">
-                <span>标题</span><input type="text" name="articleTitle" id="articleTitle"><br>
-                <span>分类</span>
-                <select id="type" name="articleClass" onchange="showSubclass(this.value);">
-                    <option value="zxdt">中心动态</option>
-                    <option value="xsbg">学术报告</option>
-                    <option value="xshy">学术会议</option>
-                    <option value="xsjl">学术交流</option>
-                    <option value="kxyj">科学研究</option>
-                    <option value="znxs">招纳贤士</option>
-                    <option value="gywm">关于我们</option>
-                </select>
+            <form id="newsForm" method="post" action="/" enctype="multipart/form-data">
+                <span>标题</span><input type="text" name="articleTitle" id="articleTitle" ><br>
+
+                <div id="selectPart" style="">
+                    <span>分类</span>
+                    <select id="type" name="articleClass" onchange="showSubclass(this.value);">
+                        <option value="news">中心动态</option>
+                        <option value="seminar">学术报告</option>
+                        <option value="conference">学术会议</option>
+                        <option value="exchange">学术交流</option>
+                        <option value="research">科学研究</option>
+                        <option value="join">招纳贤士</option>
+                        <option value="gywm">关于我们</option>
+                    </select>
+                </div>
                 <br>
-                <span>标题图片</span><input type="file" name="file" id="image"><br>
-                <span style="margin-top: 20px">新闻内容</span>
+
+                <div id="lable" style="margin-top: 20px">新闻内容</div>
                 <div id="editor" type="text/plain" style="margin-left:110px;width:90%;height:400px;margin-top: -13px"
                      name="myeditor"></div>
-                <input type="submit" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交">
+                <script type="text/javascript">
+                    var ue = UE.getEditor('editor', {
+                        serverUrl: "/api/controller/"
+                    });//实例化编辑
+
+                </script>
+                <div id="subform"></div>
+                <input type="button" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交"
+                       onclick="newsPublic( )">
 
             </form>
 
-            <script type="text/javascript">
-                var ue = UE.getEditor('editor');//实例化编辑
-            </script>
+
             <!--编辑器end-->
-            <script lang="text/javascript">
-                // var csrf = $('input[name=csrfmiddlewaretoken]').val();
-                // var title=document.getElementById("articleTitle").value
-                // var type=document.getElementById("type").value
-                // var image=document.getElementById("image").value
-                // var content=document.getElementById("editor").value
-                // var data = {
-                //     "title":title,
-                //     "type":type,
-                //     "image":image,
-                //     "content":content,
-                //     "csrfmiddlewaretoken":csrf
-                // };
-
-                // data = $('#newsForm').serialize();
-                var formData = new FormData();
-                formData.append('title', $('#title').val())
-                formData.append('type', $('#type').val())
-                formData.append('image', document.getElementById("image").files[0])
-                formData.append('content', $('#content').val())
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://127.0.0.1:8000/api/admin/news',
-                    data: formData,
-                    dataType: 'jsonp',
-                    contentType: false,
-                    processData: false,
-                    jsonpCallback: 'callback',
-                    success: function (data) {
-                        console.log(data)
-                    },
-                    error: function (xhr, type) {
-
-                    }
-                })
 
 
-            </script>
         </div>
 
     </div>

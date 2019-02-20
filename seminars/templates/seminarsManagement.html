@@ -32,6 +32,7 @@
         <ul>
             <li></li>
             <li></li>
+            <li></li>
             <li onclick="DisplaySecond()"></li>
             <ul id="secondTile">
                 <li></li>
@@ -87,10 +88,9 @@
                 processData: false,
                 //jsonpCallback: 'callback',
                 success: function (data) {
-                    console.log(data)
                     for (i = 0; i < data.length; i++) {
                         var tr;
-                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#">编辑</a>&nbsp&nbsp<a href="#">删除</a>' + '</td>'
+                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" onclick="news_edit(\' '+ data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
                         $("#tableStyle").append('<tr>' + tr + '</tr>')
                     }
                 },

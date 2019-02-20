@@ -13,9 +13,11 @@ class ConferenceAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        data = request.data
-        conference = Conference.objects.create(**data)
-        news = News.objects.create(**data)
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        type = request.POST.get('subType')
+        conference = Conference.objects.create(title=title, content=content, type=type)
+        news = News.objects.create(title=title, content=content, type='conference')
         conference.news_id = news.id
         conference.save()
         return self.success(ConferenceSerializer(conference).data)
@@ -27,9 +29,11 @@ class ConferenceAdminAPI(APIView):
         try:
             conference = Conference.objects.get(id=data['id'])
             news = News.objects.get(id=conference.news_id)
-            for k, v in data.items:
-                setattr(conference, k, v)
-                setattr(news, k, v)
+            setattr(conference, 'content', data['content'])
+            setattr(conference, 'title', data['title'])
+            setattr(conference, 'type', data['type'])
+            setattr(news, 'content', data['content'])
+            setattr(news, 'title', data['title'])
             conference.save()
             news.save()
             return self.success(ConferenceSerializer(conference).data)

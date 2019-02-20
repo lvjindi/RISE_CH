@@ -16,10 +16,11 @@ class SeminarAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        image = request.FILES.GET
-        data = request.data
-        seminar = Seminars.objects.create(**data)
-        news = News.objects.create(**data)
+
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        seminar = Seminars.objects.create(title=title, content=content)
+        news = News.objects.create(title=title, content=content, type='seminar')
         seminar.news_id = news.id
         seminar.save()
         return self.success(SeminarsSerializer(seminar).data)
@@ -32,9 +33,10 @@ class SeminarAdminAPI(APIView):
         try:
             seminar = Seminars.objects.get(id=data['id'])
             news = News.objects.get(id=seminar.news_id)
-            for k, v in data.items:
-                setattr(seminar, k, v)
-                setattr(news, k, v)
+            setattr(seminar, 'title', data['title'])
+            setattr(seminar, 'content', data['content'])
+            setattr(news, 'title', data['title'])
+            setattr(news, 'content', data['content'])
             seminar.save()
             news.save()
             return self.success(SeminarsSerializer(seminar).data)
@@ -66,5 +68,5 @@ class SeminarAdminAPI(APIView):
 
 
 class SeminarManageAdminAPI(APIView):
-    def get(self,request):
+    def get(self, request):
         return render(request, 'seminarsManagement.html')

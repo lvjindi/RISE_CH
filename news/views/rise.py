@@ -21,7 +21,7 @@ class NewsDetailAPI(APIView):
             views_number = news_detail.views_number + 1
             setattr(news_detail, 'views_number', views_number)
             news_detail.save()
-            return self.success(self.paginate_data(request, news_detail, NewsDetailSerializer))
+            return self.success(NewsDetailSerializer(news_detail).data)
         except News.DoesNotExist:
             return self.error('News does not exist')
 

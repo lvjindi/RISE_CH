@@ -25,6 +25,6 @@ class ConferenceDetailAPI(APIView):
             views_number = conference.views_number + 1
             setattr(conference, 'views_number', views_number)
             conference.save()
-            return self.success(self.paginate_data(request, conference, ConferenceDetailSerializer))
+            return self.success(ConferenceDetailSerializer(conference).data)
         except Conference.DoesNotExist:
             return self.error('Conference does not exist')

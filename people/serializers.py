@@ -16,6 +16,7 @@ class PeopleInfoSerializer(serializers.Serializer):
     degreeId = serializers.IntegerField()
     professionalTitle = serializers.CharField(max_length=32)
     area = serializers.CharField(max_length=64)
+    create_time = serializers.DateTimeField()
 
 
 class PeopleDetailSerializer(serializers.Serializer):
@@ -29,12 +30,13 @@ class PeopleDetailSerializer(serializers.Serializer):
     report = serializers.CharField(max_length=1024 * 1024 * 8)
     link = serializers.CharField(max_length=1024 * 1024 * 8)
     img = serializers.CharField(max_length=128)
+    create_time = serializers.DateTimeField()
 
 
 class PeopleSerializer(serializers.ModelSerializer):
     class Meta:
         model = People
-        exclude = ["create_time", "last_update_time"]
+        exclude = ["last_update_time"]
 
 
 class CreatePeopleSerializer(serializers.Serializer):

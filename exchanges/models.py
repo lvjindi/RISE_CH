@@ -10,7 +10,7 @@ class ExchangeType(object):
 class Exchange(models.Model):
     title = models.TextField()
     content = models.TextField(null=True)
-    views_number = models.IntegerField(null=True)
+    views_number = models.IntegerField(default=0)
     image = models.TextField(null=True)
     sliderFlag = models.BooleanField(default=False)
     type = models.CharField(max_length=10)

@@ -34,6 +34,8 @@ urlpatterns = [
     path('api/admin/', include('news.urls.admin')),
     path('api/', include('join.urls.rise')),
     path('api/admin/', include('join.urls.admin')),
-    path('api/admin/',include('upload.urls.admin')),
+    path('api/admin/', include('upload.urls.admin')),
+    path('api/', include('controller.urls')),
+    path('api/', include('static.media.urls')),
     path('admin/', admin.site.urls)
 ]

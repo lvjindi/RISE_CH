@@ -13,9 +13,11 @@ class ExchangeAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        data = request.data
-        exchange = Exchange.objects.create(**data)
-        news = News.objects.create(**data)
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        type = request.POST.get('subType')
+        exchange = Exchange.objects.create(title=title, content=content, type=type)
+        news = News.objects.create(title=title, content=content, type='exchange')
         exchange.news_id = news.id
         exchange.save()
         return self.success(ExchangeSerializer(exchange).data)
@@ -27,9 +29,11 @@ class ExchangeAdminAPI(APIView):
         try:
             exchange = Exchange.objects.get(id=data['id'])
             news = News.objects.get(id=exchange.news_id)
-            for k, v in data.items:
-                setattr(exchange, k, v)
-                setattr(news, k, v)
+            setattr(exchange, 'content', data['content'])
+            setattr(exchange, 'title', data['title'])
+            setattr(exchange, 'type', data['type'])
+            setattr(news, 'content', data['content'])
+            setattr(news, 'title', data['title'])
             exchange.save()
             news.save()
             return self.success(ExchangeSerializer(exchange).data)

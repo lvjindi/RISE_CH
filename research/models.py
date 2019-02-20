@@ -13,7 +13,6 @@ class Category(object):
 class Introduction(models.Model):
     title = models.TextField(null=True)
     content = models.TextField(null=True)
-    research_category = models.TextField()
     views_number = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
@@ -30,6 +29,7 @@ class Projects(models.Model):
     project_schedule = models.TextField(null=True)
     other = models.TextField(null=True)
     abstract = models.TextField()
+    keywords = models.TextField(null=True)
     views_number = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
@@ -41,10 +41,9 @@ class Projects(models.Model):
 class Publications(models.Model):
     author = models.TextField()
     title = models.TextField()
-    public_place = models.TextField()
-    public_year = models.TextField()
+    place = models.TextField()
+    year = models.TextField()
     other = models.TextField(null=True)
-    views_number = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -55,11 +54,10 @@ class Publications(models.Model):
 class Reports(models.Model):
     author = models.TextField()
     title = models.TextField()
-    report_place = models.TextField()
-    report_time = models.TextField()
-    report_year = models.TextField()
+    place = models.TextField()
+    time = models.TextField()
+    year = models.TextField()
     pdf_path = models.TextField()
-    views_number = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 

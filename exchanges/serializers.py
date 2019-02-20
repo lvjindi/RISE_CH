@@ -13,12 +13,14 @@ class ExchangeListSerializer(serializers.Serializer):
 
 class ExchangeDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    title = serializers.CharField(max_length=128)
     news_id = serializers.IntegerField()
     content = serializers.CharField(max_length=1024 * 1024 * 8)
     type = serializers.ChoiceField(choices=[ExchangeType.Missions, ExchangeType.Visitors])
     views_number = serializers.IntegerField()
     image = serializers.CharField(max_length=128)
     sliderFlag = serializers.BooleanField()
+    create_time = serializers.DateTimeField()
 
 
 class CreateExchangeSerializer(serializers.Serializer):

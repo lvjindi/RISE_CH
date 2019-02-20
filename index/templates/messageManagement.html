@@ -21,7 +21,7 @@
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
     <div id="login"><a href="login">登录</a></div>
     <div id="exit"><img src="/static/images/exit.png"/>退出</div>
-    <div id="Banner"><img src="/static/images/index.png"/>首页预览</div>
+    <div id="Banner"><img src=/static/images/index.png"/>首页预览</div>
 </div>
 
 <!--HeadEnd-->
@@ -53,15 +53,47 @@
     </div>
 
     <div id="MainRight">
-        <select name="conferenceType" id="conferenceType" onchange="showResearch(this.value)" style="margin-left: 30px">
-            <option value="5">请选择研究类别</option>
-            <option value="4">研究报告</option>
-            <option value="3">研究论文</option>
-            <option value="2">研究项目</option>
-            <option value="1">研究介绍</option>
-        </select>
+        <div style="float: left;margin-left: 30px;margin-top:10px;margin-bottom: 20px "><img src="/static/images/add_lable.jpg" style="height: 15px;width: 15px;margin-right: 5px"><a
+                href="message_public">添加</a></div>
 
-    </div>
+
+    <table class="tableStyle" id="tableStyle" >
+        <tr>
+            <td>序号</td>
+            <td>标题</td>
+            <td>图片</td>
+            <td>发布日期</td>
+            <td>管理</td>
+        </tr>
+    </table>
+    <!--编辑器end-->
+    <script lang="text/javascript">
+        $.ajax({
+            type: 'GET',
+            url: 'http://127.0.0.1:8000/api/admin/index/message',
+            data: '',
+            // {#dataType: 'json',#}
+            contentType: false,
+            processData: false,
+            //jsonpCallback: 'callback',
+            success: function (data) {
+                console.log(data)
+                for (i = 0; i < data.length; i++) {
+                    var tr;
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>'+'<td>' + data[i].image + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' +'<a href="#" onclick="message_edit(' + data[i].id + ')">编辑</a>&nbsp&nbsp<a href="#" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
+                    $("#tableStyle").append('<tr>' + tr + '</tr>')
+                }
+            },
+            error: function (data) {
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+            },
+        })
+
+    </script>
+
+</div>
 
 </div>
 

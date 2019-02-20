@@ -15,10 +15,11 @@ class SlideAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         "publish slide picture"
-        data = request.data
-        slide_picture = SliderPicture.objects.create(flag=data['flag'],
-                                                     articleId=data['articleId'],
-                                                     image=data['image'])
+        image = request.FILES.get('image')
+        articleId = request.POST.get('articleId')
+        slide_picture = SliderPicture.objects.create(
+            articleId=articleId,
+            image=image)
         return self.success(SliderSerializer(slide_picture).data)
 
     # @validate_serializer(EditSliderSerializer)
@@ -38,7 +39,7 @@ class SlideAdminAPI(APIView):
     @super_admin_required
     def get(self, request):
         "get slider picture list"
-        slider_id = request.Get.get('id')
+        slider_id = request.GET.get('id')
         if slider_id:
             try:
                 slider_picture = SliderPicture.objects.get(id=slider_id)
@@ -60,10 +61,12 @@ class DrMessageAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         "create message"
-        data = request.data
-        message = MessageFromDirector.objects.create(content=data['content'],
-                                                     title=data['title'],
-                                                     image=data['image'])
+        image = request.FILES.get('image')
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        message = MessageFromDirector.objects.create(content=content,
+                                                     title=title,
+                                                     image=image)
         return self.success(MessageFromDrSerializer(message).data)
 
     # @validate_serializer(MessageFromDrSerializer)
@@ -72,13 +75,16 @@ class DrMessageAdminAPI(APIView):
         "edit message"
         data = request.data
         try:
-            message = MessageFromDirector.objects.get(id=data.pop['id'])
+            message = MessageFromDirector.objects.get(id=data['id'])
+            setattr(message, 'title', data['title'])
+            setattr(message, 'content', data['content'])
+            message.save()
+            return self.success(MessageFromDrSerializer(message).data)
         except MessageFromDirector.DoesNotExist:
             return self.error('Message does not exits')
-        for k, v in data.items:
-            setattr(message, k, v)
-        message.save()
-        return self.success(MessageFromDrSerializer(message).data)
+
+
+
 
     @super_admin_required
     def get(self, request):
@@ -102,3 +108,23 @@ class DrMessageAdminAPI(APIView):
 class IndexAdminAPI(APIView):
     def get(self, request):
         return render(request, 'index.html')
+
+
+class SliderAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'sliderManagement.html')
+
+
+class MessageAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'messageManagement.html')
+
+
+class SliderPublicAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'sliderPublic.html')
+
+
+class MessagePublicAdminAPI(APIView):
+    def get(self, request):
+        return render(request, 'messagePublic.html')

@@ -6,8 +6,8 @@ from django.shortcuts import render
 from account.decorators import super_admin_required, login_required
 from research.models import Introduction, Projects, Publications, Reports
 from research.serializers import CreateResearchSerializer, IntroductionSerializer, EditIntroductionSerializer, \
-    CreateProjectSerializer, ProjectSerializer, CreatePublicationSerializer, PublicationSerializer, \
-    CreateReportSerializer, ReportSerializer
+    CreateProjectSerializer, CreatePublicationSerializer, PublicationSerializer, \
+    CreateReportSerializer, ReportSerializer, ProjectDetailSerializer
 from utils.api.api import APIView, validate_serializer
 
 
@@ -16,9 +16,9 @@ class ResearchAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         "publish research"
-        data = request.data
-        research = Introduction.objects.create(research_category=data['research_category'],
-                                               content=data['content'], title=data["title"])
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        research = Introduction.objects.create(title=title, content=content)
         return self.success(IntroductionSerializer(research).data)
 
     # @validate_serializer(EditIntroductionSerializer)
@@ -26,20 +26,26 @@ class ResearchAdminAPI(APIView):
     def put(self, request):
         "edit research"
         data = request.data
-        research = Introduction.objects.filter(id=data['id'])
-        research.update(**data)
-        return self.success(IntroductionSerializer(research).data)
+        try:
+            introduction = Introduction.objects.get(id=data['id'])
+            setattr(introduction, 'title', data['title'])
+            setattr(introduction, 'content', data['content'])
+            introduction.save()
+            return self.success(IntroductionSerializer(introduction).data)
+        except Introduction.DoesNotExist:
+            return self.error("Seminar does not exist")
 
     @login_required
     def get(self, request):
-        research_category = request.GET.get('research_category')
-        if research_category:
+        introduction_id = request.GET.get('id')
+        if introduction_id:
             try:
-                research = Introduction.objects.get(research_category=research_category)
+                research = Introduction.objects.get(id=introduction_id)
                 return self.success(IntroductionSerializer(research).data)
             except Introduction.DoesNotExist:
-                return self.error('Research does not exist')
-        research = Introduction.objects.all()
+                return self.error('Introduction does not exist')
+        else:
+            research = Introduction.objects.all()
         return self.success(self.paginate_data(request, research, IntroductionSerializer))
 
     @super_admin_required
@@ -55,21 +61,39 @@ class ProjectAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         'publish project'
-        data = request.data
-        project = Projects.objects.create(title=data['title'], author=data['author'],
-                                          project_number=data['project_number'], project_fund=data['project_fund'],
-                                          project_schedule=data['project_schedule'], other=data['other'],
-                                          abstract=data['abstract'])
-        return self.success(ProjectSerializer(project).data)
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        code = request.POST.get('code')
+        fund = request.POST.get('fund')
+        schedule = request.POST.get('schedule')
+        other = request.POST.get('other')
+        abstract = request.POST.get('abstract')
+        keywords = request.POST.get('keywords')
+        project = Projects.objects.create(title=title, author=author,
+                                          project_code=code, project_fund=fund,
+                                          project_schedule=schedule, other=other,
+                                          abstract=abstract, keywords=keywords)
+        return self.success(ProjectDetailSerializer(project).data)
 
     # @validate_serializer(CreateProjectSerializer)
     @super_admin_required
     def put(self, request):
         'edit project'
         data = request.data
-        project = Projects.objects.filter(id=data['id'])
-        project.update(**data)
-        return self.success(ProjectSerializer(project).data)
+        try:
+            project = Projects.objects.get(id=data['id'])
+            setattr(project, 'title', data['title'])
+            setattr(project, 'author', data['author'])
+            setattr(project, 'project_code', data['code'])
+            setattr(project, 'project_fund', data['fund'])
+            setattr(project, 'project_schedule', data['schedule'])
+            setattr(project, 'abstract', data['abstract'])
+            setattr(project, 'keywords', data['keywords'])
+            setattr(project, 'other', data['other'])
+            project.save()
+            return self.success(ProjectDetailSerializer(project).data)
+        except Projects.DoesNotExist:
+            return self.error("Project does not exist")
 
     @login_required
     def get(self, request):
@@ -77,12 +101,12 @@ class ProjectAdminAPI(APIView):
         if project_id:
             try:
                 project = Projects.objects.get(id=project_id)
-                return self.success(ProjectSerializer(project).data)
+                return self.success(ProjectDetailSerializer(project).data)
             except Projects.DoesNotExist:
                 return self.error("Project does not exist")
         else:
             project = Projects.objects.all()
-            return self.success(self.paginate_data(request, project, ProjectSerializer))
+            return self.success(self.paginate_data(request, project, ProjectDetailSerializer))
 
     @super_admin_required
     def delete(self, request):
@@ -97,8 +121,12 @@ class PublicationAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         'publish Publications'
-        data = request.data
-        publication = Publications.objects.create(**data)
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        place = request.POST.get('place')
+        year = request.POST.get('year')
+        other = request.POST.get('other')
+        publication = Publications.objects.create(title=title, author=author, place=place, year=year, other=other)
         return self.success(PublicationSerializer(publication).data)
 
     # @validate_serializer(CreatePublicationSerializer)
@@ -106,9 +134,17 @@ class PublicationAdminAPI(APIView):
     def put(self, request):
         'edit Publications'
         data = request.data
-        publication = Publications.objects.filter(id=data['id'])
-        publication.update(**data)
-        return self.success(PublicationSerializer(publication).data)
+        try:
+            publication = Publications.objects.get(id=data['id'])
+            setattr(publication, 'title', data['title'])
+            setattr(publication, 'author', data['author'])
+            setattr(publication, 'place', data['place'])
+            setattr(publication, 'year', data['year'])
+            setattr(publication, 'other', data['other'])
+            publication.save()
+            return self.success(PublicationSerializer(publication).data)
+        except Publications.DoesNotExist:
+            return self.error("Publication does not exist")
 
     @login_required
     def get(self, request):
@@ -141,8 +177,15 @@ class ReportAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         'publish report'
-        data = request.data
-        report = Reports.objects.create(**data)
+        pdf = request.FILES.get('pdf')
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        place = request.POST.get('place')
+        year = request.POST.get('year')
+        other = request.POST.get('other')
+        time = request.POST.get('time')
+        report = Reports.objects.create(title=title, author=author, place=place, time=time, year=year, other=other,
+                                        pdf_path=pdf)
         return self.success(ReportSerializer(report).data)
 
     # @validate_serializer(CreateReportSerializer)
@@ -152,12 +195,17 @@ class ReportAdminAPI(APIView):
         data = request.data
         try:
             report = Reports.objects.get(id=data['id'])
+            setattr(report, 'title', data['title'])
+            setattr(report, 'author', data['author'])
+            setattr(report, 'place', data['place'])
+            setattr(report, 'time', data['time'])
+            setattr(report, 'pdf_path', data['pdf'])
+            setattr(report, 'year', data['year'])
+            setattr(report, 'other', data['other'])
+            report.save()
+            return self.success(ReportSerializer(report).data)
         except Reports.DoesNotExist:
-            self.error("Reports does not exist")
-        for k, v in data.items:
-            setattr(report, k, v)
-        report.save()
-        return self.success(ReportSerializer(report).data)
+            return self.error("Report does not exist")
 
     @login_required
     def get(self, request):

@@ -53,27 +53,32 @@
     </div>
 
     <div id="MainRight">
-        <select name="conferenceType" id="conferenceType" onchange="showResearch(this.value)" style="margin-left: 30px">
-            <option value="5">请选择研究类别</option>
-            <option value="4">研究报告</option>
-            <option value="3">研究论文</option>
-            <option value="2">研究项目</option>
-            <option value="1">研究介绍</option>
-        </select>
+        <div id="articleEditor">
+            <form id="newsForm" method="post" action="/" enctype="multipart/form-data">
+                <span>图片</span><input type="file" name="indexImgae" id="indexImage"> <br>
+                <span>对应文章Id</span><input type="text" name="articleID" id="articleID" ><br>
+                <input type="button" class="submit" style="margin-left: 110px;margin-top: 35px;" value="提交"
+                       onclick="sliderPublic( )">
+
+            </form>
+
+
+            <!--编辑器end-->
+
+
+        </div>
 
     </div>
 
-</div>
+    <!--MainEnd-->
 
-<!--MainEnd-->
+    <!--Begin-->
+    <div id="bottom">
 
-<!--Begin-->
-<div id="bottom">
+    </div>
 
-</div>
-
-<!--End-->
-<script src="/static/js/admin.js"></script>
+    <!--End-->
+    <script src="/static/js/admin.js"></script>
 </body>
 
 

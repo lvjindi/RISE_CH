@@ -25,6 +25,6 @@ class ExchangeDetailAPI(APIView):
             views_number = exchange_detail.views_number + 1
             setattr(exchange_detail, 'views_number', views_number)
             exchange_detail.save()
-            return self.success(self.paginate_data(request, exchange_detail, ExchangeDetailSerializer))
+            return self.success(ExchangeDetailSerializer(exchange_detail).data)
         except Exchange.DoesNotExist:
             return self.error('Exchange does not exist')

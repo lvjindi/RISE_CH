@@ -153,5 +153,8 @@ STATICFILES_DIRS = (
     ('js', os.path.join(STATIC_ROOT, 'js').replace('\\', '/')),
     ('ueditor', os.path.join(STATIC_ROOT, 'ueditor').replace('\\', '/')),
 )
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media').replace('\\', '/')
 
+MEDIA_URL = '/static/media/'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
+

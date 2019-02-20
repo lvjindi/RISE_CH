@@ -2,7 +2,8 @@ from django.shortcuts import render
 
 # Create your views here.
 from research.models import Introduction, Projects, Reports, Publications
-from research.serializers import IntroductionSerializer, ProjectSerializer, PublicationSerializer, ReportSerializer
+from research.serializers import IntroductionSerializer, PublicationSerializer, ReportSerializer, \
+    ProjectListSerializer, ProjectDetailSerializer
 from utils.api.api import APIView
 
 
@@ -10,7 +11,7 @@ class IntroductionAPI(APIView):
     def get(self, request):
         data = request.data
         try:
-            research = Introduction.objects.get(research_category=data['research_category'])
+            research = Introduction.objects.get(id=1)
             if research:
                 views_number = research.views_number + 1
                 setattr(research, "views_number", views_number)
@@ -23,10 +24,23 @@ class IntroductionAPI(APIView):
             return self.error('Introduction does not exist')
 
 
-class ProjectAPI(APIView):
+class ProjectListAPI(APIView):
     def get(self, request):
         projects = Projects.objects.all().order_by('id')
-        return self.success(self.paginate_data(request, projects, ProjectSerializer))
+        return self.success(self.paginate_data(request, projects, ProjectListSerializer))
+
+
+class ProjectDetailAPI(APIView):
+    def get(self, request):
+        data = request.data
+        try:
+            project = Projects.objects.get(id=data['id'])
+            views_number = project.views_number + 1
+            setattr(project, 'views_number', views_number)
+            project.save()
+            return self.success(ProjectDetailSerializer(project).data)
+        except Projects.DoesNotExist:
+            return self.error('Project does not exist')
 
 
 class PublicationAPI(APIView):
