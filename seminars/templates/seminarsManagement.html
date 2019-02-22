@@ -18,10 +18,10 @@
 <body onload="NavLink()">
 <!--HeadBegin-->
 <div id="Head">
-    <div id="Title"><img src="../../static/images/logo.png"/>RISE网站后台管理系统</div>
+    <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
     <div id="login"><a href="login">登录</a></div>
-    <div id="exit"><img src="../../static/images/exit.png"/>退出</div>
-    <div id="Banner"><img src="../../static/images/index.png"/>首页预览</div>
+    <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
+    <div id="Banner"></div>
 </div>
 
 <!--HeadEnd-->
@@ -57,6 +57,7 @@
             <tr>
                 <td>序号</td>
                 <td>标题</td>
+                <td>新闻ID</td>
                 <td>发布日期</td>
                 <td>点击</td>
                 <td>管理</td>
@@ -64,20 +65,6 @@
         </table>
         <!--编辑器end-->
         <script lang="text/javascript">
-            // var csrf = $('input[name=csrfmiddlewaretoken]').val();
-            // var title=document.getElementById("articleTitle").value
-            // var type=document.getElementById("type").value
-            // var image=document.getElementById("image").value
-            // var content=document.getElementById("editor").value
-            // var data = {
-            //     "title":title,
-            //     "type":type,
-            //     "image":image,
-            //     "content":content,
-            //     "csrfmiddlewaretoken":csrf
-            // };
-
-            // data = $('#newsForm').serialize();
 
             $.ajax({
                 type: 'GET',
@@ -90,7 +77,7 @@
                 success: function (data) {
                     for (i = 0; i < data.length; i++) {
                         var tr;
-                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" onclick="news_edit(\' '+ data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
+                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].news_id + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\' ' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
                         $("#tableStyle").append('<tr>' + tr + '</tr>')
                     }
                 },

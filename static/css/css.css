@@ -1,5 +1,5 @@
 ﻿* {
-    padding：0px;
+
     margin: 0px;
 }
 
@@ -11,7 +11,7 @@ a {
 body {
     width: 99%;
     margin: 0 5px 0 7px;
-/ / background-color: #2ba2e6;
+    /*/ / background-color: #2ba2e6;*/
     font-family: "微软雅黑";
     font-size: 14px;
 
@@ -19,7 +19,7 @@ body {
 
 #Head {
     margin-top: 5px;
-/ / margin-left: 20 px;
+    /*margin-left: 20 px;*/
     text-indent: 0.5em;
     margin-right: 5px;
     width: 100%;
@@ -64,10 +64,10 @@ body {
 }
 
 #Banner {
-/ / background-color: #e5f7f9;
-/ / border: 1 px solid;
+    /*/ / background-color: #e5f7f9;*/
+    /*/ / border: 1 px solid;*/
     background-image: url(../images/navbg.png);
-/ / box-shadow: - 1 px 1 px 5 px #056da9;
+    /*/ / box-shadow: - 1 px 1 px 5 px #056da9;*/
     margin-bottom: 5px;
     height: 35px;
     text-indent: 16em;
@@ -93,7 +93,7 @@ body {
 #MainLeft {
     margin-bottom: 5px;
     width: 15%;
-/ / background-color: #e5f7f9;
+    /*/ / background-color: #e5f7f9;*/
     height: 140%;;
     float: left;
     border-radius: 5px;
@@ -143,10 +143,10 @@ body {
     background-color: #e5f7f9;
     height: 140%;
     width: 84%;
+    overflow: auto;
     box-shadow: -1px 2px 10px #056da9;
 
 }
-
 
 #bottom {
     font-size: 16px;
@@ -165,21 +165,17 @@ body {
     width: 95%;
     margin: 20px 20px 0px 30px;
     border: 1px solid black;
-/ / border: 1 px solid;
+    /*/ / border: 1 px solid;*/
     border-collapse: collapse;
 }
 
 .tableStyle td {
-/ / width: 20 %;
-/ / border-color: #87CEFA;
     padding: 0px;
     margin: 0px;
-/ / border-style: solid;
     border: 1px solid black;
     border-collapse: collapse;
     font-size: 14px;
     text-align: center;
-/ / text-indent: 2 em;
 }
 
 .tableStyle th {
@@ -187,8 +183,7 @@ body {
     color: #0a92e1;
 / / text-align: left;
 / / text-indent: 2 em;
-    white-space:  nowrap;
-     
+    white-space: nowrap;
 
 }
 
@@ -277,4 +272,10 @@ information textarea {
     vertical-align: middle;
     overflow-y: scroll;
 
+}
+
+.addUnderline {
+    color: #2D64B3;
+    text-decoration: underline;
+    text-decoration-color: #0a92e1;
 }

@@ -50,9 +50,9 @@ function showConference(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var domesticUrl = 'http://127.0.0.1:8000/api/admin/conference?type=domestic';
-    var foreignUrl = 'http://127.0.0.1:8000/api/admin/conference?type=foreign';
-    var allUrl = 'http://127.0.0.1:8000/api/admin/conference';
+    var domesticUrl = 'http://39.105.199.229:8000/api/admin/conference?type=domestic';
+    var foreignUrl = 'http://39.105.199.229:8000/api/admin/conference?type=foreign';
+    var allUrl = 'http://39.105.199.229:8000/api/admin/conference';
     var conferenceUrl;
     if (option == '1') {
         conferenceUrl = domesticUrl;
@@ -71,6 +71,7 @@ function showConference(val) {
             '                <td>序号</td>' +
             '                <td>标题</td>' +
             '                <td>类别</td>' +
+            '                <td>新闻ID</td>' +
             '                <td>发布日期</td>' +
             '                <td>点击</td>' +
             '                <td>管理</td>' +
@@ -88,12 +89,11 @@ function showConference(val) {
                 console.log(data)
                 for (i = 0; i < data.length; i++) {
                     var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" onclick="news_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].news_id + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
             error: function (data) {
-                alert("进来了")
                 alert(data)
             },
         })
@@ -107,10 +107,10 @@ function showPeople(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var staffUrl = 'http://127.0.0.1:8000/api/admin/people?type=staff';
-    var studentUrl = 'http://127.0.0.1:8000/api/admin/people?type=student';
-    var professorUrl = 'http://127.0.0.1:8000/api/admin/people?type=adjunctProfessor';
-    var allUrl = 'http://127.0.0.1:8000/api/admin/people';
+    var staffUrl = 'http://39.105.199.229:8000/api/admin/people?type=staff';
+    var studentUrl = 'http://39.105.199.229:8000/api/admin/people?type=student';
+    var professorUrl = 'http://39.105.199.229:8000/api/admin/people?type=adjunctProfessor';
+    var allUrl = 'http://39.105.199.229:8000/api/admin/people';
     var peopleUrl;
     if (option == '1') {
         peopleUrl = staffUrl;
@@ -147,12 +147,12 @@ function showPeople(val) {
                 console.log(data)
                 for (i = 0; i < data.length; i++) {
                     var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].user_category + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" onclick="people_eidt(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" onclick="news_delete(\'' + data[i].id + '\')">删除</a>' + '</td>'
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].user_category + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="people_eidt(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(\'' + data[i].id + '\')">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
             error: function (data) {
-                alert("进来了");
+
                 alert(data);
             },
         })
@@ -162,8 +162,7 @@ function showPeople(val) {
 
 function peoplePublic() {
     var formData = new FormData();
-    alert("jinlaile")
-    var url = 'http://127.0.0.1:8000/api/admin/people';
+    var url = 'http://39.105.199.229:8000/api/admin/people';
     formData.append('name', $('#name').val());
     formData.append('img', document.getElementById('image').files[0]);
     formData.append('status', $('#status').val());
@@ -202,7 +201,7 @@ function peoplePublic() {
 }
 
 function sliderPublic() {
-    var url = 'http://127.0.0.1:8000/api/admin/index/slider';
+    var url = 'http://39.105.199.229:8000/api/admin/index/slider';
     var formData = new FormData();
     formData.append('image', document.getElementById('indexImage').files[0]);
     formData.append('articleId', $('#articleID').val());
@@ -225,7 +224,7 @@ function sliderPublic() {
 }
 
 function messagePublic() {
-    var url = 'http://127.0.0.1:8000/api/admin/index/message';
+    var url = 'http://39.105.199.229:8000/api/admin/index/message';
     var formData = new FormData();
     formData.append('image', document.getElementById('image').files[0]);
     formData.append('title', $('#articleTitle').val());
@@ -252,48 +251,39 @@ function newsPublic() {
     var url;
     var formData = new FormData();
     if (document.getElementById('type').value == 'news') {
-        url = 'http://127.0.0.1:8000/api/admin/news';
+        url = 'http://39.105.199.229:8000/api/admin/news';
 
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'seminar') {
-        url = 'http://127.0.0.1:8000/api/admin/seminar';
-        alert($('#subSelect').val());
-        alert(ue.getContent());
+        url = 'http://39.105.199.229:8000/api/admin/seminar';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'conference') {
-        url = 'http://127.0.0.1:8000/api/admin/conference';
-        alert($('#subSelect').val());
-        alert(ue.getContent());
+        url = 'http://39.105.199.229:8000/api/admin/conference';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'exchange') {
-        url = 'http://127.0.0.1:8000/api/admin/exchange';
-        alert($('#subSelect').val());
-        alert(ue.getContent());
+        url = 'http://39.105.199.229:8000/api/admin/exchange';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'research') {
         if ($('#subSelect').val() == 'introduction') {
-            url = 'http://127.0.0.1:8000/api/admin/introduction';
-            alert($('#subSelect').val());
-            alert(ue.getContent());
+            url = 'http://39.105.199.229:8000/api/admin/introduction';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('content', ue.getContent());
         }
         if ($('#subSelect').val() == 'project') {
-            url = 'http://127.0.0.1:8000/api/admin/project';
-            alert($('#subSelect').val());
+            url = 'http://39.105.199.229:8000/api/admin/project';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -305,7 +295,7 @@ function newsPublic() {
             formData.append('other', $('#other').val());
         }
         if ($('#subSelect').val() == 'publication') {
-            url = 'http://127.0.0.1:8000/api/admin/publication';
+            url = 'http://39.105.199.229:8000/api/admin/publication';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -314,7 +304,7 @@ function newsPublic() {
             formData.append('other', $('#other').val());
         }
         if ($('#subSelect').val() == 'report') {
-            url = 'http://127.0.0.1:8000/api/admin/report';
+            url = 'http://39.105.199.229:8000/api/admin/report';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -327,14 +317,11 @@ function newsPublic() {
 
     }
     if (document.getElementById('type').value == 'join') {
-        url = 'http://127.0.0.1:8000/api/admin/join';
-        alert($('#subSelect').val());
-        alert(ue.getContent());
+        url = 'http://39.105.199.229:8000/api/admin/join';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
-    alert(url)
     $.ajax({
         type: 'POST',
         url: url,
@@ -361,9 +348,9 @@ function showExchange(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var missionUrl = 'http://127.0.0.1:8000/api/admin/exchange?type=mission';
-    var visitorUrl = 'http://127.0.0.1:8000/api/admin/exchange?type=visitor';
-    var allUrl = 'http://127.0.0.1:8000/api/admin/exchange';
+    var missionUrl = 'http://39.105.199.229:8000/api/admin/exchange?type=mission';
+    var visitorUrl = 'http://39.105.199.229:8000/api/admin/exchange?type=visitor';
+    var allUrl = 'http://39.105.199.229:8000/api/admin/exchange';
     var exchangeUrl;
     if (option == '1') {
         exchangeUrl = visitorUrl;//来访
@@ -382,6 +369,7 @@ function showExchange(val) {
             '                <td>序号</td>' +
             '                <td>标题</td>' +
             '                <td>类别</td>' +
+            '                <td>新闻ID</td>' +
             '                <td>发布日期</td>' +
             '                <td>点击</td>' +
             '                <td>管理</td>' +
@@ -399,7 +387,7 @@ function showExchange(val) {
                 console.log(data)
                 for (i = 0; i < data.length; i++) {
                     var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" onclick="news_edit(\'' + data[i].id + ' \')">编辑</a>&nbsp&nbsp<a href="#" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].news_id + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\'' + data[i].id + ' \')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
@@ -419,10 +407,10 @@ function showResearch(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var introductionUrl = 'http://127.0.0.1:8000/api/admin/introduction';
-    var projectUrl = 'http://127.0.0.1:8000/api/admin/project';
-    var publicationUrl = 'http://127.0.0.1:8000/api/admin/publication';
-    var reportUrl = 'http://127.0.0.1:8000/api/admin/report';
+    var introductionUrl = 'http://39.105.199.229:8000/api/admin/introduction';
+    var projectUrl = 'http://39.105.199.229:8000/api/admin/project';
+    var publicationUrl = 'http://39.105.199.229:8000/api/admin/publication';
+    var reportUrl = 'http://39.105.199.229:8000/api/admin/report';
     var researchUrl;
     if (option == '1') {
         researchUrl = introductionUrl;
@@ -437,7 +425,6 @@ function showResearch(val) {
             '            </tr>' +
             '        </table>'
         $("#MainRight").append(table)
-        alert(researchUrl)
         $.ajax({
             type: 'GET',
             url: researchUrl,
@@ -449,7 +436,7 @@ function showResearch(val) {
                 console.log(data)
                 for (i = 0; i < data.length; i++) {
                     var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" onclick="news_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" onclick="research_delete(\'' + researchUrl + '\',\'' + data[i].id + '\')">删除</a>' + '</td>'
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="research_delete(\'' + researchUrl + '\',\'' + data[i].id + '\')">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
@@ -493,7 +480,7 @@ function showResearch(val) {
                 console.log(data)
                 for (i = 0; i < data.length; i++) {
                     var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].author + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" onclick="research_edit(\'' + researchUrl + '\',\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" onclick="research_delete(\'' + researchUrl + '\',\' ' + data[i].id + '\')">删除</a>' + '</td>'
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].author + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="research_edit(\'' + researchUrl + '\',\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="research_delete(\'' + researchUrl + '\',\' ' + data[i].id + '\')">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
@@ -520,7 +507,7 @@ function showSubclass(val) {
 
         var subSelect = ' <select id="subSelect" name="subSelect">\n' +
             '                    <option value="domestic">国内会议</option>\n' +
-            '                    <option value="foregin">国外会议</option>\n' +
+            '                    <option value="foreign">国外会议</option>\n' +
             '                </select>';
 
         $("#selectPart").append(subSelect)
@@ -596,23 +583,23 @@ function showResearchPart(val) {
 
 function news_delete(id) {
     var url = window.location.href;
-    alert(url)
     var managementIndex = url.indexOf('management');
     url = url.substr(0, managementIndex - 1);
     url = url + '?id=' + id;
-    alert(url)
-    $.ajax({
-        url: url,
-        type: 'DELETE',
-        dataType: 'json',
-        success: function () {
-            alert('删除成功')
-        },
-        error: function () {
-            alert('删除失败')
+    if (confirm("确定要删除吗？")) {
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function () {
+                alert('删除成功')
+            },
+            error: function () {
+                alert('删除失败')
 
-        }
-    });
+            }
+        });
+    }
 
 }
 
@@ -701,43 +688,43 @@ function people_eidt(id) {
                 '                    });//实例化编辑\n' +
                 '            setTimeout(function () {\n' +
                 '                interestingUE.setContent(\'' + data.interesting + '\')\n' +
-                '            }, 100);' +
+                '            }, 300);' +
                 '                    var biographyUE = UE.getEditor(\'biography\', {\n' +
                 '                        serverUrl: "/api/controller/"\n' +
                 '                    });//实例化编辑\n' +
                 '            var timer2 = setTimeout(function () {\n' +
                 '                biographyUE.setContent(\'' + data.biography + '\');\n' +
-                '            }, 100);' +
+                '            }, 200);' +
                 '                    var projectUE = UE.getEditor(\'project\', {\n' +
                 '                        serverUrl: "/api/controller/"\n' +
                 '                    });//实例化编辑\n' +
                 '            var timer3 = setTimeout(function () {\n' +
                 '                projectUE.setContent(\'' + data.project + '\');\n' +
-                '            }, 100);' +
+                '            }, 200);' +
                 '                    var achievementUE = UE.getEditor(\'achievement\', {\n' +
                 '                        serverUrl: "/api/controller/"\n' +
                 '                    });//实例化编辑\n' +
                 '            var timer4 = setTimeout(function () {\n' +
                 '                achievementUE.setContent(\'' + data.achievement + '\');\n' +
-                '            }, 100);' +
+                '            }, 200);' +
                 '                    var activityUE = UE.getEditor(\'activity\', {\n' +
                 '                        serverUrl: "/api/controller/"\n' +
                 '                    });//实例化编辑\n' +
                 '            var timer5 = setTimeout(function () {\n' +
                 '                activityUE.setContent(\'' + data.activity + '\');\n' +
-                '            }, 100);' +
+                '            }, 200);' +
                 '                    var publicationUE = UE.getEditor(\'publication\', {\n' +
                 '                        serverUrl: "/api/controller/"\n' +
                 '                    });//实例化编辑\n' +
                 '            var timer6 = setTimeout(function () {\n' +
                 '                publicationUE.setContent(\'' + data.publication + '\');\n' +
-                '            }, 100);' +
+                '            }, 200);' +
                 '                    var reportUE = UE.getEditor(\'report\', {\n' +
                 '                        serverUrl: "/api/controller/"\n' +
                 '                    });//实例化编辑\n' +
                 '            var timer7 = setTimeout(function () {\n' +
                 '                reportUE.setContent(\'' + data.report + '\');\n' +
-                '            }, 100);' +
+                '            }, 200);' +
                 '                </script>\n' +
 
                 '\n' +
@@ -764,8 +751,6 @@ function message_edit(id) {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            alert("jinlaile")
-            alert(data.content)
             //删除展示数据的表格
             var tb = document.getElementById("tableStyle");
             var rowNum = tb.rows.length;
@@ -793,7 +778,7 @@ function message_edit(id) {
                 '                       onclick="messageEditSubmit(\'' + url + '\',\'' + id + '\' )">\n' +
                 '\n' +
                 '            </form>';
-            $('#MainRight').html(str)
+            $('#MainRight').html(str);
         },
         error: function () {
             alert('修改失败')
@@ -812,15 +797,12 @@ function news_edit(id) {
     url = url + '?id=' + id;
     if (newstype.startsWith('research')) {
         url = url.replace('research', 'introduction')
-        alert(url)
     }
     $.ajax({
         url: url,
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            alert("jinlaile")
-            alert(data.content)
             //删除展示数据的表格
             var tb = document.getElementById("tableStyle");
             var rowNum = tb.rows.length;
@@ -830,7 +812,7 @@ function news_edit(id) {
                 i = i - 1;
             }
             //   添加编辑内容
-            var strfont = ' <form id="newsForm" method="put" action="/" enctype="multipart/form-data">\n' +
+            var strfont = ' <form id="newsForm" method="put" action="/" enctype="multipart/form-data" style="margin-left: 30px;margin-top: 20px">\n' +
                 '                <span>标题</span><input type="text" name="articleTitle" id="articleTitle" ><br>\n' +
                 '\n' +
                 '                \n' +
@@ -853,7 +835,7 @@ function news_edit(id) {
                 '                       onclick="newsEditSubmit(\'' + url + '\',\'' + id + '\')">\n' +
                 '\n' +
                 '            </form>';
-            if (newstype.startsWith('news') || newstype.startsWith('seminar') || newstype.startsWith('research')) {
+            if (newstype.startsWith('news') || newstype.startsWith('seminar') || newstype.startsWith('research') || newstype.startsWith('join')) {
                 str = strfont + strend;
             }
             if (newstype.startsWith('conference')) {
@@ -882,11 +864,9 @@ function news_edit(id) {
 }
 
 function research_edit(url, id) {
-
     var urltype = url.split('/');
     var newstype = urltype[urltype.length - 1]
     var researchurl = url + '?id=' + id;
-    alert(url)
     $.ajax({
         url: researchurl,
         type: 'GET',
@@ -906,7 +886,7 @@ function research_edit(url, id) {
             var str = '';
             if (newstype == 'project') {
                 str = ' <div id="subForm" style="margin-left: 10%;margin-top: 30px">\n' +
-                    '<form id="researchEditForm" method="put">\n' +
+                    '<form id="researchEditForm" method="put" style="margin-left: 30px;margin-top: 20px">\n' +
                     '<span>题目</span><input type="text" name="researchtitle" id="researchtitle" value=\'' + data.title + '\'><br>\n' +
                     '                    <span>作者</span><input type="text" name="author" id="author" value=\'' + data.author + '\'><br>\n' +
                     '                    <span>项目编码</span><input type="text" name="code" id="code" value=\'' + data.project_code + '\'><br>\n' +
@@ -927,7 +907,7 @@ function research_edit(url, id) {
             }
             if (newstype == 'publication') {
                 str = ' <div id="subForm">\n' +
-                    '<form id="researchEditForm" method="put">\n' +
+                    '<form id="researchEditForm" method="put" style="margin-left: 30px;margin-top: 20px">\n' +
                     '<span>题目</span><input type="text" name="researchtitle" id="researchtitle" value=\'' + data.title + '\'><br>\n' +
                     '                    <span>作者</span><input type="text" name="author" id="author" value=\'' + data.author + '\'><br>\n' +
                     '                    <span>详细期刊及事件</span><input type="text" name="place" id="place" value=\'' + data.place + '\'><br>\n' +
@@ -940,9 +920,8 @@ function research_edit(url, id) {
                 $('#MainRight').html(str)
             }
             if (newstype == 'report') {
-                alert("report")
                 str = ' <div id="subForm">\n' +
-                    '<form id="researchEditForm" method="put">\n' +
+                    '<form id="researchEditForm" method="put" style="margin-left: 30px;margin-top: 20px">\n' +
                     '<span>题目</span><input type="text" name="researchtitle" id="researchtitle" value=\'' + data.title + '\'><br>\n' +
                     '                    <span>作者</span><input type="text" name="author" id="author" value=\'' + data.author + '\'><br>\n' +
                     '                    <span>报告地点</span><input type="text" name="place" id="place" value=\'' + data.place + '\'><br>\n' +
@@ -971,7 +950,6 @@ function researchEditSubmit(url, id) {
     var newstype = urltype[urltype.length - 1]
     var data;
     var type;
-    alert(newstype)
     if (newstype.startsWith("report")) {
         data = {
             'id': id,
@@ -1007,7 +985,6 @@ function researchEditSubmit(url, id) {
             'other': $('#other').val()
         }
     }
-    alert("进来了")
     $.ajax({
         url: url,
         type: 'PUT',
@@ -1025,8 +1002,6 @@ function researchEditSubmit(url, id) {
 }
 
 function peopleEditSubmit(url, id) {
-
-
     var name = $('#name').val();
     var status = $('#status').val();
     var user_category = $('#type').val();
@@ -1115,11 +1090,10 @@ function newsEditSubmit(url, id) {
     var data;
     var type;
 
-    if (newstype.startsWith('news') || newstype.startsWith('seminar') || newstype.startsWith('introduction')) {
+    if (newstype.startsWith('news') || newstype.startsWith('seminar') || newstype.startsWith('introduction') || newstype.startsWith('join')) {
         data = {'id': id, 'title': title, 'content': content};
     }
     if (newstype.startsWith('conference') || newstype.startsWith('exchange')) {
-        alert("进来了");
         type = $('#subSelect').val()
         data = {'id': id, 'title': title, 'content': content, 'type': type};
     }
@@ -1141,118 +1115,47 @@ function newsEditSubmit(url, id) {
 
 function research_delete(url, id) {
     url = url + '?id=' + id;
-    $.ajax({
-        url: url,
-        type: 'DELETE',
-        dataType: 'json',
-        success: function () {
-            alert('删除成功')
-        },
-        error: function () {
-            alert('删除失败')
+    if (confirm("确定要删除吗？")) {
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function () {
+                alert('删除成功')
+            },
+            error: function () {
+                alert('删除失败')
 
-        }
-    });
-
-}
-
-// var subclass = document.getElementById('articleSubClass');
-// subclass.style.display = "none";   //先将子菜单关闭
-// var childs = subclass.childNodes;  //删除原有的所有子节点
-// for (var i = childs.length - 1; i >= 0; i--) {
-//     subclass.removeChild(childs[i]);
-// }
-//
-// switch (articleClass) {
-//     case 'news':
-//         //alert("进入我这个循环了"+ articleClass);
-//         //subclass.style.display="none";
-//         break;
-//     case 'seminar':
-//         //alert("进入我这个循环了"+ articleClass);
-//         break;
-//     case 'conference':
-//         alert("进到子目录")
-//         subclass.style.display = "";
-//         subArry = ["国内会议", "国际会议"];
-//         subValue = ["gnhy", "gjhy"]
-//         for (i = 0; i < subArry.length; i++) {
-//             //alert("进入我这个循环了for"+ i);
-//             var option = document.createElement("option");
-//             var node = document.createTextNode(subArry[i]);
-//             option.appendChild(node);
-//             option.value = subValue[i];
-//             subclass.appendChild(option);
-//             //alert(subArry[i]);
-//         }
-//         break;
-//     case 'xsjl':
-//         subclass.style.display = "";
-//         subArry = ["出访", "来访"];
-//         subValue = ["cf", "lf"]
-//         for (i = 0; i < subArry.length; i++) {
-//             //alert("进入我这个循环了for"+ i);
-//             var option = document.createElement("option");
-//             var node = document.createTextNode(subArry[i]);
-//             option.appendChild(node);
-//             option.value = subValue[i];
-//             subclass.appendChild(option);
-//
-//         }
-//         break;
-//     case 'kxyj':
-//         //alert("进入我这个循环了"+ articleClass);
-//         break;
-//     case 'znxs':
-//         //alert("进入我这个循环了"+ articleClass);
-//         subclass.style.display = "";
-//         subArry = ["博士生", "研究生", "教师"];
-//         subValue = ["bss", "yjs", "js"]
-//         for (i = 0; i < subArry.length; i++) {
-//             //alert("进入我这个循环了for"+ i);
-//             var option = document.createElement("option");
-//             var node = document.createTextNode(subArry[i]);
-//             option.appendChild(node);
-//             option.value = subValue[i];
-//             subclass.appendChild(option);
-//
-//         }
-//         break;
-//     default:
-//     //alert("进入我这个循环了"+ articleClass);
-// }
-
-
-function xwfbSubmit() {
-
-    var title = document.getElementById("title");
-    var content = UE.getEditor('editor').getContent();
-    //alert(content);
-    if (title.value == "" || content == "") {
-        if (title.value == "") {
-            alert("请输入标题");
-            return false;
-        }
-        else {
-            alert("请输入内容");
-            return false;
-        }
-    }
-    else {
-        return true;
+            }
+        });
     }
 }
 
+function logout() {
+    if (confirm("确定要退出吗？")) {
+        $.ajax({
+            url: 'http://39.105.199.229:8000/api/admin/logout',
+            type: 'GET',
+            dataType: 'json',
+            success: function () {
+                alert('退出登陆成功')
+            },
+            error: function () {
+                alert('退出登陆失败')
+
+            }
+        });
+    }
+}
 
 function NavLink() {
     //设置后台导航
     var title = document.getElementById("MainLeft").getElementsByTagName("li");//获取导航的DIV
-    var LinkArry = ["index/slider_management", "index/message_management", "news_public", "#", "news_management", "seminar_management", "conference_management", "exchange_management", "research_management", "join_management", "xwgl.php?news=gywm", "people_management", "xzgl.php"]; //创建超链接数组
+    var LinkArry = ["http://39.105.199.229:8000/api/admin/index/slider_management", "http://39.105.199.229:8000/api/admin/index/message_management", "http://39.105.199.229:8000/api/admin/news_public", "#", "http://39.105.199.229:8000/api/admin/news_management", "http://39.105.199.229:8000/api/admin/seminar_management", "http://39.105.199.229:8000/api/admin/conference_management", "http://39.105.199.229:8000/api/admin/exchange_management", "http://39.105.199.229:8000/api/admin/research_management", "http://39.105.199.229:8000/api/admin/join_management", "xwgl.php?news=gywm", "people_management", "xzgl.php"]; //创建超链接数组
     var LinkNode = ["轮播图管理", "内容管理", "新闻发布", "新闻管理", "中心动态", "学术报告", "学术会议", "学术交流", "科学研究", "招纳贤士", "关于我们", "成员管理", "下载管理"]
-
     var n = title.length;
 
-    for (i = 0; i < n; i++) {                                           //遍历添加超链接
+    for (i = 0; i < n; i++) {                                           //遍历添加超链接s
 
         var a = document.createElement("a");
         var node = document.createTextNode(LinkNode[i]);

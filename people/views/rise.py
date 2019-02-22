@@ -10,7 +10,7 @@ from utils.api.api import APIView
 class PeopleInfoAPI(APIView):
     def get(self, request):
         data = request.data
-        people_list = People.objects.filter(user_category=data['user_category'], status=1)
+        people_list = People.objects.filter(user_category=data['user_category'])
         return self.success(self.paginate_data(request, people_list, PeopleInfoSerializer))
 
 

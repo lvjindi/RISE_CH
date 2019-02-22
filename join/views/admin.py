@@ -16,7 +16,7 @@ class JoinAdminAPI(APIView):
         title = request.POST.get('title')
         content = request.POST.get('content')
         join = Join.objects.create(title=title, content=content)
-        news = News.objects.create(title=title, content=content, type="jonn")
+        news = News.objects.create(title=title, content=content, type="join")
         join.news_id = news.id
         join.save()
         return self.success(JoinDetailSerializer(join).data)
@@ -28,9 +28,10 @@ class JoinAdminAPI(APIView):
         try:
             join = Join.objects.get(id=data['id'])
             news = News.objects.get(id=join.news_id)
-            for k, v in data.items:
-                setattr(join, k, v)
-                setattr(news, k, v)
+            setattr(join, 'title', data['title'])
+            setattr(join, 'content', data['content'])
+            setattr(news, 'title', data['title'])
+            setattr(news, 'content', data['content'])
             join.save()
             news.save()
             return self.success(JoinDetailSerializer(join).data)

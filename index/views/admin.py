@@ -1,8 +1,11 @@
+import os
+
 from django.contrib import admin
 
 # Register your models here.
 from django.shortcuts import render
 
+from Rise_CH import settings
 from account.decorators import super_admin_required
 from index.models import SliderPicture, MessageFromDirector
 from index.serializers import CreateSliderSerializer, SliderSerializer, EditSliderSerializer, CreateMessageSerializer, \
@@ -16,10 +19,11 @@ class SlideAdminAPI(APIView):
     def post(self, request):
         "publish slide picture"
         image = request.FILES.get('image')
+        imagePath = os.path.join(settings.MEDIA_URL, image.name.replace(' ', '_'))
         articleId = request.POST.get('articleId')
         slide_picture = SliderPicture.objects.create(
             articleId=articleId,
-            image=image)
+            image=image, imagePath=imagePath)
         return self.success(SliderSerializer(slide_picture).data)
 
     # @validate_serializer(EditSliderSerializer)
@@ -62,11 +66,12 @@ class DrMessageAdminAPI(APIView):
     def post(self, request):
         "create message"
         image = request.FILES.get('image')
+        imagePath = os.path.join(settings.MEDIA_URL, image.name)
         title = request.POST.get('title')
         content = request.POST.get('content')
         message = MessageFromDirector.objects.create(content=content,
                                                      title=title,
-                                                     image=image)
+                                                     image=image, imagePath=imagePath)
         return self.success(MessageFromDrSerializer(message).data)
 
     # @validate_serializer(MessageFromDrSerializer)
@@ -82,9 +87,6 @@ class DrMessageAdminAPI(APIView):
             return self.success(MessageFromDrSerializer(message).data)
         except MessageFromDirector.DoesNotExist:
             return self.error('Message does not exits')
-
-
-
 
     @super_admin_required
     def get(self, request):

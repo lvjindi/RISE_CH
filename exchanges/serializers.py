@@ -40,3 +40,4 @@ class ExchangeSerializer(serializers.Serializer):
     views_number = serializers.IntegerField()
     image = serializers.CharField(max_length=128)
     sliderFlag = serializers.BooleanField()
+    create_time = serializers.DateTimeField()
