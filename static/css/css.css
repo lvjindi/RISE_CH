@@ -153,7 +153,7 @@ body {
     color: white;
     height: 30px;
     line-height: 30px;
-/ / background-color: #0a92e1;
+/*/ / background-color: #0a92e1;*/
     width: 100%;
     clear: both;
     border-radius: 0 0 10px 10px;
@@ -161,43 +161,38 @@ body {
     background-image: url(../images/footer_bg.png);
 }
 
-.tableStyle {
-    width: 95%;
-    margin: 20px 20px 0px 30px;
-    border: 1px solid black;
-    /*/ / border: 1 px solid;*/
-    border-collapse: collapse;
-}
 
-.tableStyle td {
-    padding: 0px;
-    margin: 0px;
-    border: 1px solid black;
+
+.tableStyle {
+    margin-top: 20px;
     border-collapse: collapse;
-    font-size: 14px;
+    /*margin: 0 auto;*/
     text-align: center;
 }
 
-.tableStyle th {
-    font-size: 14px;
-    color: #0a92e1;
-/ / text-align: left;
-/ / text-indent: 2 em;
-    white-space: nowrap;
+.tableStyle td, .tableStyle th {
+
+    border: 1px solid #cad9ea;
+    color: #666;
+    height: 30px;
+    text-align: center;
+}
+
+.tableStyle thead th {
+    background-color: #CCE8EB;
+    margin-top: 20px;
 
 }
 
-.tableStyle > td {
-    color: white;
-    height: 25px;
-    line-height: 25px;
-    width: 20%;
-    padding: 0px;
-    margin: 0px;
-    background-color: #87CEFA;
-    border: 1px solid;
-    border-color: #87CEFA;
+.tableStyle tr:nth-child(odd) {
+    background: #fff;
+
 }
+
+.tableStyle tr:nth-child(even) {
+    background: #F5FAFA;
+}
+
 
 span {
     font-family: "微软雅黑";
@@ -278,4 +273,212 @@ information textarea {
     color: #2D64B3;
     text-decoration: underline;
     text-decoration-color: #0a92e1;
+}
+
+header {
+    width: 100%;
+    height: 50px;
+    background: #1e1b29;
+    border-bottom: solid 4px red;
+}
+
+.member_wrap {
+
+}
+
+.header_item {
+    overflow: hidden;
+}
+
+.header_item {
+
+    width: 980px;
+    margin: 0 auto;
+}
+
+.menu_head {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    border: solid 3px #fff;
+    overflow: hidden;
+}
+
+.menu_head img {
+    width: 100%;
+    height: 100%;
+}
+
+.menu_info {
+    width: 840px;
+    margin-left: 20px;
+}
+
+.info_name {
+    font-size: 18px;
+    line-height: 40px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.info_name_box {
+    margin-top: 10px;
+}
+
+.level {
+    font-size: 14px;
+    color: #f60;
+    font-weight: bold;
+}
+
+.info_desc {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #FFF;
+}
+
+.banner_menu {
+    width: 980px;
+    height: 50px;
+    margin: 20px auto;
+    background: #fff;
+}
+
+.nav_box {
+    margin-top: 50px;
+}
+
+.nav_box ul {
+    overflow: hidden;
+}
+
+.nav_box ul li {
+    display: block;
+    padding: 0 20px;
+}
+
+.nav_box ul li a {
+    color: #fff;
+    font-size: 16px;
+}
+
+.nav_box ul li a:hover {
+    color: red;
+}
+
+.login_wrap {
+    /*background: url(../img/logo_bg.jpg) no-repeat center;*/
+    background-color: #eeeeee;
+    background-size: 100%;
+}
+
+.logo {
+    width: 500px;
+    height: 150px;
+    margin: 0px auto;
+    /*background: url(../img/logowz.png) no-repeat center;*/
+}
+
+.login_box {
+    width: 360px;
+    background: #FFFFFF;
+    margin: 0px auto;
+}
+
+.login_title {
+    font-size: 25px;
+    text-align: center;
+    color: #FF7F50;
+    padding: 15px 0;
+    width: 300px;
+    margin: -30px auto;
+    border-bottom: solid 1px #CCCCCC;
+}
+
+.form_text_ipt {
+    width: 300px;
+    height: 40px;
+    border: solid 1px #CCCCCC;
+    margin: 20px auto 0 auto;
+    background: #FFFFFF;
+}
+
+.form_check_ipt {
+    width: 300px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.form_text_ipt input {
+    width: 290px;
+    height: 30px;
+    margin: 5px;
+    border: none;
+    font-family: "微软雅黑";
+    font-size: 15px;
+    color: #666;
+}
+
+.check_left label {
+    cursor: pointer;
+}
+
+.check_left label input {
+    position: relative;
+    top: 2px;
+}
+
+.form_btn {
+    width: 300px;
+    height: 40px;
+    margin-top: 10px;
+    margin-left: 330px;
+
+}
+
+.form_btn input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    background: #FF7F50;
+    cursor: pointer;
+}
+
+.form_reg_btn {
+    width: 300px;
+    margin: 0 auto;
+    font-size: 14px;
+    color: #666;
+}
+
+.other_login {
+    overflow: hidden;
+    width: 300px;
+    height: 80px;
+    line-height: 80px;
+    margin: 0px auto;
+}
+
+.other_left {
+    font-size: 14px;
+    color: #999;
+}
+
+.other_right a {
+    margin: 5px;
+    color: #636363;
+}
+
+.other_right a:hover {
+    color: #AEEEEE;
+}
+
+.ececk_warning {
+    font-size: 13px;
+    color: red;
+    width: 300px;
+    margin: 0 auto;
+    display: none;
 }

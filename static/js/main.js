@@ -50,9 +50,9 @@ function showConference(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var domesticUrl = 'http://39.105.199.229:8000/api/admin/conference?type=domestic';
-    var foreignUrl = 'http://39.105.199.229:8000/api/admin/conference?type=foreign';
-    var allUrl = 'http://39.105.199.229:8000/api/admin/conference';
+    var domesticUrl = 'http://127.0.0.1:8000/api/admin/conference?type=domestic';
+    var foreignUrl = 'http://127.0.0.1:8000/api/admin/conference?type=foreign';
+    var allUrl = 'http://127.0.0.1:8000/api/admin/conference';
     var conferenceUrl;
     if (option == '1') {
         conferenceUrl = domesticUrl;
@@ -66,16 +66,18 @@ function showConference(val) {
 
     if (option != '4') {
         var table = '';
-        table = ' <table class="tableStyle" id="tableStyle">' +
+        table = ' <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%"> ' +
+            '<thead>' +
             '            <tr>' +
-            '                <td>序号</td>' +
-            '                <td>标题</td>' +
-            '                <td>类别</td>' +
-            '                <td>新闻ID</td>' +
-            '                <td>发布日期</td>' +
-            '                <td>点击</td>' +
-            '                <td>管理</td>' +
+            '                <th>序号</th>' +
+            '                <th>标题</th>' +
+            '                <th>类别</th>' +
+            '                <th>新闻ID</th>' +
+            '                <th>发布日期</th>' +
+            '                <th>点击</th>' +
+            '                <th>管理</th>' +
             '            </tr>' +
+            '</thead>' +
             '        </table>'
         $("#MainRight").append(table)
         $.ajax({
@@ -87,6 +89,9 @@ function showConference(val) {
             //jsonpCallback: 'callback',
             success: function (data) {
                 console.log(data)
+                if (data.error) {
+                    alert(data.error)
+                }
                 for (i = 0; i < data.length; i++) {
                     var tr;
                     tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].news_id + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
@@ -101,39 +106,137 @@ function showConference(val) {
     }
 }
 
-function showPeople(val) {
+function peopleAdminCheck() {
+    $.ajax({
+        url: "http://127.0.0.1:8000/api/admin/checkAdmin",
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            if (data) {
+                str = '<select name="conferenceType" id="conferenceType" onchange="showPeopleAdmin(this.value)" style="margin-left: 30px">\n' +
+                    '            <option value="7">请选择成员类别</option>\n' +
+                    '            <option value="6">全部</option>\n' +
+                    '            <option value="5">特聘教授</option>\n' +
+                    '            <option value="4">科研人员</option>\n' +
+                    '            <option value="3">本科生</option>\n' +
+                    '            <option value="2">研究生</option>\n' +
+                    '            <option value="1">博士生</option>\n' +
+                    '        </select>';
+                $('#MainRight').append(str)
+
+            } else {
+
+                $.ajax({
+                    url: "http://127.0.0.1:8000/api/admin/people",
+                    type: 'GET',
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log(data)
+                        var table = '';
+                        table = ' <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">' +
+                            '<thead>' +
+                            '            <tr>' +
+                            '                <th>序号</th>' +
+                            '                <th>姓名</th>' +
+                            '                <th>类别</th>' +
+                            '                <th>发布日期</th>' +
+                            '                <th>管理</th>' +
+                            '            </tr>' +
+                            '</thead>' +
+                            '        </table>';
+                        $("#MainRight").append(table);
+                        for (i = 0; i < data.length; i++) {
+                            var tr;
+                            tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].user_category + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="people_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(\'' + data[i].id + '\')">删除</a>' + '</td>'
+                            $("#tableStyle").append('<tr>' + tr + '</tr>')
+                        }
+
+
+                    },
+                    error: function (data) {
+                        alert("获取数据失败！")
+
+                    }
+
+
+                })
+            }
+        }
+    })
+
+}
+
+function showStudent(val) {
     var option = val;
     var obj = document.getElementById('MainRight');
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var staffUrl = 'http://39.105.199.229:8000/api/admin/people?type=staff';
-    var studentUrl = 'http://39.105.199.229:8000/api/admin/people?type=student';
-    var professorUrl = 'http://39.105.199.229:8000/api/admin/people?type=adjunctProfessor';
-    var allUrl = 'http://39.105.199.229:8000/api/admin/people';
+    if (document.getElementById('studentType')) {
+        obj.removeChild(document.getElementById('studentType'));
+    }
+    if (option == 'student') {
+        str = '<select name="studentType" id="studentType"  style="margin-left: 30px">\n' +
+            '            <option value="undergraduate">本科生</option>\n' +
+            '            <option value="master">研究生</option>\n' +
+            '            <option value="doctor">博士生</option>\n' +
+            '        </select><br>' +
+            '<span>入学时间</span><input type="date" name="enrollmentTime" id="enrollmentTime" style="margin-top: 20px" ><br>' +
+            '<span>毕业时间</span><input type="date" name="graduationTime" id="graduationTime" style="margin-top: 20px"><br>';
+        $('#selectPart').append(str)
+    }
+
+}
+
+
+function showPeopleAdmin(val) {
+    var option = val;
+    var obj = document.getElementById('MainRight');
+    if (document.getElementById('tableStyle')) {
+        obj.removeChild(document.getElementById('tableStyle'))
+    }
+    if (document.getElementById('studentType')) {
+        obj.removeChild(document.getElementById('studentType'));
+    }
+    var staffUrl = 'http://127.0.0.1:8000/api/admin/people?type=staff';
+    var undergraduateUrl = 'http://127.0.0.1:8000/api/admin/people?type=undergraduate';
+    var masterUrl = 'http://127.0.0.1:8000/api/admin/people?type=master';
+    var doctorUrl = 'http://127.0.0.1:8000/api/admin/people?type=doctor';
+    var professorUrl = 'http://127.0.0.1:8000/api/admin/people?type=adjunctProfessor';
+    var allUrl = 'http://127.0.0.1:8000/api/admin/people';
     var peopleUrl;
     if (option == '1') {
-        peopleUrl = staffUrl;
+        peopleUrl = doctorUrl;
     }
     if (option == '2') {
-        peopleUrl = studentUrl;
+        peopleUrl = masterUrl;
     }
     if (option == '3') {
-        peopleUrl = professorUrl;
+        peopleUrl = undergraduateUrl;
     }
     if (option == '4') {
+        peopleUrl = staffUrl;
+    }
+
+    if (option == '5') {
+        peopleUrl = professorUrl;
+    }
+    if (option == '6') {
         peopleUrl = allUrl;
     }
-    if (option != '5') {
+    if (option != '7') {
         var table = '';
-        table = ' <table class="tableStyle" id="tableStyle">' +
+        table = ' <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">' +
+            '<thead>' +
             '            <tr>' +
-            '                <td>序号</td>' +
-            '                <td>姓名</td>' +
-            '                <td>类别</td>' +
-            '                <td>发布日期</td>' +
-            '                <td>管理</td>' +
+            '                <th>序号</th>' +
+            '                <th>姓名</th>' +
+            '                <th>类别</th>' +
+            '                <th>发布日期</th>' +
+            '                <th>管理</th>' +
             '            </tr>' +
+            '</thead>' +
             '        </table>'
         $("#MainRight").append(table)
         $.ajax({
@@ -145,9 +248,12 @@ function showPeople(val) {
             //jsonpCallback: 'callback',
             success: function (data) {
                 console.log(data)
+                if (data.error) {
+                    alert(data.error)
+                }
                 for (i = 0; i < data.length; i++) {
                     var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].user_category + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="people_eidt(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(\'' + data[i].id + '\')">删除</a>' + '</td>'
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].user_category + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="people_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(\'' + data[i].id + '\')">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
@@ -160,19 +266,19 @@ function showPeople(val) {
     }
 }
 
-function peoplePublic() {
+function staffPublic() {
     var formData = new FormData();
-    var url = 'http://39.105.199.229:8000/api/admin/people';
+    var url = 'http://127.0.0.1:8000/api/admin/people/staff';
     formData.append('name', $('#name').val());
     formData.append('img', document.getElementById('image').files[0]);
     formData.append('status', $('#status').val());
-    formData.append('user_category', $('#type').val());
     formData.append('office', $('#office').val());
     formData.append('phone', $('#phone').val());
     formData.append('email', $('#email').val());
     formData.append('position', $('#position').val());
     formData.append('degree', $('#degree').val());
     formData.append('professionalTitle', $('#professionalTitle').val());
+    formData.append('profession ', $('#profession ').val());
     formData.append('area', $('#area').val());
     formData.append('interesting', interesting.getContent());
     formData.append('biography', biography.getContent());
@@ -190,8 +296,15 @@ function peoplePublic() {
         processData: false,
         // jsonpCallback: 'callback',
         success: function (data) {
-            console.log(data)
-            alert("发布成功")
+            location.reload("http://127.0.0.1:8000/api/admin/people/staff_management")
+            if (data.error) {
+                alert(data.error)
+            }
+            else {
+                console.log(data)
+                alert("发布成功")
+            }
+
         },
         error: function (xhr, type) {
             alert("发布失败")
@@ -200,8 +313,126 @@ function peoplePublic() {
 
 }
 
+function adjunctProfessorPublic() {
+    var formData = new FormData();
+    var url = 'http://127.0.0.1:8000/api/admin/people/adjunctProfessor';
+    formData.append('name', $('#name').val());
+    formData.append('img', document.getElementById('image').files[0]);
+    formData.append('email', $('#email').val());
+    formData.append('position', $('#position').val());
+    formData.append('degree', $('#degree').val());
+    formData.append('professionalTitle', $('#professionalTitle').val());
+    formData.append('area', $('#area').val());
+    formData.append('link', $('#link').val());
+    formData.append('biography', biography.getContent());
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        // jsonpCallback: 'callback',
+        success: function (data) {
+            location.reload("http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management")
+            if (data.error) {
+                alert(data.error)
+            }
+            else {
+                console.log(data)
+                alert("发布成功")
+            }
+        },
+        error: function (xhr, type) {
+            alert("发布失败")
+        }
+    })
+
+}
+
+function studentPublic() {
+    var formData = new FormData();
+    var url = 'http://127.0.0.1:8000/api/admin/people/student';
+    var supervisorLinkUrl = 'http://127.0.0.1:8000/api/admin/people/student'
+    formData.append('name', $('#name').val());
+    formData.append('img', document.getElementById('image').files[0]);
+    formData.append('email', $('#email').val());
+    formData.append('enrollmentTime', $('#enrollmentTime').val());
+    formData.append('graduationTime', $('#graduationTime').val());
+    formData.append('graduateStatus', $('#graduateStatus').val());
+    formData.append('type', $('#type').val());
+    formData.append('supervisor', $('#supervisor').val());
+    if ($('#supervisor').val()) {
+        $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:8000/api/admin/people/staff',
+                data: '',
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log(data)
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i].name == $('#supervisor ').val()) {
+                            supervisorLinkUrl = supervisorLinkUrl + "?id=" + data[i].id;
+                            document.getElementById('supervisorLink').value = supervisorLinkUrl;
+
+                        }
+                        else {
+                            $('#supervisor').val(0)
+                            document.getElementById('supervisorLink').value = ''
+                            alert(document.getElementById('supervisorLink').value)
+
+                        }
+                    }
+
+                },
+                error: function () {
+                    alert(XMLHttpRequest.status);
+                    alert(XMLHttpRequest.readyState);
+                    alert(textStatus);
+                },
+
+            }
+        )
+    }
+
+    formData.append('area', $('#area').val());
+    alert($('#supervisorLink').val())
+    formData.append('supervisorLink', $('#supervisorLink').val())
+    formData.append('biography', biography.getContent());
+    formData.append('project', project.getContent());
+    formData.append('activity', activity.getContent());
+    formData.append('publication', publication.getContent());
+    // setTimeout(formData.append('supervisorLink ', document.getElementById('supervisorLink ').value), 200)
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        // jsonpCallback: 'callback',
+        success: function (data) {
+            location.reload("http://127.0.0.1:8000/api/admin/people/student_management")
+            if (data.error) {
+                alert(data.error)
+            }
+            else {
+                console.log(data)
+                alert("发布成功")
+            }
+
+        },
+        error: function () {
+            alert("发布失败")
+        }
+    })
+
+}
+
 function sliderPublic() {
-    var url = 'http://39.105.199.229:8000/api/admin/index/slider';
+    var url = 'http://127.0.0.1:8000/api/admin/index/slider';
     var formData = new FormData();
     formData.append('image', document.getElementById('indexImage').files[0]);
     formData.append('articleId', $('#articleID').val());
@@ -214,8 +445,14 @@ function sliderPublic() {
         processData: false,
         // jsonpCallback: 'callback',
         success: function (data) {
-            console.log(data)
-            alert("发布成功")
+            if (data.error) {
+                alert(data.error)
+            }
+            else {
+                location.reload("http://127.0.0.1:8000/api/admin/index/slider_management");
+                console.log(data);
+                alert("发布成功");
+            }
         },
         error: function (xhr, type) {
             alert("发布失败")
@@ -224,7 +461,7 @@ function sliderPublic() {
 }
 
 function messagePublic() {
-    var url = 'http://39.105.199.229:8000/api/admin/index/message';
+    var url = 'http://127.0.0.1:8000/api/admin/index/message';
     var formData = new FormData();
     formData.append('image', document.getElementById('image').files[0]);
     formData.append('title', $('#articleTitle').val());
@@ -238,8 +475,14 @@ function messagePublic() {
         processData: false,
         // jsonpCallback: 'callback',
         success: function (data) {
-            console.log(data)
-            alert("发布成功")
+            if (data.error) {
+                alert(data.error)
+            }
+            else {
+                location.reload("http://127.0.0.1:8000/api/admin/index/message_management")
+                console.log(data)
+                alert("发布成功")
+            }
         },
         error: function (xhr, type) {
             alert("发布失败")
@@ -251,39 +494,42 @@ function newsPublic() {
     var url;
     var formData = new FormData();
     if (document.getElementById('type').value == 'news') {
-        url = 'http://39.105.199.229:8000/api/admin/news';
+        url = 'http://127.0.0.1:8000/api/admin/news';
 
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'seminar') {
-        url = 'http://39.105.199.229:8000/api/admin/seminar';
+        url = 'http://127.0.0.1:8000/api/admin/seminar';
         formData.append('subType', $('#subSelect').val());
+        formData.append('time', $('#time').val());
+        formData.append('place', $('#place').val());
+        formData.append('speaker', $('#speaker').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'conference') {
-        url = 'http://39.105.199.229:8000/api/admin/conference';
+        url = 'http://127.0.0.1:8000/api/admin/conference';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'exchange') {
-        url = 'http://39.105.199.229:8000/api/admin/exchange';
+        url = 'http://127.0.0.1:8000/api/admin/exchange';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'research') {
         if ($('#subSelect').val() == 'introduction') {
-            url = 'http://39.105.199.229:8000/api/admin/introduction';
+            url = 'http://127.0.0.1:8000/api/admin/introduction';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('content', ue.getContent());
         }
         if ($('#subSelect').val() == 'project') {
-            url = 'http://39.105.199.229:8000/api/admin/project';
+            url = 'http://127.0.0.1:8000/api/admin/project';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -295,7 +541,7 @@ function newsPublic() {
             formData.append('other', $('#other').val());
         }
         if ($('#subSelect').val() == 'publication') {
-            url = 'http://39.105.199.229:8000/api/admin/publication';
+            url = 'http://127.0.0.1:8000/api/admin/publication';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -304,7 +550,7 @@ function newsPublic() {
             formData.append('other', $('#other').val());
         }
         if ($('#subSelect').val() == 'report') {
-            url = 'http://39.105.199.229:8000/api/admin/report';
+            url = 'http://127.0.0.1:8000/api/admin/report';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -317,7 +563,19 @@ function newsPublic() {
 
     }
     if (document.getElementById('type').value == 'join') {
-        url = 'http://39.105.199.229:8000/api/admin/join';
+        url = 'http://127.0.0.1:8000/api/admin/join';
+        formData.append('subType', $('#subSelect').val());
+        formData.append('title', $('#articleTitle').val());
+        formData.append('content', ue.getContent());
+    }
+    if (document.getElementById('type').value == 'aboutUs') {
+        url = 'http://127.0.0.1:8000/api/admin/aboutUs';
+        formData.append('subType', $('#subSelect').val());
+        formData.append('title', $('#articleTitle').val());
+        formData.append('content', ue.getContent());
+    }
+    if (document.getElementById('type').value == 'contact') {
+        url = 'http://127.0.0.1:8000/api/admin/contact';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
@@ -331,8 +589,13 @@ function newsPublic() {
         processData: false,
         // jsonpCallback: 'callback',
         success: function (data) {
-            console.log(data)
-            alert("发布成功")
+            if (data.error) {
+                alert(data.error)
+            }
+            else {
+                console.log(data)
+                alert("发布成功")
+            }
         },
         error: function (xhr, type) {
             alert("发布失败")
@@ -348,9 +611,9 @@ function showExchange(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var missionUrl = 'http://39.105.199.229:8000/api/admin/exchange?type=mission';
-    var visitorUrl = 'http://39.105.199.229:8000/api/admin/exchange?type=visitor';
-    var allUrl = 'http://39.105.199.229:8000/api/admin/exchange';
+    var missionUrl = 'http://127.0.0.1:8000/api/admin/exchange?type=mission';
+    var visitorUrl = 'http://127.0.0.1:8000/api/admin/exchange?type=visitor';
+    var allUrl = 'http://127.0.0.1:8000/api/admin/exchange';
     var exchangeUrl;
     if (option == '1') {
         exchangeUrl = visitorUrl;//来访
@@ -364,16 +627,18 @@ function showExchange(val) {
 
     if (option != '4') {
         var table = '';
-        table = ' <table class="tableStyle" id="tableStyle">' +
+        table = ' <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">' +
+            '<thead>' +
             '            <tr>' +
-            '                <td>序号</td>' +
-            '                <td>标题</td>' +
-            '                <td>类别</td>' +
-            '                <td>新闻ID</td>' +
-            '                <td>发布日期</td>' +
-            '                <td>点击</td>' +
-            '                <td>管理</td>' +
+            '                <th>序号</th>' +
+            '                <th>标题</th>' +
+            '                <th>类别</th>' +
+            '                <th>新闻ID</th>' +
+            '                <th>发布日期</th>' +
+            '                <th>点击</th>' +
+            '                <th>管理</th>' +
             '            </tr>' +
+            '</thead>>' +
             '        </table>'
         $("#MainRight").append(table)
         $.ajax({
@@ -385,6 +650,9 @@ function showExchange(val) {
             //jsonpCallback: 'callback',
             success: function (data) {
                 console.log(data)
+                if (data.error) {
+                    alert(data.error)
+                }
                 for (i = 0; i < data.length; i++) {
                     var tr;
                     tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].news_id + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\'' + data[i].id + ' \')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
@@ -407,22 +675,24 @@ function showResearch(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var introductionUrl = 'http://39.105.199.229:8000/api/admin/introduction';
-    var projectUrl = 'http://39.105.199.229:8000/api/admin/project';
-    var publicationUrl = 'http://39.105.199.229:8000/api/admin/publication';
-    var reportUrl = 'http://39.105.199.229:8000/api/admin/report';
+    var introductionUrl = 'http://127.0.0.1:8000/api/admin/introduction';
+    var projectUrl = 'http://127.0.0.1:8000/api/admin/project';
+    var publicationUrl = 'http://127.0.0.1:8000/api/admin/publication';
+    var reportUrl = 'http://127.0.0.1:8000/api/admin/report';
     var researchUrl;
     if (option == '1') {
         researchUrl = introductionUrl;
         var table = '';
-        table = ' <table class="tableStyle" id="tableStyle">' +
+        table = ' <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">' +
+            '<thead>' +
             '            <tr>' +
-            '                <td>序号</td>' +
-            '                <td>标题</td>' +
-            '                <td>发布日期</td>' +
-            '                <td>点击</td>' +
-            '                <td>管理</td>' +
+            '                <th>序号</th>' +
+            '                <th>标题</th>' +
+            '                <th>发布日期</th>' +
+            '                <th>点击</th>' +
+            '                <th>管理</th>' +
             '            </tr>' +
+            '</thead>' +
             '        </table>'
         $("#MainRight").append(table)
         $.ajax({
@@ -434,6 +704,9 @@ function showResearch(val) {
             //jsonpCallback: 'callback',
             success: function (data) {
                 console.log(data)
+                if (data.error) {
+                    alert(data.error)
+                }
                 for (i = 0; i < data.length; i++) {
                     var tr;
                     tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="research_delete(\'' + researchUrl + '\',\'' + data[i].id + '\')">删除</a>' + '</td>'
@@ -458,15 +731,17 @@ function showResearch(val) {
     }
     if (option != '5' && option != '1') {
         var table = '';
-        table = ' <table class="tableStyle" id="tableStyle">' +
+        table = ' <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">' +
+            '<thead>' +
             '            <tr>' +
-            '                <td>序号</td>' +
-            '                <td>标题</td>' +
-            '                <td>作者</td>' +
-            '                <td>发布日期</td>' +
-            '                <td>点击</td>' +
-            '                <td>管理</td>' +
+            '                <th>序号</th>' +
+            '                <th>标题</th>' +
+            '                <th>作者</th>' +
+            '                <th>发布日期</th>' +
+            '                <th>点击</th>' +
+            '                <th>管理</th>' +
             '            </tr>' +
+            '</thead>' +
             '        </table>'
         $("#MainRight").append(table)
         $.ajax({
@@ -478,6 +753,9 @@ function showResearch(val) {
             //jsonpCallback: 'callback',
             success: function (data) {
                 console.log(data)
+                if (data.error) {
+                    alert(data.error)
+                }
                 for (i = 0; i < data.length; i++) {
                     var tr;
                     tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].author + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="research_edit(\'' + researchUrl + '\',\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="research_delete(\'' + researchUrl + '\',\' ' + data[i].id + '\')">删除</a>' + '</td>'
@@ -519,6 +797,20 @@ function showSubclass(val) {
             '                    <option value="visitor">来访</option>\n' +
             '                </select>';
         $("#selectPart").append(subSelect)
+    }
+    if (option == 'seminar') {
+        if (document.getElementById('subForm')) {
+            var par = document.getElementById('subForm').parentNode;
+            par.removeChild(document.getElementById('subForm'));
+        }
+        var subformstr = ' <div id="subForm">\n' +
+            '                    <span>时间</span><input type="date" name="time" id="time"><br>\n' +
+            '                    <span>地点</span><input type="text" name="place" id="place"><br>\n' +
+            '                    <span>讲者</span><input type="text" name="speaker" id="speaker"><br>\n' +
+            '                </div>';
+        $('#subform').append(subformstr)
+
+
     }
     if (option == 'research') {
         var subSelect = ' <select id="subSelect" name="subSelect" onchange="showResearchPart(this.value)">\n' +
@@ -591,8 +883,9 @@ function news_delete(id) {
             url: url,
             type: 'DELETE',
             dataType: 'json',
-            success: function () {
-                alert('删除成功')
+            success: function (data) {
+                alert('删除成功');
+                location.reload()
             },
             error: function () {
                 alert('删除失败')
@@ -603,9 +896,35 @@ function news_delete(id) {
 
 }
 
-function people_eidt(id) {
+function user_delete(id) {
+    var url = "http://127.0.0.1:8000/api/admin/change_role"
+    url = url + '?id=' + id;
+    if (confirm("确定要删除吗？")) {
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function (data) {
+                if (data.error) {
+                    alert(data.error);
+                }
+                alert('删除成功');
+                location.reload()
+            },
+            error: function () {
+                alert('删除失败')
+
+            }
+        });
+    }
+
+}
+
+function people_edit(id) {
     var str;
     var url = window.location.href;
+    var urltype = url.split('/');
+    var peopletype = urltype[urltype.length - 1]
     var managementIndex = url.indexOf('management');
     url = url.substr(0, managementIndex - 1);
     url = url + '?id=' + id;
@@ -622,121 +941,284 @@ function people_eidt(id) {
                 rowNum = rowNum - 1;
                 i = i - 1;
             }
-            str = ' <form id="peopleForm" method="post" action="/" enctype="multipart/form-data" style="margin-left: 50px;margin-top: 20px">\n' +
-                '                <span>姓名</span><input type="text" name="name" id="name" value=\'' + data.name + '\'><br>\n' +
-                '                <span>状态</span>\n' +
-                '                <select id="status" name="status" >\n' +
-                '                    <option value="1">在职</option>\n' +
-                '                    <option value="0">不在职</option>\n' +
-                '                </select>\n' +
-                '\n' +
-                '                <div id="selectPart" style="">\n' +
-                '                    <span>身份</span>\n' +
-                '                    <select id="type" name="user_category">\n' +
-                '                        <option value="staff">工作人员</option>\n' +
-                '                        <option value="student">学生</option>\n' +
-                '                        <option value="adjunctProfessor">兼职教授</option>\n' +
-                '                    </select>\n' +
-                '                </div>\n' +
-                '                <span>办公室</span><input type="text" name="office" id="office" style="margin-top: 20px" value=\'' + data.office + '\'><br>\n' +
-                '                <span>电话</span><input type="text" name="phone" id="phone" style="margin-top: 20px" value=\'' + data.phone + '\'><br>\n' +
-                '                <span>邮箱</span><input type="text" name="email" id="email" style="margin-top: 20px" value=\'' + data.email + '\'><br>\n' +
-                '                <span>职位</span><input type="text" name="position" id="position" style="margin-top: 20px" value=\'' + data.position + '\'><br>\n' +
-                '                <span>学位</span><input type="text" name="degree" id="degree" style="margin-top: 20px" value=\'' + data.degree + '\'><br>\n' +
-                '                <span>头衔</span><input type="text" name="professionalTitle" id="professionalTitle"\n' +
-                '                                      style="margin-top: 20px" value=\'' + data.professionalTitle + '\'><br>\n' +
-                '                <span>研究领域</span><input type="text" name="area" id="area" style="margin-top: 20px" value=\'' + data.area + '\'><br>\n' +
-                '                <div id="" style="margin-top: 20px" ></div>\n' +
-                '                <span>研究兴趣</span>\n' +
-                '                <div id="interesting" type="text/plain"\n' +
-                '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
-                '                     name="interesting">\n' +
-                '                </div>\n' +
-                '                <span>个人简介</span>\n' +
-                '                <div id="biography" type="text/plain"\n' +
-                '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
-                '                     name="biography">\n' +
-                '                </div>\n' +
-                '                <span>研究项目</span>\n' +
-                '                <div id="project" type="text/plain"\n' +
-                '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
-                '                     name="project">\n' +
-                '                </div>\n' +
-                '                <span>成就</span>\n' +
-                '                <div id="achievement" type="text/plain"\n' +
-                '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
-                '                     name="achievement">\n' +
-                '                </div>\n' +
-                '                <span>活动</span>\n' +
-                '                <div id="activity" type="text/plain"\n' +
-                '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
-                '                     name="activity">\n' +
-                '                </div>\n' +
-                '                <span>论文</span>\n' +
-                '                <div id="publication" type="text/plain"\n' +
-                '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
-                '                     name="publication">\n' +
-                '                </div>\n' +
-                '                <span>报告</span>\n' +
-                '                <div id="report" type="text/plain"\n' +
-                '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
-                '                     name="report">\n' +
-                '                </div>\n' +
-                '                <script type="text/javascript">\n' +
-                '                    var interestingUE = UE.getEditor(\'interesting\', {\n' +
-                '                        serverUrl: "/api/controller/"\n' +
-                '                    });//实例化编辑\n' +
-                '            setTimeout(function () {\n' +
-                '                interestingUE.setContent(\'' + data.interesting + '\')\n' +
-                '            }, 300);' +
-                '                    var biographyUE = UE.getEditor(\'biography\', {\n' +
-                '                        serverUrl: "/api/controller/"\n' +
-                '                    });//实例化编辑\n' +
-                '            var timer2 = setTimeout(function () {\n' +
-                '                biographyUE.setContent(\'' + data.biography + '\');\n' +
-                '            }, 200);' +
-                '                    var projectUE = UE.getEditor(\'project\', {\n' +
-                '                        serverUrl: "/api/controller/"\n' +
-                '                    });//实例化编辑\n' +
-                '            var timer3 = setTimeout(function () {\n' +
-                '                projectUE.setContent(\'' + data.project + '\');\n' +
-                '            }, 200);' +
-                '                    var achievementUE = UE.getEditor(\'achievement\', {\n' +
-                '                        serverUrl: "/api/controller/"\n' +
-                '                    });//实例化编辑\n' +
-                '            var timer4 = setTimeout(function () {\n' +
-                '                achievementUE.setContent(\'' + data.achievement + '\');\n' +
-                '            }, 200);' +
-                '                    var activityUE = UE.getEditor(\'activity\', {\n' +
-                '                        serverUrl: "/api/controller/"\n' +
-                '                    });//实例化编辑\n' +
-                '            var timer5 = setTimeout(function () {\n' +
-                '                activityUE.setContent(\'' + data.activity + '\');\n' +
-                '            }, 200);' +
-                '                    var publicationUE = UE.getEditor(\'publication\', {\n' +
-                '                        serverUrl: "/api/controller/"\n' +
-                '                    });//实例化编辑\n' +
-                '            var timer6 = setTimeout(function () {\n' +
-                '                publicationUE.setContent(\'' + data.publication + '\');\n' +
-                '            }, 200);' +
-                '                    var reportUE = UE.getEditor(\'report\', {\n' +
-                '                        serverUrl: "/api/controller/"\n' +
-                '                    });//实例化编辑\n' +
-                '            var timer7 = setTimeout(function () {\n' +
-                '                reportUE.setContent(\'' + data.report + '\');\n' +
-                '            }, 200);' +
-                '                </script>\n' +
+            if (peopletype.startsWith('staff')) {
+                str = ' <form id="peopleForm" method="post" style="margin-left: 50px;margin-top: 20px">\n' +
+                    '                <span>姓名</span><input type="text" name="name" id="name" value=\'' + data.name + '\'><br>\n' +
+                    '                <span>状态</span>\n' +
+                    '                <select id="status" name="status" >\n' +
+                    '                    <option value="1">在职</option>\n' +
+                    '                    <option value="0">不在职</option>\n' +
+                    '                </select>\n' +
+                    '<br>\n' +
+                    '                <span>办公室</span><input type="text" name="office" id="office" style="margin-top: 20px" value=\'' + data.office + '\'><br>\n' +
+                    '                <span>电话</span><input type="text" name="phone" id="phone" style="margin-top: 20px" value=\'' + data.phone + '\'><br>\n' +
+                    '                <span>邮箱</span><input type="text" name="email" id="email" style="margin-top: 20px" value=\'' + data.email + '\'><br>\n' +
+                    '                <span>职位</span><input type="text" name="position" id="position" style="margin-top: 20px" value=\'' + data.position + '\'><br>\n' +
+                    '                <span>学位</span><input type="text" name="degree" id="degree" style="margin-top: 20px" value=\'' + data.degree + '\'><br>\n' +
+                    '                <span>职称</span><input type="text" name="professionalTitle" id="professionalTitle"\n' +
+                    '                                      style="margin-top: 20px" value=\'' + data.professionalTitle + '\'><br>\n' +
+                    ' <span>导师类型</span><input type="text" id="profession" name="profession" style="margin-top: 20px"\n' +
+                    '                                        placeholder="博士导师/硕士导师（可多选）" value=\'' + data.profession + '\' ><br>' +
+                    '                <span>研究领域</span><input type="text" name="area" id="area" style="margin-top: 20px" value=\'' + data.area + '\'><br>\n' +
+                    '                <div id="" style="margin-top: 20px" ></div>\n' +
+                    '                <span>研究兴趣</span>\n' +
+                    '                <div id="interesting" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="interesting">\n' +
+                    '                </div>\n' +
+                    '                <span>个人简介</span>\n' +
+                    '                <div id="biography" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="biography">\n' +
+                    '                </div>\n' +
+                    '                <span>研究项目</span>\n' +
+                    '                <div id="project" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="project">\n' +
+                    '                </div>\n' +
+                    '                <span>成就</span>\n' +
+                    '                <div id="achievement" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="achievement">\n' +
+                    '                </div>\n' +
+                    '                <span>活动</span>\n' +
+                    '                <div id="activity" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="activity">\n' +
+                    '                </div>\n' +
+                    '                <span>论文</span>\n' +
+                    '                <div id="publication" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="publication">\n' +
+                    '                </div>\n' +
+                    '                <span>报告</span>\n' +
+                    '                <div id="report" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="report">\n' +
+                    '                </div>\n' +
+                    '                <script type="text/javascript">\n' +
 
-                '\n' +
-                '\n' +
-                '                <div id="subform"></div>\n' +
-                '                <input type="button" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交"\n' +
-                '                       onclick="peopleEditSubmit( \'' + url + '\',\'' + id + '\')">\n' +
-                '\n' +
-                '            </form>';
+                    '                    var interestingUE = UE.getEditor(\'interesting\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            setTimeout(function () {\n' +
+                    '                interestingUE.setContent(\'' + data.interesting + '\')\n' +
+                    '            }, 300);' +
+                    '                    var biographyUE = UE.getEditor(\'biography\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer2 = setTimeout(function () {\n' +
+                    '                biographyUE.setContent(\'' + data.biography + '\');\n' +
+                    '            }, 200);' +
+                    '                    var projectUE = UE.getEditor(\'project\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer3 = setTimeout(function () {\n' +
+                    '                projectUE.setContent(\'' + data.project + '\');\n' +
+                    '            }, 200);' +
+                    '                    var achievementUE = UE.getEditor(\'achievement\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer4 = setTimeout(function () {\n' +
+                    '                achievementUE.setContent(\'' + data.achievement + '\');\n' +
+                    '            }, 200);' +
+                    '                    var activityUE = UE.getEditor(\'activity\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer5 = setTimeout(function () {\n' +
+                    '                activityUE.setContent(\'' + data.activity + '\');\n' +
+                    '            }, 200);' +
+                    '                    var publicationUE = UE.getEditor(\'publication\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer6 = setTimeout(function () {\n' +
+                    '                publicationUE.setContent(\'' + data.publication + '\');\n' +
+                    '            }, 200);' +
+                    '                    var reportUE = UE.getEditor(\'report\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer7 = setTimeout(function () {\n' +
+                    '                reportUE.setContent(\'' + data.report + '\');\n' +
+                    '            }, 200);' +
+                    '                </script>\n' +
+
+                    '\n' +
+                    '\n' +
+                    '                <div id="subform"></div>\n' +
+                    '                <input type="button" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交"\n' +
+                    '                       onclick="staffEditSubmit( \'' + url + '\',\'' + id + '\')">\n' +
+                    '\n' +
+                    '            </form>';
+            }
+            if (peopletype.startsWith('student')) {
+                str = ' <form id="peopleForm" method="post" action="/"  style="margin-left: 50px;margin-top: 20px">\n' +
+                    '                <span>姓名</span><input type="text" name="name" id="name" value=\'' + data.name + '\'><br>\n' +
+                    '                <span>邮箱</span><input type="text" name="email" id="email" style="margin-top: 20px" value=\'' + data.email + '\'><br>\n' +
+                    '                <span>学生状态</span>\n' +
+                    '                <select id="graduateStatus" name="graduateStatus">\n' +
+                    '                    <option value="postgraduate" selected="selected">在读</option>\n' +
+                    '                    <option value="graduate">毕业</option>\n' +
+                    '                </select>\n' +
+                    '                <br>\n' +
+                    '                <span>研究领域</span><input type="text" name="area" id="area" style="margin-top: 20px" value=\'' + data.area + '\'><br>\n' +
+                    '                <div id="" style="margin-top: 20px"></div>\n' +
+                    '                <span>个人简介</span>\n' +
+                    '                <div id="biography" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="biography">\n' +
+                    '                </div>\n' +
+                    '                <span>研究项目</span>\n' +
+                    '                <div id="project" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="project">\n' +
+                    '                </div>\n' +
+                    '\n' +
+                    '                <span>活动</span>\n' +
+                    '                <div id="activity" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="activity">\n' +
+                    '                </div>\n' +
+                    '                <span>论文</span>\n' +
+                    '                <div id="publication" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="publication">\n' +
+                    '                </div>\n' +
+                    '\n' +
+                    '                <script type="text/javascript">\n' +
+
+                    '                    var biographyUE = UE.getEditor(\'biography\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer2 = setTimeout(function () {\n' +
+                    '                biographyUE.setContent(\'' + data.biography + '\');\n' +
+                    '            }, 200);' +
+                    '                    var projectUE = UE.getEditor(\'project\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer3 = setTimeout(function () {\n' +
+                    '                projectUE.setContent(\'' + data.project + '\');\n' +
+                    '            }, 200);' +
+
+                    '                    var activityUE = UE.getEditor(\'activity\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer5 = setTimeout(function () {\n' +
+                    '                activityUE.setContent(\'' + data.activity + '\');\n' +
+                    '            }, 200);' +
+                    '                    var publicationUE = UE.getEditor(\'publication\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '            var timer6 = setTimeout(function () {\n' +
+                    '                publicationUE.setContent(\'' + data.publication + '\');\n' +
+                    '            }, 200);' +
+
+                    '                </script>\n' +
+
+                    '\n' +
+                    '\n' +
+                    '                <div id="subform"></div>\n' +
+                    '                <input type="button" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交"\n' +
+                    '                       onclick="studentEditSubmit( \'' + url + '\',\'' + id + '\')">\n' +
+                    '\n' +
+                    '            </form>';
+            }
+            if (peopletype.startsWith('adjunctProfessor')) {
+                str = ' <form id="peopleForm" method="post" action="/" style="margin-left: 50px;margin-top: 20px">\n' +
+                    '                <span>姓名</span><input type="text" name="name" id="name" value=\'' + data.name + '\'><br>\n' +
+                    '                <span>邮箱</span><input type="text" name="email" id="email" style="margin-top: 20px" value=\'' + data.email + '\'><br>\n' +
+                    '                <span>学位</span><input type="text" name="degree" id="degree" style="margin-top: 20px"\n' +
+                    '                                      placeholder="本科/硕士/博士/FBCS(可多选)" value=\'' + data.degree + '\'/><br>\n' +
+                    '                <span>职称</span><input type="text" name="professionalTitle" id="professionalTitle"\n' +
+                    '                                      style="margin-top: 20px" placeholder="教授/副教授/讲师" value=\'' + data.professionalTitle + '\'><br>\n' +
+                    '                <span>主页链接</span>\n' +
+                    '                <input type="text" name="link" id="link" style="margin-top: 20px" placeholder="http://..." value=\'' + data.link + '\'><br>\n' +
+                    '                <span>研究领域</span><input type="text" name="area" id="area" style="margin-top: 20px" value=\'' + data.area + '\'><br><br>\n' +
+                    '                <span>个人简介</span>\n' +
+                    '                <div id="biography" type="text/plain"\n' +
+                    '                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"\n' +
+                    '                     name="biography">\n' +
+                    '                </div>\n' +
+                    '\n' +
+                    '\n' +
+                    '                <script type="text/javascript">\n' +
+                    '                var biographyUE = UE.getEditor(\'biography\', {\n' +
+                    '                        serverUrl: "/api/controller/"\n' +
+                    '                    });//实例化编辑\n' +
+                    '                var timer2 = setTimeout(function () {\n' +
+                    '                biographyUE.setContent(\'' + data.biography + '\');\n' +
+                    '            }, 200);' +
+                    '                </script>\n' +
+                    '                <div id="subform"></div>\n' +
+                    '                <input type="button" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交"\n' +
+                    '                       onclick="adjunctProfessorEditSubmit( \'' + url + '\',\'' + id + '\')">\n' +
+                    '\n' +
+                    '            </form>';
+            }
             $('#MainRight').html(str)
         }
 
+    })
+}
+
+function user_edit(id) {
+
+    var str;
+    var url = "http://127.0.0.1:8000/api/admin/change_role";
+    url = url + '?id=' + id;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            //删除展示数据的表格
+            if (data.error) {
+                alert(data.error)
+            }
+            var tb = document.getElementById("tableStyle");
+            var rowNum = tb.rows.length;
+            for (i = 0; i < rowNum; i++) {
+                tb.deleteRow(i);
+                rowNum = rowNum - 1;
+                i = i - 1;
+            }
+            str = '<form name="userEditForm" method="post" style="margin-left: 50px;margin-top: 20px">\n' +
+                '        <p>\n' +
+                '            <label for="id_email">邮箱：</label>\n' +
+                '            <input type="text" id="email" placeholder="邮箱" name="email" value=\'' + data.email + '\'>\n' +
+                '        </p>\n' +
+                '        <br>\n' +
+                '        <p>\n' +
+                '            <label for="id_real_name">真实姓名：</label>\n' +
+                '            <input type="text" id="real_name" placeholder="真实姓名" name="real_name" value=\'' + data.real_name + '\'>\n' +
+                '        </p>\n' +
+                '        <br>\n' +
+                '        <p>\n' +
+                '            <label for="id_user_category">身份：</label>\n' +
+                '            <select id="user_category" name="user_category">\n' +
+                '                <option value="staff">工作人员</option>\n' +
+                '                <option value="student" selected="selected">学生</option>\n' +
+                '                <option value="adjunctProfessor">兼职教授</option>\n' +
+                '            </select>\n' +
+                '        </p>\n' +
+                '        <br>\n' +
+                '        <p>\n' +
+                '            <label for="id_role_type">角色：</label>\n' +
+                '            <select id="role_type" name="role_type">\n' +
+                '                <option value="Super Admin">超级管理员</option>\n' +
+                '                <option value="Regular User" selected="selected">普通用户</option>\n' +
+                '            </select>\n' +
+                '        </p>\n' +
+                '\n' +
+                '\n' +
+                '                <input type="button" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交"\n' +
+                '                       onclick="userEditSubmit(\'' + url + '\',\'' + id + '\' )">\n' +
+                '    </form>'
+            $('#MainRight').html(str);
+        },
+        error: function () {
+            alert('修改失败')
+
+        }
     })
 }
 
@@ -752,6 +1234,9 @@ function message_edit(id) {
         dataType: 'json',
         success: function (data) {
             //删除展示数据的表格
+            if (data.error) {
+                alert(data.error)
+            }
             var tb = document.getElementById("tableStyle");
             var rowNum = tb.rows.length;
             for (i = 0; i < rowNum; i++) {
@@ -804,6 +1289,9 @@ function news_edit(id) {
         dataType: 'json',
         success: function (data) {
             //删除展示数据的表格
+            if (data.error) {
+                alert(data.error)
+            }
             var tb = document.getElementById("tableStyle");
             var rowNum = tb.rows.length;
             for (i = 0; i < rowNum; i++) {
@@ -835,8 +1323,16 @@ function news_edit(id) {
                 '                       onclick="newsEditSubmit(\'' + url + '\',\'' + id + '\')">\n' +
                 '\n' +
                 '            </form>';
-            if (newstype.startsWith('news') || newstype.startsWith('seminar') || newstype.startsWith('research') || newstype.startsWith('join')) {
+            if (newstype.startsWith('news') || newstype.startsWith('research') || newstype.startsWith('join') || newstype.startsWith('aboutUs') || newstype.startsWith('contact')) {
                 str = strfont + strend;
+            }
+            if (newstype.startsWith('seminar')) {
+                var strmiddle = ' <div id="subForm">\n' +
+                    '                    <span>时间</span><input type="date" name="time" id="time" value=\'' + data.time + '\'><br>\n' +
+                    '                    <span>地点</span><input type="text" name="place" id="place" value=\'' + data.place + '\'><br>\n' +
+                    '                    <span>讲者</span><input type="text" name="speaker" id="speaker" value=\'' + data.speaker + '\'><br>\n' +
+                    '                </div>';
+                str = strfont + strmiddle + strend
             }
             if (newstype.startsWith('conference')) {
                 var strmiddle = '<span>标题</span>' + ' <select id="subSelect" name="subSelect">\n' +
@@ -863,6 +1359,7 @@ function news_edit(id) {
     });
 }
 
+
 function research_edit(url, id) {
     var urltype = url.split('/');
     var newstype = urltype[urltype.length - 1]
@@ -872,7 +1369,9 @@ function research_edit(url, id) {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-
+            if (data.error) {
+                alert(data.error)
+            }
             //删除展示数据的表格
             var tb = document.getElementById("tableStyle");
             var rowNum = tb.rows.length;
@@ -990,8 +1489,13 @@ function researchEditSubmit(url, id) {
         type: 'PUT',
         dataType: 'json',
         data: data,
-        success: function () {
-            alert('修改成功')
+        success: function (data) {
+            if (data.error) {
+                alert(data.error)
+            } else {
+                alert('修改成功')
+            }
+
         },
         error: function () {
             alert('修改失败')
@@ -1001,16 +1505,16 @@ function researchEditSubmit(url, id) {
 
 }
 
-function peopleEditSubmit(url, id) {
+function staffEditSubmit(url, id) {
     var name = $('#name').val();
     var status = $('#status').val();
-    var user_category = $('#type').val();
     var office = $('#office').val();
     var phone = $('#phone').val();
     var email = $('#email').val();
     var position = $('#position').val();
     var degree = $('#degree').val();
     var professionalTitle = $('#professionalTitle').val();
+    var profession = $('#profession').val();
     var area = $('#area').val();
     var interesting = interestingUE.getContent();
     var biography = biographyUE.getContent();
@@ -1025,7 +1529,7 @@ function peopleEditSubmit(url, id) {
         'id': id,
         'name': name,
         'status': status,
-        'user_category': user_category,
+        'profession': profession,
         'office': office,
         'phone': phone,
         'email': email,
@@ -1047,7 +1551,8 @@ function peopleEditSubmit(url, id) {
         type: 'PUT',
         dataType: 'json',
         data: data,
-        success: function () {
+        success: function (data) {
+            location.reload('http://127.0.0.1:8000/api/admin/people/staff_management')
             alert('修改成功')
         },
         error: function () {
@@ -1058,8 +1563,86 @@ function peopleEditSubmit(url, id) {
 
 }
 
-function messageEditSubmit(url, id) {
+function adjunctProfessorEditSubmit(url, id) {
+    var name = $('#name').val();
+    var email = $('#email').val();
+    var degree = $('#degree').val();
+    var professionalTitle = $('#professionalTitle').val();
+    var area = $('#area').val();
+    var link = $('#link').val();
+    var biography = biographyUE.getContent();
+    var data;
+    data = {
+        'id': id,
+        'name': name,
+        'degree': degree,
+        'email': email,
+        'area': area,
+        'biography': biography,
+        'professionalTitle': professionalTitle,
+        'link': link,
 
+    };
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+            location.reload('http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management')
+            alert('修改成功')
+
+
+        },
+        error: function () {
+            alert('修改失败')
+
+        }
+    });
+
+}
+
+function studentEditSubmit(url, id) {
+    var name = $('#name').val();
+    var graduateStatus = $('#graduateStatus ').val();
+    var email = $('#email').val();
+    var area = $('#area').val();
+    var biography = biographyUE.getContent();
+    var project = projectUE.getContent();
+    var activity = activityUE.getContent();
+    var publication = publicationUE.getContent();
+    var data;
+    data = {
+        'id': id,
+        'name': name,
+        'graduateStatus': graduateStatus,
+        'email': email,
+        'area': area,
+        'biography': biography,
+        'project': project,
+        'activity': activity,
+        'publication': publication,
+    };
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+            location.reload('http://127.0.0.1:8000/api/admin/people/student_management')
+            alert('修改成功')
+
+
+        },
+        error: function () {
+            alert('修改失败')
+
+        }
+    });
+
+}
+
+function messageEditSubmit(url, id) {
     var title = $('#articleTitle').val();
     var content = ue.getContent();
     var data;
@@ -1070,8 +1653,41 @@ function messageEditSubmit(url, id) {
         type: 'PUT',
         dataType: 'json',
         data: data,
-        success: function () {
-            alert('修改成功')
+        success: function (data) {
+
+            if (data.error) {
+                alert(data.error)
+            } else {
+                alert('修改成功')
+            }
+        },
+        error: function () {
+            alert('修改失败')
+
+        }
+    });
+
+}
+
+function userEditSubmit(url, id) {
+
+    var email = $('#email').val();
+    var real_name = $('#real_name').val();
+    var user_category = $('#user_category').val();
+    var role_type = $('#role_type').val();
+    data = {'id': id, 'email': email, 'real_name': real_name, 'user_category': user_category, 'role_type': role_type};
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        dataType: 'json',
+        data: data,
+        success: function (data) {
+
+            if (data.error) {
+                alert(data.error)
+            } else {
+                alert('修改成功')
+            }
         },
         error: function () {
             alert('修改失败')
@@ -1089,8 +1705,13 @@ function newsEditSubmit(url, id) {
     var content = ue.getContent();
     var data;
     var type;
-
-    if (newstype.startsWith('news') || newstype.startsWith('seminar') || newstype.startsWith('introduction') || newstype.startsWith('join')) {
+    if (newstype.startsWith('seminar')) {
+        var time = $('#time').val();
+        var place = $('#place').val();
+        var speaker = $('#speaker').val();
+        data = {'id': id, 'title': title, 'content': content, 'time': time, 'place': place, 'speaker': speaker};
+    }
+    if (newstype.startsWith('news') || newstype.startsWith('introduction') || newstype.startsWith('join') || newstype.startsWith('aboutUs') || newstype.startsWith('contact')) {
         data = {'id': id, 'title': title, 'content': content};
     }
     if (newstype.startsWith('conference') || newstype.startsWith('exchange')) {
@@ -1102,8 +1723,12 @@ function newsEditSubmit(url, id) {
         type: 'PUT',
         dataType: 'json',
         data: data,
-        success: function () {
-            alert('修改成功')
+        success: function (data) {
+            if (data.error) {
+                alert(data.error)
+            } else {
+                alert('修改成功')
+            }
         },
         error: function () {
             alert('修改失败')
@@ -1120,8 +1745,13 @@ function research_delete(url, id) {
             url: url,
             type: 'DELETE',
             dataType: 'json',
-            success: function () {
-                alert('删除成功')
+            success: function (data) {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert('删除成功');
+                    location.reload();
+                }
             },
             error: function () {
                 alert('删除失败')
@@ -1134,11 +1764,12 @@ function research_delete(url, id) {
 function logout() {
     if (confirm("确定要退出吗？")) {
         $.ajax({
-            url: 'http://39.105.199.229:8000/api/admin/logout',
+            url: 'http://127.0.0.1:8000/api/admin/logout',
             type: 'GET',
             dataType: 'json',
             success: function () {
                 alert('退出登陆成功')
+                window.location.href = "http://127.0.0.1:8000/api/admin/index";
             },
             error: function () {
                 alert('退出登陆失败')
@@ -1148,47 +1779,122 @@ function logout() {
     }
 }
 
+function checkLogin() {
+    $.ajax({
+        url: "http://127.0.0.1:8000/api/admin/checkLogin",
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            if (!data.error) {
+                document.getElementById('login').append(data + ",欢迎您！")
+            } else {
+                str = '<a href="http://127.0.0.1:8000/api/admin/login">登录</a>'
+                $('#login').html(str)
+            }
+        },
+        error: function (data) {
+            alert(data)
+        }
+
+    })
+}
+
+
 function NavLink() {
     //设置后台导航
-    var title = document.getElementById("MainLeft").getElementsByTagName("li");//获取导航的DIV
-    var LinkArry = ["http://39.105.199.229:8000/api/admin/index/slider_management", "http://39.105.199.229:8000/api/admin/index/message_management", "http://39.105.199.229:8000/api/admin/news_public", "#", "http://39.105.199.229:8000/api/admin/news_management", "http://39.105.199.229:8000/api/admin/seminar_management", "http://39.105.199.229:8000/api/admin/conference_management", "http://39.105.199.229:8000/api/admin/exchange_management", "http://39.105.199.229:8000/api/admin/research_management", "http://39.105.199.229:8000/api/admin/join_management", "xwgl.php?news=gywm", "people_management", "xzgl.php"]; //创建超链接数组
-    var LinkNode = ["轮播图管理", "内容管理", "新闻发布", "新闻管理", "中心动态", "学术报告", "学术会议", "学术交流", "科学研究", "招纳贤士", "关于我们", "成员管理", "下载管理"]
-    var n = title.length;
 
-    for (i = 0; i < n; i++) {                                           //遍历添加超链接s
+    $.ajax({
+        url: 'http://127.0.0.1:8000/api/admin/checkAdmin',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            if (data) {
+                str = ' <ul>\n' +
+                    '            <li></li>\n' +
+                    '            <li></li>\n' +
+                    '            <li></li>\n' +
+                    '            <li></li>\n' +
+                    '            <li onclick="DisplaySecond()"></li>\n' +
+                    '            <ul id="secondTile">\n' +
+                    '                <li></li>\n' +
+                    '                <li></li>\n' +
+                    '                <li></li>\n' +
+                    '                <li></li>\n' +
+                    '                <li></li>\n' +
+                    '                <li></li>\n' +
+                    '                <li></li>\n' +
+                    '                <li></li>\n' +
+                    '            </ul>\n' +
+                    '            <li onclick="DisplayThird()"></li>\n' +
+                    '            <ul id="thirdTile">\n' +
+                    '                <li></li>' +
+                    '               <li></li>' +
+                    '               <li></li>' +
+                    '            </ul>\n' +
+                    '            <li></li>\n' +
+                    '        </ul>';
 
-        var a = document.createElement("a");
-        var node = document.createTextNode(LinkNode[i]);
-        a.appendChild(node);
-        a.href = LinkArry[i];
-        title[i].appendChild(a);
-    }
-    ;
+                $('#MainLeft').html(str);
+                var title = document.getElementById("MainLeft").getElementsByTagName("li");//获取导航的DIV
+                var LinkArry = ["http://127.0.0.1:8000/api/admin/userManagement", "http://127.0.0.1:8000/api/admin/index/slider_management", "http://127.0.0.1:8000/api/admin/index/message_management", "http://127.0.0.1:8000/api/admin/news_public", "#", "http://127.0.0.1:8000/api/admin/news_management", "http://127.0.0.1:8000/api/admin/seminar_management", "http://127.0.0.1:8000/api/admin/conference_management", "http://127.0.0.1:8000/api/admin/exchange_management", "http://127.0.0.1:8000/api/admin/research_management", "http://127.0.0.1:8000/api/admin/join_management", "http://127.0.0.1:8000/api/admin/aboutUs_management", "http://127.0.0.1:8000/api/admin/contact_management", "#", "http://127.0.0.1:8000/api/admin/people/staff_management", "http://127.0.0.1:8000/api/admin/people/student_management", "http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management", "xzgl.php"]; //创建超链接数组
+                var LinkNode = ["用户管理", "轮播图管理", "内容管理", "新闻发布", "新闻管理", "中心动态", "学术报告", "学术会议", "学术交流", "科学研究", "招纳贤士", "关于我们", "联系我们", "成员管理", "职工管理", "学生管理", "兼职教授管理", "下载管理"]
+                var n = title.length;
 
-    var getLi, getAllLi;
-    getLi = document.getElementById("secondTile").getElementsByTagName("li");
-    getAllLi = document.getElementById("MainLeft").getElementsByTagName("li");
-    for (i = 0; i < 6; i++) {
-        getLi[i].onclick = function () {
+            } else {
+                str = ' <ul>\n' +
+                    '            <li></li>\n' +
+                    '            <li></li>\n' +
+                    '        </ul>';
+                $('#MainLeft').html(str);
+                var title = document.getElementById("MainLeft").getElementsByTagName("li");//获取导航的DIV
+                var LinkArry = ["http://127.0.0.1:8000/api/admin/people/staff_management", "http://127.0.0.1:8000/api/admin/people/student_management", "http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management", "xzgl.php"]; //创建超链接数组
+                var LinkNode = ["成员管理", "下载管理"]
+                var n = title.length;
+                if (document.getElementById('conferenceTypeId')) {
+                    $('#MainRight').removeChild(document.getElementById('conferenceTypeId'))
+
+                }
+            }
+            for (i = 0; i < n; i++) {                                           //遍历添加超链接s
+
+                var a = document.createElement("a");
+                var node = document.createTextNode(LinkNode[i]);
+                a.appendChild(node);
+                a.href = LinkArry[i];
+                title[i].appendChild(a);
+            }
+            ;
+
+            var getLi, getAllLi;
+            getLi = document.getElementById("secondTile").getElementsByTagName("li");
+            getAllLi = document.getElementById("MainLeft").getElementsByTagName("li");
             for (i = 0; i < 6; i++) {
-                getLi[i].style.background = "white";
+                getLi[i].onclick = function () {
+                    for (i = 0; i < 6; i++) {
+                        getLi[i].style.background = "white";
+                    }
+                    this.style.background = "#c5eaf3";
+                }
             }
-            this.style.background = "#c5eaf3";
-        }
-    }
-    ;
+            ;
 
-    var getLiThird;
-    getLiThird = document.getElementById("thirdTile").getElementsByTagName("li");
-    for (i = 0; i < 2; i++) {
-        getLiThird[i].onclick = function () {
+            var getLiThird;
+            getLiThird = document.getElementById("thirdTile").getElementsByTagName("li");
             for (i = 0; i < 2; i++) {
-                getLiThird[i].style.background = "white";
+                getLiThird[i].onclick = function () {
+                    for (i = 0; i < 2; i++) {
+                        getLiThird[i].style.background = "white";
+                    }
+                    this.style.background = "#c5eaf3";
+                }
             }
-            this.style.background = "#c5eaf3";
+            ;
+        },
+        error: function () {
+            alert('退出登陆失败')
+
         }
-    }
-    ;
+    });
 
 
 }

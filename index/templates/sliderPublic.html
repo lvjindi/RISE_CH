@@ -15,11 +15,11 @@
     <script src="/static/time/documents/js/prism.js"></script>
 </head>
 
-<body onload="NavLink()">
+<body onload="NavLink(),checkLogin()">
 <!--HeadBegin-->
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
-    <div id="login"><a href="login">登录</a></div>
+    <div id="login"></div>
     <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
     <div id="Banner"></div>
 </div>
@@ -29,26 +29,7 @@
 <!--MainBegin-->
 <div id="Main">
     <div id="MainLeft">
-        <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li onclick="DisplaySecond()"></li>
-            <ul id="secondTile">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-            <li onclick="DisplayThird()"></li>
-            <ul id="thirdTile">
 
-            </ul>
-            <li></li>
-        </ul>
 
     </div>
 
@@ -56,7 +37,7 @@
         <div id="articleEditor">
             <form id="newsForm" method="post" action="/" enctype="multipart/form-data">
                 <span>图片</span><input type="file" name="indexImgae" id="indexImage"> <br>
-                <span>对应文章Id</span><input type="text" name="articleID" id="articleID" ><br>
+                <span>对应文章Id</span><input type="text" name="articleID" id="articleID"><br>
                 <input type="button" class="submit" style="margin-left: 110px;margin-top: 35px;" value="提交"
                        onclick="sliderPublic( )">
 

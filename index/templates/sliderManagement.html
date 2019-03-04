@@ -15,12 +15,12 @@
     <script src="/static/time/documents/js/prism.js"></script>
 </head>
 
-<body onload="NavLink()">
+<body onload="NavLink(),checkLogin()">
 <!--HeadBegin-->
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
-    <div id="login"><a href="login">登录</a></div>
-    <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
+    <div id="login"></div>
+    <div id="exit"><img src="/static/images/exit.png"/><a onclick="logout()" >退出</a></div>
     <div id="Banner"></div>
 </div>
 
@@ -29,70 +29,57 @@
 <!--MainBegin-->
 <div id="Main">
     <div id="MainLeft">
-        <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li onclick="DisplaySecond()"></li>
-            <ul id="secondTile">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-            <li onclick="DisplayThird()"></li>
-            <ul id="thirdTile">
 
-            </ul>
-            <li></li>
-        </ul>
 
     </div>
 
     <div id="MainRight">
-        <div style="float: left;margin-left: 30px;margin-top:10px;margin-bottom: 20px "><img src="/static/images/add_lable.jpg" style="height: 15px;width: 15px;margin-right: 5px"><a
+        <div style="float: left;margin-left: 30px;margin-top:10px;margin-bottom: 20px "><img
+                src="/static/images/add_lable.jpg" style="height: 15px;width: 15px;margin-right: 5px"><a
                 href="slider_public">添加</a></div>
 
 
-    <table class="tableStyle" id="tableStyle" >
-        <tr>
-            <td>序号</td>
-            <td>图片地址</td>
-            <td>发布日期</td>
-            <td>管理</td>
-        </tr>
-    </table>
-    <!--编辑器end-->
-    <script lang="text/javascript">
-        $.ajax({
-            type: 'GET',
-            url: 'http://127.0.0.1:8000/api/admin/index/slider',
-            data: '',
-            // {#dataType: 'json',#}
-            contentType: false,
-            processData: false,
-            //jsonpCallback: 'callback',
-            success: function (data) {
-                console.log(data)
-                for (i = 0; i < data.length; i++) {
-                    var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].image + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' +'<a href="#" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
-                    $("#tableStyle").append('<tr>' + tr + '</tr>')
-                }
-            },
-            error: function (data) {
-                alert(XMLHttpRequest.status);
-                alert(XMLHttpRequest.readyState);
-                alert(textStatus);
-            },
-        })
+        <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>图片地址</th>
+                <th>发布日期</th>
+                <th>管理</th>
+            </tr>
+            </thead>
+        </table>
+        <!--编辑器end-->
+        <script lang="text/javascript">
+            $.ajax({
+                type: 'GET',
+                url: 'http://39.105.199.229:8000/api/admin/index/slider',
+                data: '',
+                // {#dataType: 'json',#}
+                contentType: false,
+                processData: false,
+                //jsonpCallback: 'callback',
+                success: function (data) {
+                    if (data.error) {
+                        alert(data.error)
+                    }
+                    console.log(data)
+                    for (i = 0; i < data.length; i++) {
+                        var tr;
+                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].image + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
+                        $("#tableStyle").append('<tr>' + tr + '</tr>')
+                    }
+                },
+                error: function (data) {
+                    alert(XMLHttpRequest.status);
+                    alert(XMLHttpRequest.readyState);
+                    alert(textStatus);
+                },
+            })
 
-    </script>
+        </script>
 
-</div>
+    </div>
 
 </div>
 

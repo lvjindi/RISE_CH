@@ -9,6 +9,9 @@ class Seminars(models.Model):
     image = models.ImageField(upload_to="images")
     news_id = models.IntegerField(null=True)
     sliderFlag = models.BooleanField(default=False)
+    place = models.TextField(null=True)
+    speaker = models.TextField(null=True)
+    time = models.DateTimeField(null=True)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 

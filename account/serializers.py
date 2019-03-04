@@ -16,7 +16,7 @@ class UserChangePasswordSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "email", "user_category", "role_type", "create_time"]
+        fields = ["id", "username", "email", "user_category", "real_name", "role_type", "create_time"]
 
 
 class EditUserChSerializer(serializers.Serializer):

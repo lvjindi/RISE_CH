@@ -25,11 +25,6 @@ class UserLoginAPI(APIView):
         if user:
             if user.is_active:
                 login(request, user)
-                # request.session['auth_user_id']
-                # if auth.authenticate(username=username, password=password):
-                #     print("chenggong ")
-                # else:
-                #     print("shibai")
                 return HttpResponseRedirect('/api/admin/index')
             else:
                 return self.error("账户未激活")
@@ -76,7 +71,7 @@ class UserRegisterAPI(APIView):
             return self.error("Email already exists")
         try:
             user = User.objects.create(username=username, email=data['email'],
-                                       user_category=data['user_category'])
+                                       user_category=data['user_category'], real_name=data['real_name'])
             user.set_password(password)
             user.save()
             return self.success("Succeeded")
@@ -89,11 +84,17 @@ class UserChangeRoleAPI(APIView):
     @super_admin_required
     def put(self, request):
         data = request.data
-        user = auth.authenticate(username=request.user.username, password=data['password'])
-        if user:
-            user.role_type = data['role_type']
-            user.save()
-            return self.success("Succeeded")
+        try:
+            user = User.objects.get(id=data['id'])
+            if user:
+                user.email = data['email']
+                user.real_name = data['real_name']
+                user.user_category = data['user_category']
+                user.role_type = data['role_type']
+                user.save()
+                return self.success("Succeeded")
+        except User.DoesNotExist:
+            return self.error("User does not exist")
 
     @super_admin_required
     def get(self, request):
@@ -106,4 +107,31 @@ class UserChangeRoleAPI(APIView):
                 return self.error("User does not exist")
         else:
             user = User.objects.all()
-            return self.success(self.paginate_data(request.user, UserSerializer))
+            return self.success(self.paginate_data(request, user, UserSerializer))
+
+    @super_admin_required
+    def delete(self, request):
+        user_id = request.GET.get('id')
+        if user_id:
+            user = User.objects.get(id=user_id)
+            user.delete()
+            return self.success("Succeeded")
+
+
+class CheckPermissionAPI(APIView):
+    def get(self, request):
+        user = self.request.user
+        return self.success(user.is_authenticated and user.is_super_admin())
+
+class CheckLoginAPI(APIView):
+    def get(self, request):
+        user = self.request.user
+        if user.is_authenticated:
+            return self.success(user.username)
+        else:
+            return self.error("Login required!")
+
+
+class UserManagementAPI(APIView):
+    def get(self, request):
+        return render(request, 'UserManegement.html')

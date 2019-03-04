@@ -15,11 +15,11 @@
     <script src="/static/time/documents/js/prism.js"></script>
 </head>
 
-<body onload="NavLink()">
+<body onload="NavLink(),checkLogin()">
 <!--HeadBegin-->
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
-    <div id="login"><a href="login">登录</a></div>
+    <div id="login"></div>
     <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
     <div id="Banner"></div>
 </div>
@@ -30,45 +30,28 @@
 <!--MainBegin-->
 <div id="Main">
     <div id="MainLeft">
-        <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li onclick="DisplaySecond()"></li>
-            <ul id="secondTile">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-            <li onclick="DisplayThird()"></li>
-            <ul id="thirdTile">
 
-            </ul>
-            <li></li>
-        </ul>
 
     </div>
 
     <div id="MainRight">
-        <table class="tableStyle" id="tableStyle">
+        <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">
+            <thead>
             <tr>
-                <td>序号</td>
-                <td>标题</td>
-                <td>发布日期</td>
-                <td>点击</td>
-                <td>管理</td>
+                <th>序号</th>
+                <th>标题</th>
+                <th>发布日期</th>
+                <th>点击</th>
+                <th>管理</th>
             </tr>
+            </thead>
         </table>
         <!--编辑器end-->
         <script lang="text/javascript">
 
             $.ajax({
                 type: 'GET',
-                url: 'http://127.0.0.1:8000/api/admin/join',
+                url: 'http://39.105.199.229:8000/api/admin/join',
                 data: '',
                 {#dataType: 'json',#}
                 contentType: false,
@@ -78,7 +61,7 @@
                     console.log(data)
                     for (i = 0; i < data.length; i++) {
                         var tr;
-                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\' '+ data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(\'' + data[i].id + '\')">删除</a>' + '</td>'
+                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_edit(\' ' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(\'' + data[i].id + '\')">删除</a>' + '</td>'
                         $("#tableStyle").append('<tr>' + tr + '</tr>')
                     }
                 },

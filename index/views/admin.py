@@ -66,7 +66,10 @@ class DrMessageAdminAPI(APIView):
     def post(self, request):
         "create message"
         image = request.FILES.get('image')
-        imagePath = os.path.join(settings.MEDIA_URL, image.name)
+        if image is not None:
+            imagePath = os.path.join(settings.MEDIA_URL, image.name)
+        else:
+            imagePath = ''
         title = request.POST.get('title')
         content = request.POST.get('content')
         message = MessageFromDirector.objects.create(content=content,

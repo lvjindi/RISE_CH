@@ -19,7 +19,10 @@ class SeminarAdminAPI(APIView):
 
         title = request.POST.get('title')
         content = request.POST.get('content')
-        seminar = Seminars.objects.create(title=title, content=content)
+        place = request.POST.get('place')
+        time = request.POST.get('time')
+        speaker = request.POST.get('speaker')
+        seminar = Seminars.objects.create(title=title, content=content, place=place, time=time, speaker=speaker)
         news = News.objects.create(title=title, content=content, type='seminar')
         seminar.news_id = news.id
         seminar.save()
@@ -33,6 +36,9 @@ class SeminarAdminAPI(APIView):
         try:
             seminar = Seminars.objects.get(id=data['id'])
             news = News.objects.get(id=seminar.news_id)
+            setattr(seminar, 'time', data['time'])
+            setattr(seminar, 'place', data['place'])
+            setattr(seminar, 'speaker', data['speaker'])
             setattr(seminar, 'title', data['title'])
             setattr(seminar, 'content', data['content'])
             setattr(news, 'title', data['title'])

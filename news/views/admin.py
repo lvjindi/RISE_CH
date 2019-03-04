@@ -46,7 +46,7 @@ class NewsAdminAPI(APIView):
             except News.DoesNotExist:
                 return self.error("News does not exist")
         else:
-            news = News.objects.all()
+            news = News.objects.all().order_by('id')
             return self.success(self.paginate_data(request, news, NewsDetailSerializer))
 
     @super_admin_required

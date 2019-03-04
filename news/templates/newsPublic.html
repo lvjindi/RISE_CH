@@ -15,11 +15,11 @@
     <script src="/static/time/documents/js/prism.js"></script>
 </head>
 
-<body onload="NavLink()">
+<body onload="NavLink(),checkLogin()">
 <!--HeadBegin-->
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
-    <div id="login"><a href="login">登录</a></div>
+    <div id="login"></div>
     <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
     <div id="Banner"></div>
 </div>
@@ -29,33 +29,14 @@
 <!--MainBegin-->
 <div id="Main">
     <div id="MainLeft">
-        <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li onclick="DisplaySecond()"></li>
-            <ul id="secondTile">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-            <li onclick="DisplayThird()"></li>
-            <ul id="thirdTile">
 
-            </ul>
-            <li></li>
-        </ul>
 
     </div>
 
     <div id="MainRight">
         <div id="articleEditor">
             <form id="newsForm" method="post" action="/" enctype="multipart/form-data">
-                <span>标题</span><input type="text" name="articleTitle" id="articleTitle" ><br>
+                <span>标题</span><input type="text" name="articleTitle" id="articleTitle"><br>
 
                 <div id="selectPart" style="">
                     <span>分类</span>
@@ -66,11 +47,12 @@
                         <option value="exchange">学术交流</option>
                         <option value="research">科学研究</option>
                         <option value="join">招纳贤士</option>
-                        <option value="gywm">关于我们</option>
+                        <option value="aboutUs">关于我们</option>
+                        <option value="contact">联系我们</option>
                     </select>
                 </div>
                 <br>
-
+                <div id="subform"></div>
                 <div id="lable" style="margin-top: 20px">新闻内容</div>
                 <div id="editor" type="text/plain" style="margin-left:110px;width:90%;height:400px;margin-top: -13px"
                      name="myeditor"></div>
@@ -80,7 +62,7 @@
                     });//实例化编辑
 
                 </script>
-                <div id="subform"></div>
+
                 <input type="button" class="submit" style="margin-left: 190px;margin-top: 35px;" value="提交"
                        onclick="newsPublic( )">
 
