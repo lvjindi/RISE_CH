@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from account.models import User, RoleType, UserCategory
+from account.models import User
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -24,20 +24,16 @@ class EditUserChSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=32)
     password = serializers.CharField(min_length=6, allow_blank=True, required=False, default=None)
     email = serializers.EmailField(max_length=64)
-    role_type = serializers.ChoiceField(choices=(RoleType.ADMIN, RoleType.SUPER_ADMIN, RoleType.REGULAR_USER))
-    user_category = serializers.ChoiceField(choices=(
-        UserCategory.Adjunct_Professors, UserCategory.Postgraduate_Students, UserCategory.Staff,
-        UserCategory.Undergraduates))
+    role_type = serializers.ChoiceField(choices=User.RoleType)
+    user_category = serializers.ChoiceField(choices=User.UserCategory)
 
 
 class UserRegisterSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=32)
     password = serializers.CharField(min_length=6)
     email = serializers.EmailField(max_length=64)
-    user_category = serializers.ChoiceField(choices=(
-        UserCategory.Adjunct_Professors, UserCategory.Postgraduate_Students, UserCategory.Staff,
-        UserCategory.Undergraduates))
+    user_category = serializers.ChoiceField(choices=User.UserCategory)
 
 
 class ChangeUserRoleSerializer(serializers.Serializer):
-    role_type = serializers.ChoiceField(choices=(RoleType.ADMIN, RoleType.SUPER_ADMIN, RoleType.REGULAR_USER))
+    role_type = serializers.ChoiceField(choices=User.RoleType)

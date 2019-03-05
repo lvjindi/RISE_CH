@@ -3,18 +3,6 @@ from django.contrib.auth.models import AbstractBaseUser
 
 
 # Create your models here.
-class UserCategory(object):
-    Staff = 'Staff'
-    Adjunct_Professors = 'Adjunct Professors'
-    Postgraduate_Students = 'Postgraduate Student'
-    Undergraduates = 'Undergraduates'
-
-
-class RoleType(object):
-    ADMIN = 'Admin'
-    REGULAR_USER = 'Regular User'
-    SUPER_ADMIN = 'Super Admin'
-
 
 class UserManager(models.Manager):
     use_in_migrations = True
@@ -24,21 +12,27 @@ class UserManager(models.Manager):
 
 
 class User(AbstractBaseUser):
+    RoleType = (
+        ('Super Admin', u'超级管理员'),
+        ('Regular User', u'普通用户')
+    )
+    UserCategory = (
+        ('staff', u'职工'),
+        ('student', u'学生'),
+        ('adjunctProfessor', u'兼职教授'),
+    )
     username = models.CharField(unique=True, max_length=64)
     email = models.TextField(null=True)
     real_name = models.TextField(null=True)
     create_time = models.DateTimeField(auto_now_add=True, null=True)
-    user_category = models.TextField(null=True)
-    role_type = models.TextField(default=RoleType.REGULAR_USER)
+    user_category = models.TextField(choices=UserCategory, null=True)
+    role_type = models.TextField(choices=RoleType, default='Regular User')
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     objects = UserManager()
 
-    def is_admin(self):
-        return self.role_type == RoleType.ADMIN
-
     def is_super_admin(self):
-        return self.role_type == RoleType.SUPER_ADMIN
+        return self.role_type == 'Super Admin'
 
     class Meta:
         db_table = 'cn_rise_user'

@@ -7,9 +7,8 @@ from rest_framework.exceptions import ValidationError
 
 from account.decorators import login_required, super_admin_required
 from account.models import User
-from account.serializers import UserLoginSerializer, UserChangePasswordSerializer, UserRegisterSerializer, \
-    ChangeUserRoleSerializer, UserSerializer
-from utils.api.api import validate_serializer, APIView
+from account.serializers import UserSerializer
+from utils.api.api import APIView
 
 
 class UserLoginAPI(APIView):
@@ -74,7 +73,7 @@ class UserRegisterAPI(APIView):
                                        user_category=data['user_category'], real_name=data['real_name'])
             user.set_password(password)
             user.save()
-            return self.success("Succeeded")
+            return HttpResponseRedirect('/api/admin/login')
         except ValidationError as e:
             return self.error("create user wrong")
 
@@ -102,11 +101,16 @@ class UserChangeRoleAPI(APIView):
         if user_id:
             try:
                 user = User.objects.get(id=user_id)
+                user.user_category = user.get_user_category_display()
+                user.role_type = user.get_role_type_display()
                 return self.success(UserSerializer(user).data)
             except User.DoesNotExist:
                 return self.error("User does not exist")
         else:
             user = User.objects.all()
+            for item in user:
+                item.role_type = item.get_role_type_display()
+                item.user_category = item.get_user_category_display()
             return self.success(self.paginate_data(request, user, UserSerializer))
 
     @super_admin_required
@@ -122,6 +126,7 @@ class CheckPermissionAPI(APIView):
     def get(self, request):
         user = self.request.user
         return self.success(user.is_authenticated and user.is_super_admin())
+
 
 class CheckLoginAPI(APIView):
     def get(self, request):
