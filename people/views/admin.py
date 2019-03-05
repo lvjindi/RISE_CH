@@ -89,22 +89,28 @@ class StaffAdminAPI(APIView):
             if staff_id:
                 try:
                     staff = Staff.objects.get(id=staff_id)
+                    staff.status = staff.get_status_display()
                     return self.success(StaffSerializer(staff).data)
                 except Staff.DoesNotExist:
                     return self.error("Staff does not exits")
             else:
                 staff = Staff.objects.all()
+                for item in staff:
+                    item.status = item.get_status_display()
                 return self.success(self.paginate_data(request, staff, StaffSerializer))
         else:
             if not staff_id:
                 staff = Staff.objects.filter(name=user.real_name)
                 if staff:
+                    for item in staff:
+                        item.status = item.get_status_display()
                     return self.success(self.paginate_data(request, staff, StaffSerializer))
                 else:
                     return self.error("You does not exits in staff")
             else:
                 try:
                     staff = Staff.objects.get(id=staff_id)
+                    staff.status = staff.get_status_display()
                     return self.success(StaffSerializer(staff).data)
                 except Staff.DoesNotExist:
                     return self.error("Staff does not exits")
@@ -182,31 +188,42 @@ class StudentAdminAPI(APIView):
             if student_id:
                 try:
                     student = Student.objects.get(id=student_id)
+                    student.type = student.get_type_display()
+                    student.graduateStatus = student.get_graduateStatus_display()
+                    student.supervisor = student.get_supervisor_display()
                     return self.success(StudentSerializer(student).data)
                 except Student.DoesNotExist:
                     return self.error("Student does not exits")
             elif student_type and student_status:
                 student = Student.objects.filter(type=student_type, graduateStatus=student_status)
-                return self.success(self.paginate_data(request, student, StudentSerializer))
             elif student_type:
                 student = Student.objects.filter(type=student_type)
-                return self.success(self.paginate_data(request, student, StudentSerializer))
             elif student_status:
                 student = Student.objects.filter(graduateStatus=student_status)
-                return self.success(self.paginate_data(request, student, StudentSerializer))
             else:
                 student = Student.objects.all()
-                return self.success(self.paginate_data(request, student, StudentSerializer))
+            for item in student:
+                item.type = item.get_type_display()
+                item.graduateStatus = item.get_graduateStatus_display()
+                item.supervisor = item.get_supervisor_display()
+            return self.success(self.paginate_data(request, student, StudentSerializer))
         else:
             if not student_id:
                 student = Student.objects.filter(name=user.real_name)
                 if student:
+                    for item in student:
+                        item.type = item.get_type_display()
+                        item.graduateStatus = item.get_graduateStatus_display()
+                        item.supervisor = item.get_supervisor_display()
                     return self.success(self.paginate_data(request, student, StudentSerializer))
                 else:
                     return self.error("You does not exits in student")
             else:
                 try:
                     student = Student.objects.get(id=student_id)
+                    student.type = student.get_type_display()
+                    student.graduateStatus = student.get_graduateStatus_display()
+                    student.supervisor = student.get_supervisor_display()
                     return self.success(StudentSerializer(student).data)
                 except Student.DoesNotExist:
                     return self.error("Student does not exits")

@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from account.decorators import super_admin_required, login_required
 from exchanges.models import Exchange
-from exchanges.serializers import CreateExchangeSerializer, ExchangeSerializer
+from exchanges.serializers import ExchangeSerializer
 from news.models import News
 from news.serializers import CreateNewsSerializer
 from utils.api.api import APIView, validate_serializer
@@ -47,14 +47,19 @@ class ExchangeAdminAPI(APIView):
         if exchange_id:
             try:
                 exchange = Exchange.objects.get(id=exchange_id)
+                exchange.type = exchange.get_type_display()
                 return self.success(ExchangeSerializer(exchange).data)
             except Exchange.DoesNotExist:
                 return self.error("Exchange does not exist")
         elif exchange_type:
             exchange = Exchange.objects.filter(type=exchange_type)
+            for item in exchange:
+                item.type = item.get_type_display()
             return self.success(self.paginate_data(request, exchange, ExchangeSerializer))
         else:
             exchange = Exchange.objects.all()
+            for item in exchange:
+                item.type = item.get_type_display()
             return self.success(self.paginate_data(request, exchange, ExchangeSerializer))
 
     @super_admin_required

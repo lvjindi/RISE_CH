@@ -15,7 +15,7 @@
     <script src="/static/time/documents/js/prism.js"></script>
 </head>
 
-<body onload="NavLink(),checkLogin()">
+<body onload="NavLink(),checkLogin(),PeoplePublicPermission()">
 <!--HeadBegin-->
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
@@ -28,15 +28,12 @@
 <!--MainBegin-->
 <div id="Main">
     <div id="MainLeft">
-
     </div>
-
     <div id="MainRight">
-        <div style="float: right;margin-right: 15px;margin-top:10px "><img src="/static/images/add_lable.jpg"
-                                                                           style="height: 15px;width: 15px;margin-right: 5px">
-            <a href="adjunctProfessor_public">添加</a>
-        </div>
+        <div style="float: right;margin-right: 25px;margin-top:10px " id="peoplePublic">
 
+        </div>
+        <br>
         <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">
             <thead>
             <tr>
@@ -51,14 +48,11 @@
         <script lang="text/javascript">
             $.ajax({
                 type: 'GET',
-                url: 'http://127.0.0.1:8000/api/admin/people/adjunctProfessor',
+                url: 'http://39.105.199.229:8000/api/admin/people/adjunctProfessor',
                 data: '',
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    if (data.error) {
-                        alert(data.error)
-                    }
                     console.log(data)
                     for (i = 0; i < data.length; i++) {
                         var tr;

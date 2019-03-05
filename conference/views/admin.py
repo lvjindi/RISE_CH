@@ -47,14 +47,19 @@ class ConferenceAdminAPI(APIView):
         if conference_id:
             try:
                 conference = Conference.objects.get(id=conference_id)
+                conference.type = conference.get_type_display()
                 return self.success(ConferenceSerializer(conference).data)
             except Conference.DoesNotExist:
                 return self.error("Conference does not exist")
         elif conference_type:
             conference = Conference.objects.filter(type=conference_type)
+            for item in conference:
+                item.type = item.get_type_display()
             return self.success(self.paginate_data(request, conference, ConferenceSerializer))
         else:
             conference = Conference.objects.all()
+            for item in conference:
+                item.type = item.get_type_display()
             return self.success(self.paginate_data(request, conference, ConferenceSerializer))
 
     @super_admin_required

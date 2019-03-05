@@ -14,6 +14,8 @@ from utils.api.api import APIView
 class StaffInfoAPI(APIView):
     def get(self, request):
         staff_list = Staff.objects.all()
+        for item in staff_list:
+            item.status = item.get_status_display()
         return self.success(self.paginate_data(request, staff_list, StaffInfoSerializer))
 
 
@@ -37,9 +39,14 @@ class StudentInfoAPI(APIView):
             if student_type:
                 student_list = Student.objects.filter(type=student_type)
             elif student_status:
-                student_list = Student.objects.filter(graduateStatus=student_status)
+                student_list = Student.objects.filter(graduateStatus=student_status).order_by('type').order_by(
+                    'enrollmentTime')
             else:
                 student_list = Student.objects.all()
+        for item in student_list:
+            item.type = item.get_type_display()
+            item.graduateStatus = item.get_graduateStatus_display()
+            item.supervisor = item.get_supervisor_display()
         return self.success(self.paginate_data(request, student_list, StudentInfoSerializer))
 
 

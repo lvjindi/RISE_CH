@@ -11,10 +11,11 @@ class ConferenceListAPI(APIView):
         data = request.data
         if data.get('type') == None:
             conference_list = Conference.objects.all()
-            return self.success(self.paginate_data(request, conference_list, ConferenceListSerializer))
         else:
             conference_list = Conference.objects.filter(type=data['type'])
-            return self.success(self.paginate_data(request, conference_list, ConferenceListSerializer))
+        for item in conference_list:
+            item.type = item.get_type_display()
+        return self.success(self.paginate_data(request, conference_list, ConferenceListSerializer))
 
 
 class ConferenceDetailAPI(APIView):
@@ -25,6 +26,7 @@ class ConferenceDetailAPI(APIView):
             views_number = conference.views_number + 1
             setattr(conference, 'views_number', views_number)
             conference.save()
+            conference.type = conference.get_type_display()
             return self.success(ConferenceDetailSerializer(conference).data)
         except Conference.DoesNotExist:
             return self.error('Conference does not exist')

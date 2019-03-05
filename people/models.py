@@ -4,6 +4,10 @@ from django.db import models
 # Create your models here.
 
 class Staff(models.Model):
+    Staff_Status = (
+        (0, u'不在职'),
+        (1, u'在职'),
+    )
     name = models.TextField()
     office = models.TextField(null=True)
     phone = models.TextField(null=True)
@@ -23,7 +27,7 @@ class Staff(models.Model):
     img = models.TextField(null=True)
     imgPath = models.TextField(null=True)
     link = models.TextField(null=True)
-    status = models.BooleanField(null=True)  # 状态（在职，不在职）
+    status = models.BooleanField(choices=Staff_Status, null=True)  # 状态（在职，不在职）
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -32,13 +36,27 @@ class Staff(models.Model):
 
 
 class Student(models.Model):
+    Student_Type = (
+        ('undergraduate', u'本科'),
+        ('master', u'硕士'),
+        ('doctor', u'博士'),
+    )
+    Student_GraduateStatus = (
+        ('postgraduate', u'在读'),
+        ('graduate', u'毕业'),
+    )
+    Student_supervisor = (
+        ('刘志明', u'刘志明教授'),
+        ('赖红', u'赖红副教授'),
+        ('叶明', u'叶明副教授'),
+    )
     name = models.TextField()
     email = models.TextField(null=True)
     enrollmentTime = models.DateTimeField(null=True)
     graduationTime = models.DateTimeField(null=True)
-    type = models.TextField(null=True)  # 学生类型（硕士，博士,本科生）
-    graduateStatus = models.TextField(null=True, default="在读")  # 学生状态（在读，毕业）
-    supervisor = models.TextField(null=True, default="刘志明教授")  # 导师（刘志明教授，赖红副教授，叶明副教授）
+    type = models.TextField(choices=Student_Type, null=True)  # 学生类型（硕士，博士,本科生）
+    graduateStatus = models.TextField(choices=Student_GraduateStatus, null=True, default="postgraduate")  # 学生状态（在读，毕业）
+    supervisor = models.TextField(choices=Student_supervisor, null=True, default="刘志明")  # 导师（刘志明教授，赖红副教授，叶明副教授）
     supervisorLink = models.TextField(null=True)  # 导师主页连接
     img = models.TextField(null=True)
     imgPath = models.TextField(null=True)
@@ -53,6 +71,7 @@ class Student(models.Model):
 
     class Meta:
         db_table = 'cn_rise_student'
+        ordering = ['type']
 
 
 class AdjunctProfessor(models.Model):

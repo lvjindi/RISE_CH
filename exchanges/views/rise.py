@@ -11,10 +11,11 @@ class ExchangeListAPI(APIView):
         data = request.data
         if data.get('type') == None:
             exchange_list = Exchange.objects.all()
-            return self.success(self.paginate_data(request, exchange_list, ExchangeListSerializer))
         else:
             exchange_list = Exchange.objects.filter(type=data['type'])
-            return self.success(self.paginate_data(request, exchange_list, ExchangeListSerializer))
+        for item in exchange_list:
+            item.type = item.get_type_display()
+        return self.success(self.paginate_data(request, exchange_list, ExchangeListSerializer))
 
 
 class ExchangeDetailAPI(APIView):
@@ -25,6 +26,7 @@ class ExchangeDetailAPI(APIView):
             views_number = exchange_detail.views_number + 1
             setattr(exchange_detail, 'views_number', views_number)
             exchange_detail.save()
+            exchange_detail.type = exchange_detail.get_type_display()
             return self.success(ExchangeDetailSerializer(exchange_detail).data)
         except Exchange.DoesNotExist:
             return self.error('Exchange does not exist')

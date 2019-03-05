@@ -15,7 +15,7 @@
     <script src="/static/time/documents/js/prism.js"></script>
 </head>
 
-<body onload="NavLink(),checkLogin()">
+<body onload="NavLink(),checkLogin(),PeoplePublicPermission()">
 <!--HeadBegin-->
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
@@ -32,16 +32,15 @@
     </div>
 
     <div id="MainRight">
-        <div style="float: right;margin-right: 15px;margin-top:10px "><img src="/static/images/add_lable.jpg"
-                                                                           style="height: 15px;width: 15px;margin-right: 5px">
-            <a href="student_public">添加</a>
+        <div style="float: right;margin-right: 25px;margin-top:10px " id="peoplePublic">
         </div>
-
+        <br>
         <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">
             <thead>
             <tr>
                 <th>序号</th>
                 <th>姓名</th>
+                <th>学生类型</th>
                 <th>发布日期</th>
                 <th>管理</th>
             </tr>
@@ -51,18 +50,15 @@
         <script lang="text/javascript">
             $.ajax({
                 type: 'GET',
-                url: 'http://127.0.0.1:8000/api/admin/people/student',
+                url: 'http://39.105.199.229:8000/api/admin/people/student',
                 data: '',
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    if (data.error) {
-                        alert(data.error)
-                    }
                     console.log(data)
                     for (i = 0; i < data.length; i++) {
                         var tr;
-                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="people_edit(' + data[i].id + ')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
+                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].type + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="people_edit(' + data[i].id + ')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
                         $("#tableStyle").append('<tr>' + tr + '</tr>')
                     }
                 },

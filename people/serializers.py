@@ -1,12 +1,14 @@
 # -*-coding:utf-8 -*-
 from rest_framework import serializers
 
+from people.models import Staff
+
 
 class StaffInfoSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     imgPath = serializers.CharField(max_length=128)
     name = serializers.CharField(max_length=10)
-    status = serializers.ChoiceField(choices=['在职', '不在职'])
+    status = serializers.ChoiceField(choices=Staff.Staff_Status)
     office = serializers.CharField(max_length=128)
     phone = serializers.CharField(max_length=16)
     email = serializers.CharField(max_length=32)
@@ -34,6 +36,7 @@ class StaffDetailSerializer(serializers.Serializer):
 class StaffSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=30)
+    status = serializers.CharField(max_length=30)
     office = serializers.CharField(max_length=128)
     phone = serializers.CharField(max_length=16)
     email = serializers.CharField(max_length=32)
