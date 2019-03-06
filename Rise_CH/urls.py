@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/', include('contact.urls.rise')),
     path('api/admin/', include('contact.urls.admin')),
     path('api/admin/', include('upload.urls.admin')),
+    path('api/admin/', include('leave.urls.admin')),
     path('api/', include('controller.urls')),
     path('api/', include('static.media.urls')),
     path('admin/', admin.site.urls)

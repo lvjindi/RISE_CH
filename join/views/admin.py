@@ -4,8 +4,7 @@ from account.decorators import super_admin_required, login_required
 from join.models import Join
 from join.serializers import CreateJoinSerializer, JoinDetailSerializer
 from news.models import News
-from news.serializers import CreateNewsSerializer
-from utils.api.api import APIView, validate_serializer
+from utils.api.api import APIView
 
 
 class JoinAdminAPI(APIView):
