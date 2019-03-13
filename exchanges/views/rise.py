@@ -15,6 +15,7 @@ class ExchangeListAPI(APIView):
             exchange_list = Exchange.objects.filter(type=data['type'])
         for item in exchange_list:
             item.type = item.get_type_display()
+            item.create_time = item.create_time.strftime('%Y-%m-%d')
         return self.success(self.paginate_data(request, exchange_list, ExchangeListSerializer))
 
 
@@ -27,6 +28,7 @@ class ExchangeDetailAPI(APIView):
             setattr(exchange_detail, 'views_number', views_number)
             exchange_detail.save()
             exchange_detail.type = exchange_detail.get_type_display()
+            exchange_detail.create_time = exchange_detail.create_time.strftime('%Y-%m-%d')
             return self.success(ExchangeDetailSerializer(exchange_detail).data)
         except Exchange.DoesNotExist:
             return self.error('Exchange does not exist')

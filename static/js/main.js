@@ -47,9 +47,9 @@ function showConference(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var domesticUrl = 'http://127.0.0.1:8000/api/admin/conference?type=domestic';
-    var foreignUrl = 'http://127.0.0.1:8000/api/admin/conference?type=foreign';
-    var allUrl = 'http://127.0.0.1:8000/api/admin/conference';
+    var domesticUrl = 'http://39.105.199.229:8000/api/admin/conference?type=domestic';
+    var foreignUrl = 'http://39.105.199.229:8000/api/admin/conference?type=foreign';
+    var allUrl = 'http://39.105.199.229:8000/api/admin/conference';
     var conferenceUrl;
     if (option == '1') {
         conferenceUrl = domesticUrl;
@@ -105,7 +105,7 @@ function showConference(val) {
 
 function peopleAdminCheck() {
     $.ajax({
-        url: "http://127.0.0.1:8000/api/admin/checkAdmin",
+        url: "http://39.105.199.229:8000/api/admin/checkAdmin",
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -124,7 +124,7 @@ function peopleAdminCheck() {
             } else {
 
                 $.ajax({
-                    url: "http://127.0.0.1:8000/api/admin/people",
+                    url: "http://39.105.199.229:8000/api/admin/people",
                     type: 'GET',
                     contentType: false,
                     processData: false,
@@ -196,12 +196,12 @@ function showPeopleAdmin(val) {
     if (document.getElementById('studentType')) {
         obj.removeChild(document.getElementById('studentType'));
     }
-    var staffUrl = 'http://127.0.0.1:8000/api/admin/people?type=staff';
-    var undergraduateUrl = 'http://127.0.0.1:8000/api/admin/people?type=undergraduate';
-    var masterUrl = 'http://127.0.0.1:8000/api/admin/people?type=master';
-    var doctorUrl = 'http://127.0.0.1:8000/api/admin/people?type=doctor';
-    var professorUrl = 'http://127.0.0.1:8000/api/admin/people?type=adjunctProfessor';
-    var allUrl = 'http://127.0.0.1:8000/api/admin/people';
+    var staffUrl = 'http://39.105.199.229:8000/api/admin/people?type=staff';
+    var undergraduateUrl = 'http://39.105.199.229:8000/api/admin/people?type=undergraduate';
+    var masterUrl = 'http://39.105.199.229:8000/api/admin/people?type=master';
+    var doctorUrl = 'http://39.105.199.229:8000/api/admin/people?type=doctor';
+    var professorUrl = 'http://39.105.199.229:8000/api/admin/people?type=adjunctProfessor';
+    var allUrl = 'http://39.105.199.229:8000/api/admin/people';
     var peopleUrl;
     if (option == '1') {
         peopleUrl = doctorUrl;
@@ -265,7 +265,7 @@ function showPeopleAdmin(val) {
 
 function staffPublic() {
     var formData = new FormData();
-    var url = 'http://127.0.0.1:8000/api/admin/people/staff';
+    var url = 'http://39.105.199.229:8000/api/admin/people/staff';
     formData.append('name', $('#name').val());
     formData.append('img', document.getElementById('image').files[0]);
     formData.append('status', $('#status').val());
@@ -293,7 +293,7 @@ function staffPublic() {
         processData: false,
         // jsonpCallback: 'callback',
         success: function (data) {
-            location.reload("http://127.0.0.1:8000/api/admin/people/staff_management")
+            location.reload("http://39.105.199.229:8000/api/admin/people/staff_management")
             if (data.error) {
                 alert(data.error)
             }
@@ -312,7 +312,7 @@ function staffPublic() {
 
 function leavePublic() {
     var formData = new FormData;
-    var url = 'http://127.0.0.1:8000/api/admin/leave';
+    var url = 'http://39.105.199.229:8000/api/admin/leave';
     formData.append('name', $('#name').val());
     formData.append('startTime', $('#startTime').val());
     formData.append('endTime', $('#endTime').val());
@@ -341,7 +341,7 @@ function leavePublic() {
 
 function adjunctProfessorPublic() {
     var formData = new FormData();
-    var url = 'http://127.0.0.1:8000/api/admin/people/adjunctProfessor';
+    var url = 'http://39.105.199.229:8000/api/admin/people/adjunctProfessor';
     formData.append('name', $('#name').val());
     formData.append('img', document.getElementById('image').files[0]);
     formData.append('email', $('#email').val());
@@ -360,7 +360,7 @@ function adjunctProfessorPublic() {
         processData: false,
         // jsonpCallback: 'callback',
         success: function (data) {
-            location.reload("http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management")
+            location.reload("http://39.105.199.229:8000/api/admin/people/adjunctProfessor_management")
             if (data.error) {
                 alert(data.error)
             }
@@ -376,10 +376,32 @@ function adjunctProfessorPublic() {
 
 }
 
+function superiorInfo() {
+    var result;
+    $.ajax({
+            type: 'GET',
+            url: 'http://39.105.199.229:8000/api/admin/people/staff',
+            async: false,
+            success: function (data) {
+                console.log(data)
+                result = data
+            },
+            error: function () {
+                console.log("获取导师首页连接失败")
+            },
+
+        }
+    );
+    return result;
+
+}
+
 function studentPublic() {
     var formData = new FormData();
-    var url = 'http://127.0.0.1:8000/api/admin/people/student';
-    var supervisorLinkUrl = 'http://127.0.0.1:8000/api/admin/people/student'
+    var url = 'http://39.105.199.229:8000/api/admin/people/student';
+    var supervisorLinkUrl = 'http://39.105.199.229:8000/api/admin/people/staff';
+    var supervisorLink;
+    var superiorData;
     formData.append('name', $('#name').val());
     formData.append('img', document.getElementById('image').files[0]);
     formData.append('email', $('#email').val());
@@ -389,47 +411,25 @@ function studentPublic() {
     formData.append('type', $('#type').val());
     formData.append('supervisor', $('#supervisor').val());
     if ($('#supervisor').val()) {
-        $.ajax({
-                type: 'GET',
-                url: 'http://127.0.0.1:8000/api/admin/people/staff',
-                data: '',
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    console.log(data)
-                    for (i = 0; i < data.length; i++) {
-                        if (data[i].name == $('#supervisor ').val()) {
-                            supervisorLinkUrl = supervisorLinkUrl + "?id=" + data[i].id;
-                            document.getElementById('supervisorLink').value = supervisorLinkUrl;
-
-                        }
-                        else {
-                            $('#supervisor').val(0)
-                            document.getElementById('supervisorLink').value = ''
-                            alert(document.getElementById('supervisorLink').value)
-
-                        }
-                    }
-
-                },
-                error: function () {
-                    alert(XMLHttpRequest.status);
-                    alert(XMLHttpRequest.readyState);
-                    alert(textStatus);
-                },
-
+        superiorData = new superiorInfo();
+        for (i = 0; i < superiorData.length; i++) {
+            if (superiorData[i].name == $('#supervisor').val()) {
+                supervisorLink = supervisorLinkUrl + "?id=" + superiorData[i].id;
+                document.getElementById('supervisorLink').value = supervisorLinkUrl;
+                break;
             }
-        )
+            else {
+                supervisorLink = ''
+            }
+        }
     }
-
     formData.append('area', $('#area').val());
-    alert($('#supervisorLink').val())
-    formData.append('supervisorLink', $('#supervisorLink').val())
+    formData.append('supervisorLink', supervisorLink);
     formData.append('biography', biography.getContent());
     formData.append('project', project.getContent());
     formData.append('activity', activity.getContent());
     formData.append('publication', publication.getContent());
-    // setTimeout(formData.append('supervisorLink ', document.getElementById('supervisorLink ').value), 200)
+// setTimeout(formData.append('supervisorLink ', document.getElementById('supervisorLink ').value), 200)
 
     $.ajax({
         type: 'POST',
@@ -440,14 +440,9 @@ function studentPublic() {
         processData: false,
         // jsonpCallback: 'callback',
         success: function (data) {
-            location.reload("http://127.0.0.1:8000/api/admin/people/student_management")
-            if (data.error) {
-                alert(data.error)
-            }
-            else {
-                console.log(data)
-                alert("发布成功")
-            }
+            location.reload('http://39.105.199.229:8000/api/admin/people/student_management');
+            console.log(data);
+            alert("发布成功")
 
         },
         error: function () {
@@ -458,7 +453,7 @@ function studentPublic() {
 }
 
 function sliderPublic() {
-    var url = 'http://127.0.0.1:8000/api/admin/index/slider';
+    var url = 'http://39.105.199.229:8000/api/admin/index/slider';
     var formData = new FormData();
     formData.append('image', document.getElementById('indexImage').files[0]);
     formData.append('articleId', $('#articleID').val());
@@ -475,7 +470,7 @@ function sliderPublic() {
                 alert(data.error)
             }
             else {
-                location.reload("http://127.0.0.1:8000/api/admin/index/slider_management");
+                location.reload("http://39.105.199.229:8000/api/admin/index/slider_management");
                 console.log(data);
                 alert("发布成功");
             }
@@ -487,7 +482,7 @@ function sliderPublic() {
 }
 
 function messagePublic() {
-    var url = 'http://127.0.0.1:8000/api/admin/index/message';
+    var url = 'http://39.105.199.229:8000/api/admin/index/message';
     var formData = new FormData();
     formData.append('image', document.getElementById('image').files[0]);
     formData.append('title', $('#articleTitle').val());
@@ -505,7 +500,7 @@ function messagePublic() {
                 alert(data.error)
             }
             else {
-                location.reload("http://127.0.0.1:8000/api/admin/index/message_management")
+                location.reload("http://39.105.199.229:8000/api/admin/index/message_management")
                 console.log(data)
                 alert("发布成功")
             }
@@ -520,14 +515,14 @@ function newsPublic() {
     var url;
     var formData = new FormData();
     if (document.getElementById('type').value == 'news') {
-        url = 'http://127.0.0.1:8000/api/admin/news';
+        url = 'http://39.105.199.229:8000/api/admin/news';
 
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'seminar') {
-        url = 'http://127.0.0.1:8000/api/admin/seminar';
+        url = 'http://39.105.199.229:8000/api/admin/seminar';
         formData.append('subType', $('#subSelect').val());
         formData.append('time', $('#time').val());
         formData.append('place', $('#place').val());
@@ -536,26 +531,26 @@ function newsPublic() {
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'conference') {
-        url = 'http://127.0.0.1:8000/api/admin/conference';
+        url = 'http://39.105.199.229:8000/api/admin/conference';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'exchange') {
-        url = 'http://127.0.0.1:8000/api/admin/exchange';
+        url = 'http://39.105.199.229:8000/api/admin/exchange';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'research') {
         if ($('#subSelect').val() == 'introduction') {
-            url = 'http://127.0.0.1:8000/api/admin/introduction';
+            url = 'http://39.105.199.229:8000/api/admin/introduction';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('content', ue.getContent());
         }
         if ($('#subSelect').val() == 'project') {
-            url = 'http://127.0.0.1:8000/api/admin/project';
+            url = 'http://39.105.199.229:8000/api/admin/project';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -567,7 +562,7 @@ function newsPublic() {
             formData.append('other', $('#other').val());
         }
         if ($('#subSelect').val() == 'publication') {
-            url = 'http://127.0.0.1:8000/api/admin/publication';
+            url = 'http://39.105.199.229:8000/api/admin/publication';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -576,7 +571,7 @@ function newsPublic() {
             formData.append('other', $('#other').val());
         }
         if ($('#subSelect').val() == 'report') {
-            url = 'http://127.0.0.1:8000/api/admin/report';
+            url = 'http://39.105.199.229:8000/api/admin/report';
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('author', $('#author').val());
@@ -589,19 +584,19 @@ function newsPublic() {
 
     }
     if (document.getElementById('type').value == 'join') {
-        url = 'http://127.0.0.1:8000/api/admin/join';
+        url = 'http://39.105.199.229:8000/api/admin/join';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'aboutUs') {
-        url = 'http://127.0.0.1:8000/api/admin/aboutUs';
+        url = 'http://39.105.199.229:8000/api/admin/aboutUs';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
     }
     if (document.getElementById('type').value == 'contact') {
-        url = 'http://127.0.0.1:8000/api/admin/contact';
+        url = 'http://39.105.199.229:8000/api/admin/contact';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
@@ -620,6 +615,7 @@ function newsPublic() {
             }
             else {
                 console.log(data)
+                location.replace(location.href);
                 alert("发布成功")
             }
         },
@@ -637,9 +633,9 @@ function showExchange(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var missionUrl = 'http://127.0.0.1:8000/api/admin/exchange?type=mission';
-    var visitorUrl = 'http://127.0.0.1:8000/api/admin/exchange?type=visitor';
-    var allUrl = 'http://127.0.0.1:8000/api/admin/exchange';
+    var missionUrl = 'http://39.105.199.229:8000/api/admin/exchange?type=mission';
+    var visitorUrl = 'http://39.105.199.229:8000/api/admin/exchange?type=visitor';
+    var allUrl = 'http://39.105.199.229:8000/api/admin/exchange';
     var exchangeUrl;
     if (option == '1') {
         exchangeUrl = visitorUrl;//来访
@@ -700,10 +696,10 @@ function showResearch(val) {
     if (document.getElementById('tableStyle')) {
         obj.removeChild(document.getElementById('tableStyle'))
     }
-    var introductionUrl = 'http://127.0.0.1:8000/api/admin/introduction';
-    var projectUrl = 'http://127.0.0.1:8000/api/admin/project';
-    var publicationUrl = 'http://127.0.0.1:8000/api/admin/publication';
-    var reportUrl = 'http://127.0.0.1:8000/api/admin/report';
+    var introductionUrl = 'http://39.105.199.229:8000/api/admin/introduction';
+    var projectUrl = 'http://39.105.199.229:8000/api/admin/project';
+    var publicationUrl = 'http://39.105.199.229:8000/api/admin/publication';
+    var reportUrl = 'http://39.105.199.229:8000/api/admin/report';
     var researchUrl;
     if (option == '1') {
         researchUrl = introductionUrl;
@@ -763,7 +759,6 @@ function showResearch(val) {
             '                <th>标题</th>' +
             '                <th>作者</th>' +
             '                <th>发布日期</th>' +
-            '                <th>点击</th>' +
             '                <th>管理</th>' +
             '            </tr>' +
             '</thead>' +
@@ -783,7 +778,7 @@ function showResearch(val) {
                 }
                 for (i = 0; i < data.length; i++) {
                     var tr;
-                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].author + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + data[i].views_number + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="research_edit(\'' + researchUrl + '\',\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="research_delete(\'' + researchUrl + '\',\' ' + data[i].id + '\')">删除</a>' + '</td>'
+                    tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].title + '</td>' + '<td>' + data[i].author + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="research_edit(\'' + researchUrl + '\',\'' + data[i].id + '\')">编辑</a>&nbsp&nbsp<a href="#" class="addUnderline" onclick="research_delete(\'' + researchUrl + '\',\' ' + data[i].id + '\')">删除</a>' + '</td>'
                     $("#tableStyle").append('<tr>' + tr + '</tr>')
                 }
             },
@@ -922,7 +917,7 @@ function news_delete(id) {
 }
 
 function user_delete(id) {
-    var url = "http://127.0.0.1:8000/api/admin/change_role"
+    var url = "http://39.105.199.229:8000/api/admin/change_role"
     url = url + '?id=' + id;
     if (confirm("确定要删除吗？")) {
         $.ajax({
@@ -978,9 +973,9 @@ function people_edit(id) {
                     '                <span>办公室</span><input type="text" name="office" id="office" style="margin-top: 20px" value=\'' + data.office + '\'><br>\n' +
                     '                <span>电话</span><input type="text" name="phone" id="phone" style="margin-top: 20px" value=\'' + data.phone + '\'><br>\n' +
                     '                <span>邮箱</span><input type="text" name="email" id="email" style="margin-top: 20px" value=\'' + data.email + '\'><br>\n' +
-                    '                <span>职位</span><input type="text" name="position" id="position" style="margin-top: 20px" value=\'' + data.position + '\'><br>\n' +
-                    '                <span>学位</span><input type="text" name="degree" id="degree" style="margin-top: 20px" value=\'' + data.degree + '\'><br>\n' +
-                    '                <span>职称</span><input type="text" name="professionalTitle" id="professionalTitle"\n' +
+                    '                <span>职位</span><input type="text" name="position" id="position" style="margin-top: 20px" value=\'' + data.position + '\' placeholder="中心主任/助理教授/主任助理/博士后"><br>\n' +
+                    '                <span>学位</span><input type="text" name="degree" id="degree" style="margin-top: 20px" value=\'' + data.degree + '\'  placeholder="本科/硕士/博士/FBCS(可多选)"><br>\n' +
+                    '                <span>职称</span><input type="text" name="professionalTitle" id="professionalTitle" placeholder="教授/副教授/讲师"\n' +
                     '                                      style="margin-top: 20px" value=\'' + data.professionalTitle + '\'><br>\n' +
                     ' <span>导师类型</span><input type="text" id="profession" name="profession" style="margin-top: 20px"\n' +
                     '                                        placeholder="博士导师/硕士导师（可多选）" value=\'' + data.profession + '\' ><br>' +
@@ -1188,7 +1183,7 @@ function people_edit(id) {
 function user_edit(id) {
 
     var str;
-    var url = "http://127.0.0.1:8000/api/admin/change_role";
+    var url = "http://39.105.199.229:8000/api/admin/change_role";
     url = url + '?id=' + id;
     $.ajax({
         url: url,
@@ -1353,7 +1348,6 @@ function news_edit(id) {
             }
             if (newstype.startsWith('seminar')) {
                 var strmiddle = ' <div id="subForm">\n' +
-                    '                    <span>时间</span><input type="date" name="time" id="time" value=\'' + data.time + '\'><br>\n' +
                     '                    <span>地点</span><input type="text" name="place" id="place" value=\'' + data.place + '\'><br>\n' +
                     '                    <span>讲者</span><input type="text" name="speaker" id="speaker" value=\'' + data.speaker + '\'><br>\n' +
                     '                </div>';
@@ -1577,7 +1571,7 @@ function staffEditSubmit(url, id) {
         dataType: 'json',
         data: data,
         success: function (data) {
-            location.reload('http://127.0.0.1:8000/api/admin/people/staff_management')
+            location.reload('http://39.105.199.229:8000/api/admin/people/staff_management')
             alert('修改成功')
         },
         error: function () {
@@ -1614,7 +1608,7 @@ function adjunctProfessorEditSubmit(url, id) {
         dataType: 'json',
         data: data,
         success: function (data) {
-            location.reload('http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management')
+            location.reload('http://39.105.199.229:8000/api/admin/people/adjunctProfessor_management')
             alert('修改成功')
 
 
@@ -1654,7 +1648,7 @@ function studentEditSubmit(url, id) {
         dataType: 'json',
         data: data,
         success: function (data) {
-            location.reload('http://127.0.0.1:8000/api/admin/people/student_management')
+            location.reload('http://39.105.199.229:8000/api/admin/people/student_management')
             alert('修改成功')
 
 
@@ -1731,10 +1725,9 @@ function newsEditSubmit(url, id) {
     var data;
     var type;
     if (newstype.startsWith('seminar')) {
-        var time = $('#time').val();
         var place = $('#place').val();
         var speaker = $('#speaker').val();
-        data = {'id': id, 'title': title, 'content': content, 'time': time, 'place': place, 'speaker': speaker};
+        data = {'id': id, 'title': title, 'content': content, 'place': place, 'speaker': speaker};
     }
     if (newstype.startsWith('news') || newstype.startsWith('introduction') || newstype.startsWith('join') || newstype.startsWith('aboutUs') || newstype.startsWith('contact')) {
         data = {'id': id, 'title': title, 'content': content};
@@ -1789,12 +1782,12 @@ function research_delete(url, id) {
 function logout() {
     if (confirm("确定要退出吗？")) {
         $.ajax({
-            url: 'http://127.0.0.1:8000/api/admin/logout',
+            url: 'http://39.105.199.229:8000/api/admin/logout',
             type: 'GET',
             dataType: 'json',
             success: function () {
                 alert('退出登陆成功')
-                window.location.href = "http://127.0.0.1:8000/api/admin/index";
+                window.location.href = "http://39.105.199.229:8000/api/admin/index";
             },
             error: function () {
                 alert('退出登陆失败')
@@ -1806,14 +1799,14 @@ function logout() {
 
 function checkLogin() {
     $.ajax({
-        url: "http://127.0.0.1:8000/api/admin/checkLogin",
+        url: "http://39.105.199.229:8000/api/admin/checkLogin",
         type: 'GET',
         dataType: 'json',
         success: function (data) {
             if (!data.error) {
                 document.getElementById('login').append(data + ",欢迎您！")
             } else {
-                str = '<a href="http://127.0.0.1:8000/api/admin/login">登录</a>'
+                str = '<a href="http://39.105.199.229:8000/api/admin/login">登录</a>'
                 $('#login').html(str)
             }
         },
@@ -1831,7 +1824,7 @@ function PeoplePublicPermission() {
     var managementIndex = url.indexOf('management');
     //设置后台导航
     $.ajax({
-        url: 'http://127.0.0.1:8000/api/admin/checkAdmin',
+        url: 'http://39.105.199.229:8000/api/admin/checkAdmin',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -1870,7 +1863,7 @@ function PeoplePublicPermission() {
 function NavLink() {
     //设置后台导航
     $.ajax({
-        url: 'http://127.0.0.1:8000/api/admin/checkAdmin',
+        url: 'http://39.105.199.229:8000/api/admin/checkAdmin',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -1903,7 +1896,7 @@ function NavLink() {
 
                 $('#MainLeft').html(str);
                 var title = document.getElementById("MainLeft").getElementsByTagName("li");//获取导航的DIV
-                var LinkArry = ["http://127.0.0.1:8000/api/admin/userManagement", "http://127.0.0.1:8000/api/admin/index/slider_management", "http://127.0.0.1:8000/api/admin/index/message_management", "http://127.0.0.1:8000/api/admin/news_public", "#", "http://127.0.0.1:8000/api/admin/news_management", "http://127.0.0.1:8000/api/admin/seminar_management", "http://127.0.0.1:8000/api/admin/conference_management", "http://127.0.0.1:8000/api/admin/exchange_management", "http://127.0.0.1:8000/api/admin/research_management", "http://127.0.0.1:8000/api/admin/join_management", "http://127.0.0.1:8000/api/admin/aboutUs_management", "http://127.0.0.1:8000/api/admin/contact_management", "#", "http://127.0.0.1:8000/api/admin/people/staff_management", "http://127.0.0.1:8000/api/admin/people/student_management", "http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management", "http://127.0.0.1:8000/api/admin/leave_public", "http://127.0.0.1:8000/api/admin/leave_management"]; //创建超链接数组
+                var LinkArry = ["http://39.105.199.229:8000/api/admin/userManagement", "http://39.105.199.229:8000/api/admin/index/slider_management", "http://39.105.199.229:8000/api/admin/index/message_management", "http://39.105.199.229:8000/api/admin/news_public", "#", "http://39.105.199.229:8000/api/admin/news_management", "http://39.105.199.229:8000/api/admin/seminar_management", "http://39.105.199.229:8000/api/admin/conference_management", "http://39.105.199.229:8000/api/admin/exchange_management", "http://39.105.199.229:8000/api/admin/research_management", "http://39.105.199.229:8000/api/admin/join_management", "http://39.105.199.229:8000/api/admin/aboutUs_management", "http://39.105.199.229:8000/api/admin/contact_management", "#", "http://39.105.199.229:8000/api/admin/people/staff_management", "http://39.105.199.229:8000/api/admin/people/student_management", "http://39.105.199.229:8000/api/admin/people/adjunctProfessor_management", "http://39.105.199.229:8000/api/admin/leave_public", "http://39.105.199.229:8000/api/admin/leave_management"]; //创建超链接数组
                 var LinkNode = ["用户管理", "轮播图管理", "内容管理", "新闻发布", "新闻管理", "中心动态", "学术报告", "学术会议", "学术交流", "科学研究", "招纳贤士", "关于我们", "联系我们", "成员管理", "职工管理", "学生管理", "兼职教授管理", "请假发布", "请假管理"]
                 var n = title.length;
 
@@ -1919,7 +1912,7 @@ function NavLink() {
                     '        </ul>';
                 $('#MainLeft').html(str);
                 var title = document.getElementById("MainLeft").getElementsByTagName("li");//获取导航的DIV
-                var LinkArry = ["#", "http://127.0.0.1:8000/api/admin/people/staff_management", "http://127.0.0.1:8000/api/admin/people/student_management", "http://127.0.0.1:8000/api/admin/people/adjunctProfessor_management", "http://127.0.0.1:8000/api/admin/leave_public"]; //创建超链接数组
+                var LinkArry = ["#", "http://39.105.199.229:8000/api/admin/people/staff_management", "http://39.105.199.229:8000/api/admin/people/student_management", "http://39.105.199.229:8000/api/admin/people/adjunctProfessor_management", "http://39.105.199.229:8000/api/admin/leave_public"]; //创建超链接数组
                 var LinkNode = ["成员管理", "职工管理", "学生管理", "兼职教授管理", "请假发布"]
                 var n = title.length;
                 if (document.getElementById('conferenceTypeId')) {

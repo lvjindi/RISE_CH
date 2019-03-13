@@ -17,6 +17,7 @@ class IntroductionAPI(APIView):
                 setattr(research, "views_number", views_number)
                 # research.update(views_number=views_number)
                 research.save()
+                research.create_time = research.create_time.strftime('%Y-%m-%d')
                 return self.success(IntroductionSerializer(research).data)
             else:
                 return self.error('The research does not exist')
@@ -38,6 +39,7 @@ class ProjectDetailAPI(APIView):
             views_number = project.views_number + 1
             setattr(project, 'views_number', views_number)
             project.save()
+            project.create_time = project.create_time.strftime('%Y-%m-%d')
             return self.success(ProjectDetailSerializer(project).data)
         except Projects.DoesNotExist:
             return self.error('Project does not exist')
@@ -47,11 +49,8 @@ class PublicationAPI(APIView):
     def get(self, request):
         public_time = request.GET.get('year')
         if public_time:
-            try:
-                publications = Publications.objects.filter(public_time=public_time)
-                return self.success(self.paginate_data(request, publications, PublicationSerializer))
-            except Publications.DoesNotExist:
-                return self.error("Publications does not exist")
+            publications = Publications.objects.filter(public_time=public_time)
+            return self.success(self.paginate_data(request, publications, PublicationSerializer))
         else:
             publications = Publications.objects.all()
             return self.success(self.paginate_data(request, publications, PublicationSerializer))

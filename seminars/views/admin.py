@@ -36,7 +36,6 @@ class SeminarAdminAPI(APIView):
         try:
             seminar = Seminars.objects.get(id=data['id'])
             news = News.objects.get(id=seminar.news_id)
-            setattr(seminar, 'time', data['time'])
             setattr(seminar, 'place', data['place'])
             setattr(seminar, 'speaker', data['speaker'])
             setattr(seminar, 'title', data['title'])

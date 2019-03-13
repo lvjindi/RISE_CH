@@ -50,7 +50,7 @@ class LeaveAdmin(APIView):
         path_use = path.replace('\\', '/')
         title = name + " Ask For Leave"
         from_mail = settings.EMAIL_HOST_USER
-        recipient_list = settings.EMAIL_RECEIVE_USER
+        recipient_list = settings.EMAIL_RECEIVE_LEAVE_USER
         html_content = emailTemplate.render(context)
         msg = mail.EmailMessage(title, html_content, from_mail, recipient_list)
         image_agree = add_img(path_use + '/static/images/agree.png', 'test_cid1')
@@ -96,9 +96,10 @@ class AgreeReplyAdmin(APIView):
             recipient_email = recipient.email
         except Leave.DoesNotExist:
             return self.error("Leave does not exist")
-        content = 'Dear ' + recipient.name + ', your requirement of asking leave on ' + str(
-            recipient.create_time).replace('T',' ') + ' is agreed!'
-        recipient_list = [recipient_email]
+        content = 'Dear ' + recipient.name + ', your request for leave on ' + str(
+            recipient.create_time).replace('T', ' ') + ' has been approved!'
+        recipient_list = settings.EMAIL_RECEIVE_REPLY_USER
+        recipient_list.append(recipient_email)
         send_mail(title, content, from_mail, recipient_list, fail_silently=False)
         return self.success("Send agreed email successfully!")
 
@@ -115,9 +116,10 @@ class DisAgreeReplyAdmin(APIView):
             recipient_email = recipient.email
         except Leave.DoesNotExist:
             return self.error("Leave does not exist")
-        content = 'Dear ' + recipient.name + ', your request of asking leave on ' + str(
-            recipient.create_time).replace('T',' ') + ' is disagreed!'
-        recipient_list = [recipient_email]
+        content = 'Dear ' + recipient.name + ', your request for leave on ' + str(
+            recipient.create_time).replace('T', ' ') + ' has been rejected!'
+        recipient_list = settings.EMAIL_RECEIVE_REPLY_USER
+        recipient_list.append(recipient_email)
         send_mail(title, content, from_mail, recipient_list, fail_silently=False)
         return self.success("Send disagreed email successfully!")
 
@@ -130,4 +132,3 @@ class LeavePublic(APIView):
 class LeaveManagement(APIView):
     def get(self, request):
         return render(request, 'leaveManagement.html')
-

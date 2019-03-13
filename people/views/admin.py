@@ -135,8 +135,8 @@ class StudentAdminAPI(APIView):
         name = request.POST.get('name')
         graduateStatus = request.POST.get('graduateStatus')
         email = request.POST.get('email')
-        enrollmentTime = request.POST.get('enrollmentTime ')
-        graduationTime = request.POST.get('graduationTime ')
+        enrollmentTime = request.POST.get('enrollmentTime')
+        graduationTime = request.POST.get('graduationTime')
         type = request.POST.get('type')
         supervisor = request.POST.get('supervisor')
         supervisorLink = request.POST.get('supervisorLink')
@@ -145,12 +145,11 @@ class StudentAdminAPI(APIView):
         project = request.POST.get('project')
         activity = request.POST.get('activity')
         publication = request.POST.get('publication')
-        link = request.POST.get('link')
         student = Student.objects.create(img=img, imgPath=imgPath, name=name, graduateStatus=graduateStatus,
                                          email=email, enrollmentTime=enrollmentTime, graduationTime=graduationTime,
                                          type=type, area=area, supervisor=supervisor, biography=biography,
                                          project=project, supervisorLink=supervisorLink,
-                                         activity=activity, publication=publication, link=link
+                                         activity=activity, publication=publication
                                          )
         return self.success(StudentSerializer(student).data)
 

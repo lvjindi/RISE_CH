@@ -54,10 +54,11 @@ class Publications(models.Model):
 class Reports(models.Model):
     author = models.TextField()
     title = models.TextField()
-    place = models.TextField()
-    time = models.TextField()
-    year = models.TextField()
-    pdf_path = models.TextField()
+    place = models.TextField(null=True)
+    time = models.TextField(null=True)
+    year = models.TextField(null=True)
+    pdf_path = models.FileField(null=True)
+    other = models.TextField(null=True)
     create_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 

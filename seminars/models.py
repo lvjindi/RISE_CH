@@ -17,3 +17,4 @@ class Seminars(models.Model):
 
     class Meta:
         db_table = 'cn_rise_seminars'
+        ordering = ['-time']

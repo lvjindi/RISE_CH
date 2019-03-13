@@ -62,15 +62,14 @@ class StudentInfoSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     imgPath = serializers.CharField(max_length=128)
     name = serializers.CharField(max_length=10)
-    enrollmentTime = serializers.DateTimeField()
-    graduationTime = serializers.DateTimeField()
+    enrollmentTime = serializers.CharField(max_length=20)
+    graduationTime = serializers.CharField(max_length=20)
     type = serializers.ChoiceField(choices=['硕士', '博士', '本科生'])
     graduateStatus = serializers.ChoiceField(choices=['在读', '毕业'])
     supervisor = serializers.ChoiceField(choices=['刘志明教授', '赖红副教授', '叶明副教授'])
     supervisorLink = serializers.CharField(max_length=256)
     email = serializers.CharField(max_length=32)
     area = serializers.CharField(max_length=64)
-    link = serializers.CharField(max_length=256)
     create_time = serializers.DateTimeField()
 
 
@@ -87,8 +86,8 @@ class StudentSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=30)
     email = serializers.CharField(max_length=32)
-    enrollmentTime = serializers.DateTimeField()
-    graduationTime = serializers.DateTimeField()
+    enrollmentTime = serializers.CharField(max_length=20)
+    graduationTime = serializers.CharField(max_length=20)
     type = serializers.ChoiceField(choices=['硕士', '博士', '本科生'])
     graduateStatus = serializers.ChoiceField(choices=['在读', '毕业'])
     supervisor = serializers.CharField(max_length=64)
@@ -100,7 +99,6 @@ class StudentSerializer(serializers.Serializer):
     project = serializers.CharField(max_length=1024 * 1024 * 8)
     activity = serializers.CharField(max_length=1024 * 1024 * 8)
     publication = serializers.CharField(max_length=1024 * 1024 * 8)
-    link = serializers.CharField(max_length=256)
     create_time = serializers.DateTimeField()
 
 
