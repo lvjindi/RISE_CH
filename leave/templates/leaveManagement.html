@@ -44,6 +44,7 @@
                 <th>开始时间</th>
                 <th>结束时间</th>
                 <th>状态</th>
+                <th>回复</th>
                 <th>发布日期</th>
                 <th>管理</th>
             </tr>
@@ -53,7 +54,7 @@
         <script lang="text/javascript">
             $.ajax({
                 type: 'GET',
-                url: 'http://127.0.0.1:8000/api/admin/leave',
+                url: 'http://39.105.199.229:8000/api/admin/leave',
                 data: '',
                 contentType: false,
                 processData: false,
@@ -61,7 +62,7 @@
                     console.log(data)
                     for (i = 0; i < data.length; i++) {
                         var tr;
-                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].reason + '</td>' + '<td>' + data[i].startTime + '</td>' + '<td>' + data[i].endTime + '</td>' + '<td>' + data[i].status + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
+                        tr = '<td>' + data[i].id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].reason + '</td>' + '<td>' + data[i].startTime + '</td>' + '<td>' + data[i].endTime + '</td>' + '<td>' + data[i].status + '</td>' + '<td>' + data[i].reply + '</td>' + '<td>' + data[i].create_time + '</td>' + '<td>' + '<a href="#" class="addUnderline" onclick="news_delete(' + data[i].id + ')">删除</a>' + '</td>'
                         $("#tableStyle").append('<tr>' + tr + '</tr>')
                     }
                 },

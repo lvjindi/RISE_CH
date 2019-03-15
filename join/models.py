@@ -5,7 +5,7 @@ from django.db import models
 class Join(models.Model):
     title = models.TextField()
     content = models.TextField(null=True)
-    views_number = models.IntegerField(null=True)
+    views_number = models.IntegerField(null=True, default=0)
     image = models.TextField(null=True)
     sliderFlag = models.BooleanField(default=False)
     news_id = models.IntegerField(null=True)

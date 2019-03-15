@@ -328,6 +328,7 @@ function leavePublic() {
         processData: false,
         success: function (data) {
             alert("发送成功")
+            location.reload('http://39.105.199.229:8000/api/admin/leave_public')
             console.log(data)
 
         },

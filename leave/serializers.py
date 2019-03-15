@@ -9,4 +9,5 @@ class LeaveSerializer(serializers.Serializer):
     endTime = serializers.DateTimeField()
     reason = serializers.CharField(max_length=128 * 128)
     status = serializers.CharField(max_length=10)
+    reply = serializers.CharField(max_length=128 * 128)
     create_time = serializers.DateTimeField()

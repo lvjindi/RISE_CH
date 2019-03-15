@@ -1,0 +1,150 @@
+<!DOCTYPE>
+<html>
+<head>
+    <script src="/static/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/css.css"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/ueditor.all.min.js"></script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <link rel="stylesheet" href="/static/time/css/BeatPicker.min.css"/>
+    <script src="/static/time/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/time/js/BeatPicker.min.js"></script>
+    <script src="/static/time/documents/js/prism.js"></script>
+</head>
+
+<body onload="NavLink(),checkLogin()">
+<!--HeadBegin-->
+<div id="Head">
+    <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
+    <div id="login"></div>
+    <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
+    <div id="Banner"></div>
+</div>
+
+<!--HeadEnd-->
+
+<!--MainBegin-->
+<div id="Main">
+    <div id="MainLeft">
+    </div>
+    <div id="MainRight">
+        <div id="articleEditor">
+            <form id="leaveForm" method="post" action="/">
+                <span>Name</span><input type="text" name="name" id="name" placeholder="name in english"><br>
+                <span>Email</span><input type="email" name="email" id="email"><br>
+                <span>StartTime</span><input type="datetime-local" name="startTime" id="startTime"
+                                             placeholder="请输s入时间"><br>
+                <span>EndTime</span><input type="datetime-local" name="endTime" id="endTime"><br><br>
+                <span>Reason</span>
+                <div id="reason" type="text/plain"
+                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"
+                     name="reason">
+                </div>
+                <span>Status</span>
+                <input type="radio" name="Status" value="agree" checked="checked"
+                       style="width: 20px;margin-left: 5px;margin-top: 40px;"/>Agree
+                <input type="radio" name="Status" value="disagree"
+                       style="width: 20px;margin-left:50px;margin-top: 40px;"/>Disagree
+                <br><br><br>
+                <span>Reply</span>
+                <div id="reply" type="text/plain"
+                     style="margin-left:110px;width:90%;height:400px;margin-top: -13px"
+                     name="reply">
+                </div>
+                <div id="subform"></div>
+                <input type="button" class="submit" id="replyLeave" style="margin-left: 190px;margin-top: 35px;"
+                       value="回复">
+
+            </form>
+            <script type="text/javascript">
+                var reason = UE.getEditor('reason', {
+                    serverUrl: "/api/controller/"
+                });//实例化编辑
+                var reply = UE.getEditor('reply', {
+                    serverUrl: "/api/controller/"
+                });//实例化编辑
+                var url = 'http://39.105.199.229:8000/api/admin/leave'
+                var replyUrl = window.location.href
+                var id = replyUrl.substr(replyUrl.indexOf('?'), replyUrl.length - 1)
+                url = url + id
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    async: false,
+                    success: function (data) {
+                        if (data.status == 'agree' || data.status == 'disagree' || data.reply) {
+                            alert("该请假已被批复！")
+                            window.close()
+                        }
+                        $('#name').val(data.name);
+                        $('#email').val(data.email);
+                        var startTime = new Date();
+                        var endTime = new Date();
+                        startTime = data.startTime;
+                        endTime = data.endTime;
+                        $('#startTime').val(startTime);
+                        $('#endTime').val(endTime);
+                        setTimeout(function () {
+                            reason.setContent(data.reason)
+                        }, 300);
+
+                        document.getElementById('replyLeave').onclick = function () {
+                            var replyUrl = 'http://39.105.199.229:8000/api/admin/leave/reply';
+                            var formData = new FormData();
+                            formData.append('id', data.id);
+                            formData.append('status', $("input[type='radio']:checked").val());
+                            formData.append('reply', reply.getContentTxt());
+
+                            $.ajax({
+                                type: 'POST',
+                                url: replyUrl,
+                                data: formData,
+                                dataType: 'json',
+                                contentType: false,
+                                processData: false,
+                                success: function (data) {
+                                    alert("Send reply email successfully!")
+                                    window.close()
+
+
+                                },
+                                error: function () {
+                                    alert("Fail to send reply email!")
+                                }
+                            })
+
+                        }
+
+                    },
+                    error: function () {
+                        alert("加载数据错误")
+
+                    }
+                })
+
+            </script>
+
+
+        </div>
+
+        <!--编辑器end-->
+
+
+    </div>
+
+    <!--MainEnd-->
+
+    <!--Begin-->
+    <div id="bottom">
+
+    </div>
+
+    <!--End-->
+    <script src="/static/js/admin.js"></script>
+</body>
+
+
+</html>
