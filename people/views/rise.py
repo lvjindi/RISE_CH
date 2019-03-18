@@ -4,8 +4,8 @@ from itertools import chain
 from django.shortcuts import render
 
 from people.models import Staff, Student, AdjunctProfessor
-from people.serializers import StaffInfoSerializer, StaffDetailSerializer, StudentInfoSerializer, \
-    StudentDetailSerializer, AdjunctProfessorInfoSerializer, AdjunctProfessorDetailSerializer
+from people.serializers import StaffInfoSerializer, StudentInfoSerializer, AdjunctProfessorInfoSerializer, \
+    StaffSerializer, StudentSerializer, AdjunctProfessorSerializer
 from utils.api.api import APIView
 
 
@@ -24,7 +24,7 @@ class StaffDetailAPI(APIView):
         data = request.data
         try:
             staff_detail = Staff.objects.filter(id=data['id'])
-            return self.success(self.paginate_data(request, staff_detail, StaffDetailSerializer))
+            return self.success(self.paginate_data(request, staff_detail, StaffSerializer))
         except Staff.DoesNotExist:
             return self.error("Staff does not exist")
 
@@ -55,7 +55,7 @@ class StudentDetailAPI(APIView):
         data = request.data
         try:
             student_detail = Student.objects.filter(id=data['id'])
-            return self.success(self.paginate_data(request, student_detail, StudentDetailSerializer))
+            return self.success(self.paginate_data(request, student_detail, StudentSerializer))
         except Student.DoesNotExist:
             return self.error("Student does not exist")
 
@@ -71,6 +71,6 @@ class AdjunctProfessorDetailAPI(APIView):
         data = request.data
         try:
             adjunct_professor_detail = AdjunctProfessor.objects.filter(id=data['id'])
-            return self.success(self.paginate_data(request, adjunct_professor_detail, AdjunctProfessorDetailSerializer))
+            return self.success(self.paginate_data(request, adjunct_professor_detail, AdjunctProfessorSerializer))
         except AdjunctProfessor.DoesNotExist:
             return self.error("AdjunctProfessor does not exist")
