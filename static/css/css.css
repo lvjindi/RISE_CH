@@ -14,6 +14,7 @@ body {
     /*/ / background-color: #2ba2e6;*/
     font-family: "微软雅黑";
     font-size: 14px;
+    background-color: #F4F4F4 ;
 
 }
 
@@ -30,7 +31,8 @@ body {
     color: white;
     height: 69px;
     line-height: 69px;
-    background-image: url(../images/banner_bg.png);
+    background-color: #36648B;
+    /*background-image: url(../images/banner_bg.png);*/
     border-radius: 10px 10px 0 0;
 
 }
@@ -48,6 +50,8 @@ body {
     margin-right: 2%;
     vertical-align: middle;
     line-height: 35px;
+    font-size: 16px;
+    margin-top: 30px;
 }
 
 #exit img {
@@ -58,18 +62,23 @@ body {
 
 #login {
     float: right;
-    margin-right: 10px;
+    margin-right: 20px;
     vertical-align: middle;
     line-height: 35px;
+    font-size: 16px;
+    margin-top: 30px;
+    color: white;
 }
 
 #Banner {
     /*/ / background-color: #e5f7f9;*/
     /*/ / border: 1 px solid;*/
-    background-image: url(../images/navbg.png);
+    /*background-image: url(../images/navbg.png);*/
+    background-color: #EBEBEB;
     /*/ / box-shadow: - 1 px 1 px 5 px #056da9;*/
+    margin-top: 3px;
     margin-bottom: 5px;
-    height: 35px;
+    height: 30px;
     text-indent: 16em;
     line-height: 35px;
 
@@ -87,17 +96,18 @@ body {
 
 / / margin-left: 6 px;
 / / margin-right: 9 px;
+    margin-top: 5px;
 
 }
 
 #MainLeft {
     margin-bottom: 5px;
     width: 15%;
-    /*/ / background-color: #e5f7f9;*/
-    height: 140%;;
+    background-color: #FAFAFA;
+    height: 90%;;
     float: left;
     border-radius: 5px;
-    box-shadow: 1px 1px 10px #056da9;
+    box-shadow: 1px 1px 10px darkgray;
 }
 
 #MainLeft > ul > li {
@@ -139,12 +149,14 @@ body {
 
 #MainRight {
     float: right;
-    margin-left: 8px;
-    background-color: #e5f7f9;
-    height: 140%;
+    margin-left: 5px;
+    border-radius: 3px;
+    /*background-color: #e5f7f9;*/
+    background-color: #FAFAFA;
+    height: 90%;
     width: 84%;
     overflow: auto;
-    box-shadow: -1px 2px 10px #056da9;
+    box-shadow: -1px 2px 10px grey;
 
 }
 
@@ -153,15 +165,13 @@ body {
     color: white;
     height: 30px;
     line-height: 30px;
-/*/ / background-color: #0a92e1;*/
+    background-color: #36648B;
     width: 100%;
     clear: both;
     border-radius: 0 0 10px 10px;
     text-align: center;
-    background-image: url(../images/footer_bg.png);
+    /*background-image: url(../images/footer_bg.png);*/
 }
-
-
 
 .tableStyle {
     margin-top: 20px;
@@ -172,15 +182,18 @@ body {
 
 .tableStyle td, .tableStyle th {
 
-    border: 1px solid #cad9ea;
+    border: 1px solid white;
     color: #666;
     height: 30px;
     text-align: center;
 }
 
 .tableStyle thead th {
-    background-color: #CCE8EB;
+    background-color:
+
+#E0E0E0;
     margin-top: 20px;
+    color: #4F4F4F;
 
 }
 
@@ -190,9 +203,8 @@ body {
 }
 
 .tableStyle tr:nth-child(even) {
-    background: #F5FAFA;
+    background: #F5F5F5;
 }
-
 
 span {
     font-family: "微软雅黑";
@@ -270,9 +282,9 @@ information textarea {
 }
 
 .addUnderline {
-    color: #2D64B3;
+    color: #36648B;
     text-decoration: underline;
-    text-decoration-color: #0a92e1;
+    text-decoration-color: #36648B;
 }
 
 header {

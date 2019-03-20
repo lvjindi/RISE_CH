@@ -18,10 +18,12 @@
 <body onload="NavLink(),checkLogin()">
 <!--HeadBegin-->
 <div id="Head">
-    <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
-    <div id="login"></div>
-    <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
-    <div id="Banner"></div>
+    <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统
+        <div id="login"></div>
+        <div id="exit"><a onclick="logout()" style="color: white;text-decoration: underline">退出</a></div>
+    </div>
+
+    {#    <div id="Banner"></div>#}
 </div>
 
 <!--HeadEnd-->
@@ -51,7 +53,6 @@
                         <option value="contact">联系我们</option>
                     </select>
                 </div>
-                <br>
                 <div id="subform"></div>
                 <div id="lable" style="margin-top: 20px">新闻内容</div>
                 <div id="editor" type="text/plain" style="margin-left:110px;width:90%;height:400px;margin-top: -13px"

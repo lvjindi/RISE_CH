@@ -150,7 +150,7 @@ class PublicationAdminAPI(APIView):
     def get(self, request):
         'get Publications'
         publication_id = request.GET.get('id')
-        public_year = request.GET.get('public_year')
+        public_year = request.GET.get('year')
         if publication_id:
             try:
                 publication = Publications.objects.get(id=publication_id)
@@ -158,7 +158,7 @@ class PublicationAdminAPI(APIView):
             except Publications.DoesNotExist:
                 return self.error("Publication does not exist")
         elif public_year:
-            publications = Publications.objects.filter(public_year=public_year)
+            publications = Publications.objects.filter(year=public_year)
             return self.success(self.paginate_data(request, publications, PublicationSerializer))
         else:
             publications = Publications.objects.all()
@@ -209,7 +209,7 @@ class ReportAdminAPI(APIView):
 
     @login_required
     def get(self, request):
-        report_year = request.GET.get('report_year')
+        report_year = request.GET.get('year')
         report_id = request.GET.get('id')
         if report_id:
             try:
@@ -218,7 +218,7 @@ class ReportAdminAPI(APIView):
             except Reports.DoesNotExist:
                 return self.error("Reports does not exist")
         elif report_year:
-            report = Reports.objects.filter(report_year=report_year)
+            report = Reports.objects.filter(year=report_year)
             return self.success(self.paginate_data(request, report, ReportSerializer))
         else:
             report = Reports.objects.all()

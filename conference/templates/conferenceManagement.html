@@ -18,10 +18,12 @@
 <body onload="NavLink(),checkLogin()">
 <!--HeadBegin-->
 <div id="Head">
-    <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统</div>
-    <div id="login"></div>
-    <div id="exit"><img src="/static/images/exit.png"/><a href="#" onclick="logout()">退出</a></div>
-    <div id="Banner"></div>
+    <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统
+        <div id="login"></div>
+        <div id="exit"><a onclick="logout()" style="color: white;text-decoration: underline">退出</a></div>
+    </div>
+
+    {#    <div id="Banner"></div>#}
 </div>
 
 <!--HeadEnd-->
@@ -34,7 +36,8 @@
     </div>
 
     <div id="MainRight">
-        <select name="conferenceType" id="conferenceType" onchange="showConference(this.value)" style="margin-left: 30px">
+        <select name="conferenceType" id="conferenceType" onchange="showConference(this.value)"
+                style="margin-left: 30px">
             <option value="4">请选择会议类别</option>
             <option value="3">全部</option>
             <option value="2">国外</option>

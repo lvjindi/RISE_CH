@@ -7,6 +7,8 @@ class ConferenceListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField(max_length=128)
     type = serializers.ChoiceField(choices=Conference.ConferenceType)
+    time = serializers.DateField()
+    place = serializers.CharField(max_length=64)
     create_time = serializers.DateTimeField()
 
 
@@ -18,6 +20,8 @@ class ConferenceDetailSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=Conference.ConferenceType)
     views_number = serializers.IntegerField()
     image = serializers.CharField(max_length=128)
+    time = serializers.DateField()
+    place = serializers.CharField(max_length=64)
     sliderFlag = serializers.BooleanField()
     create_time = serializers.DateTimeField()
 
@@ -38,5 +42,7 @@ class ConferenceSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=Conference.ConferenceType)
     views_number = serializers.IntegerField()
     image = serializers.CharField(max_length=128)
+    time = serializers.DateField()
+    place = serializers.CharField(max_length=64)
     sliderFlag = serializers.BooleanField()
     create_time = serializers.DateTimeField()
