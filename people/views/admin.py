@@ -40,13 +40,16 @@ class StaffAdminAPI(APIView):
         publication = request.POST.get('publication')
         report = request.POST.get('report')
         link = request.POST.get('link')
-        staff = Staff.objects.create(img=img, imgPath=imgPath, name=name, status=status, office=office,
-                                     phone=phone, email=email, position=position, degree=degree,
-                                     professionalTitle=professionalTitle, profession=profession, area=area,
-                                     interesting=interesting, biography=biography, project=project,
-                                     achievement=achievement, activity=activity, publication=publication,
-                                     report=report, link=link)
-        return self.success(StaffSerializer(staff).data)
+        try:
+            staff = Staff.objects.create(img=img, imgPath=imgPath, name=name, status=status, office=office,
+                                         phone=phone, email=email, position=position, degree=degree,
+                                         professionalTitle=professionalTitle, profession=profession, area=area,
+                                         interesting=interesting, biography=biography, project=project,
+                                         achievement=achievement, activity=activity, publication=publication,
+                                         report=report, link=link)
+            return self.success(StaffSerializer(staff).data)
+        except Exception:
+            return self.error("error")
 
     @login_required
     def put(self, request):
@@ -79,6 +82,8 @@ class StaffAdminAPI(APIView):
                 return self.error('Don\'t have permission')
         except Staff.DoesNotExist:
             return self.error("staff does not exist")
+        except Exception:
+            return self.error("error")
 
     @login_required
     def get(self, request):
@@ -145,13 +150,16 @@ class StudentAdminAPI(APIView):
         project = request.POST.get('project')
         activity = request.POST.get('activity')
         publication = request.POST.get('publication')
-        student = Student.objects.create(img=img, imgPath=imgPath, name=name, graduateStatus=graduateStatus,
-                                         email=email, enrollmentTime=enrollmentTime, graduationTime=graduationTime,
-                                         type=type, area=area, supervisor=supervisor, biography=biography,
-                                         project=project, supervisorLink=supervisorLink,
-                                         activity=activity, publication=publication
-                                         )
-        return self.success(StudentSerializer(student).data)
+        try:
+            student = Student.objects.create(img=img, imgPath=imgPath, name=name, graduateStatus=graduateStatus,
+                                             email=email, enrollmentTime=enrollmentTime, graduationTime=graduationTime,
+                                             type=type, area=area, supervisor=supervisor, biography=biography,
+                                             project=project, supervisorLink=supervisorLink,
+                                             activity=activity, publication=publication
+                                             )
+            return self.success(StudentSerializer(student).data)
+        except Exception:
+            return self.error("Error")
 
     @login_required
     def put(self, request):
@@ -175,6 +183,8 @@ class StudentAdminAPI(APIView):
                 return self.error('Don\'t have permission')
         except Student.DoesNotExist:
             return self.error("Student does not exist")
+        except Exception:
+            return self.error("Error")
 
     @login_required
     def get(self, request):
@@ -200,7 +210,7 @@ class StudentAdminAPI(APIView):
             elif student_status:
                 student = Student.objects.filter(graduateStatus=student_status)
             else:
-                student = Student.objects.all()
+                student = Student.objects.all().order_by('type', 'id')
             for item in student:
                 item.type = item.get_type_display()
                 item.graduateStatus = item.get_graduateStatus_display()
@@ -251,12 +261,15 @@ class AdjunctProfessorAdminAPI(APIView):
         area = request.POST.get('area')
         biography = request.POST.get('biography')
         link = request.POST.get('link')
-        adjunctProfessor = AdjunctProfessor.objects.create(img=img, imgPath=imgPath, name=name,
-                                                           email=email, degree=degree,
-                                                           professionalTitle=professionalTitle, area=area,
-                                                           biography=biography, link=link
-                                                           )
-        return self.success(AdjunctProfessorSerializer(adjunctProfessor).data)
+        try:
+            adjunctProfessor = AdjunctProfessor.objects.create(img=img, imgPath=imgPath, name=name,
+                                                               email=email, degree=degree,
+                                                               professionalTitle=professionalTitle, area=area,
+                                                               biography=biography, link=link
+                                                               )
+            return self.success(AdjunctProfessorSerializer(adjunctProfessor).data)
+        except Exception:
+            return self.error("Error")
 
     @login_required
     def put(self, request):
@@ -279,6 +292,8 @@ class AdjunctProfessorAdminAPI(APIView):
                 return self.error('Don\'t have permission')
         except AdjunctProfessor.DoesNotExist:
             return self.error("AdjunctProfessor does not exist")
+        except Exception:
+            return self.error("error")
 
     @login_required
     def get(self, request):

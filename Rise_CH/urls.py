@@ -13,8 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+
+# from people.views.rise import StaffLinkRedirct
 
 urlpatterns = [
     path('api/admin/', include('account.urls')),
@@ -42,5 +45,6 @@ urlpatterns = [
     path('api/admin/', include('leave.urls.admin')),
     path('api/', include('controller.urls')),
     path('api/', include('static.media.urls')),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    # url(r"./", StaffLinkRedirct.as_view(), name="staff_link_redirect"),
 ]

@@ -11,6 +11,7 @@ class SeminarsListAPI(APIView):
         seminars_list = Seminars.objects.all()
         for item in seminars_list:
             item.create_time = item.create_time.strftime('%Y-%m-%d')
+            item.time = item.time.strftime('%Y-%m-%d')
         return self.success(self.paginate_data(request, seminars_list, SeminarsListSerializer))
 
 
@@ -23,6 +24,7 @@ class SeminarsDetailAPI(APIView):
             setattr(seminars, 'views_number', views_number)
             seminars.save()
             seminars.create_time = seminars.create_time.strftime('%Y-%m-%d')
+            seminars.time=seminars.time.strftime('%Y-%m-%d')
             return self.success(SeminarsDetailSerializer(seminars).data)
         except Seminars.DoesNotExist:
             return self.error('Seminars does not exist')

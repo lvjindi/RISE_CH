@@ -17,6 +17,7 @@ class Staff(models.Model):
     professionalTitle = models.TextField()  # 职称（教授，副教授，讲师）
     profession = models.TextField(null=True)  # 导师类型（博士导师，硕士导师）
     area = models.TextField(null=True)
+    linkName = models.TextField(null=True)
     interesting = models.TextField(null=True)
     biography = models.TextField(null=True)
     project = models.TextField(null=True)

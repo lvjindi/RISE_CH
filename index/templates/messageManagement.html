@@ -20,7 +20,7 @@
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统
         <div id="login"></div>
-        <div id="exit"><a onclick="logout()" style="color: white;text-decoration: underline">退出</a></div>
+        <div id="exit"></div>
     </div>
 
     {#    <div id="Banner"></div>#}
@@ -56,7 +56,7 @@
         <script lang="text/javascript">
             $.ajax({
                 type: 'GET',
-                url: 'http://39.105.199.229:8000/api/admin/index/message',
+                url: '/api/admin/index/message',
                 data: '',
                 // {#dataType: 'json',#}
                 contentType: false,

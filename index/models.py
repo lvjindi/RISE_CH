@@ -14,6 +14,7 @@ class SliderPicture(models.Model):
         db_table = 'cn_rise_slider'
 
 
+
 class MessageFromDirector(models.Model):
     content = models.TextField(null=True)
     title = models.TextField(default='Message from the Director', null=True)
@@ -24,3 +25,4 @@ class MessageFromDirector(models.Model):
 
     class Meta:
         db_table = 'cn_rise_message'
+        ordering = ['id']

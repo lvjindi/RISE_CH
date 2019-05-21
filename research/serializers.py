@@ -36,7 +36,7 @@ class ProjectListSerializer(serializers.Serializer):
     author = serializers.CharField(max_length=128)
     project_fund = serializers.CharField(max_length=64)
     project_schedule = serializers.CharField(max_length=32)
-    abstract = serializers.CharField(max_length=1024 * 1024 * 8)
+    abstract = serializers.CharField(max_length=50)
     other = serializers.CharField(max_length=128)
     create_time = serializers.DateTimeField()
 

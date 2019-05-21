@@ -36,3 +36,4 @@ class User(AbstractBaseUser):
 
     class Meta:
         db_table = 'cn_rise_user'
+        ordering = ['id']

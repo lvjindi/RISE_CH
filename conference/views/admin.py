@@ -33,7 +33,6 @@ class ConferenceAdminAPI(APIView):
             news = News.objects.get(id=conference.news_id)
             setattr(conference, 'content', data['content'])
             setattr(conference, 'title', data['title'])
-            setattr(conference, 'time', data['time'])
             setattr(conference, 'place', data['place'])
             setattr(conference, 'type', data['type'])
             setattr(news, 'content', data['content'])

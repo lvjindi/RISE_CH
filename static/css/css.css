@@ -107,7 +107,7 @@ body {
     height: 90%;;
     float: left;
     border-radius: 5px;
-    box-shadow: 1px 1px 10px darkgray;
+    box-shadow: 1px 1px 10px #36648B;
 }
 
 #MainLeft > ul > li {
@@ -156,7 +156,7 @@ body {
     height: 90%;
     width: 84%;
     overflow: auto;
-    box-shadow: -1px 2px 10px grey;
+    box-shadow: -1px 2px 10px #36648B;
 
 }
 

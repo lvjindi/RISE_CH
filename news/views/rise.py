@@ -9,7 +9,7 @@ from utils.api.api import APIView
 class NewsListAPI(APIView):
     def get(self, request):
         data = request.data
-        news_list = News.objects.all()
+        news_list = News.objects.all().order_by('-create_time')
         for item in news_list:
             item.create_time = item.create_time.strftime('%Y-%m-%d')
         return self.success(self.paginate_data(request, news_list, NewsListSerializer))

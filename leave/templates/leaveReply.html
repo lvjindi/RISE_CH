@@ -20,7 +20,7 @@
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统
         <div id="login"></div>
-        <div id="exit"><a onclick="logout()" style="color: white;text-decoration: underline">退出</a></div>
+        <div id="exit"></div>
     </div>
 
     {#    <div id="Banner"></div>#}
@@ -68,7 +68,7 @@
                 var reply = UE.getEditor('reply', {
                     serverUrl: "/api/controller/"
                 });//实例化编辑
-                var url = 'http://39.105.199.229:8000/api/admin/leave'
+                var url = '/api/admin/leave'
                 var replyUrl = window.location.href
                 var id = replyUrl.substr(replyUrl.indexOf('?'), replyUrl.length - 1)
                 url = url + id
@@ -94,7 +94,7 @@
                         }, 300);
 
                         document.getElementById('replyLeave').onclick = function () {
-                            var replyUrl = 'http://39.105.199.229:8000/api/admin/leave/reply';
+                            var replyUrl = '/api/admin/leave/reply';
                             var formData = new FormData();
                             formData.append('id', data.id);
                             formData.append('status', $("input[type='radio']:checked").val());

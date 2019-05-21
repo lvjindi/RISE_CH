@@ -28,6 +28,8 @@ class IntroductionAPI(APIView):
 class ProjectListAPI(APIView):
     def get(self, request):
         projects = Projects.objects.all().order_by('id')
+        for item in projects:
+            item.abstract=item.abstract[:200]
         return self.success(self.paginate_data(request, projects, ProjectListSerializer))
 
 

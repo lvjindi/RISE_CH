@@ -20,7 +20,7 @@
 <div id="Head">
     <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统
         <div id="login"></div>
-        <div id="exit"><a onclick="logout()" style="color: white;text-decoration: underline">退出</a></div>
+        <div id="exit"></div>
     </div>
 
     {#    <div id="Banner"></div>#}
@@ -36,7 +36,6 @@
     <div id="MainRight">
         <div style="float: right;margin-right: 25px;margin-top:10px " id="peoplePublic">
         </div>
-        <br>
         <table class="tableStyle" id="tableStyle" style="margin: 20px 20px 0px 30px;width: 95%">
             <thead>
             <tr>
@@ -56,7 +55,7 @@
         <script lang="text/javascript">
             $.ajax({
                 type: 'GET',
-                url: 'http://39.105.199.229:8000/api/admin/leave',
+                url: '/api/admin/leave',
                 data: '',
                 contentType: false,
                 processData: false,

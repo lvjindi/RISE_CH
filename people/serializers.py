@@ -23,6 +23,18 @@ class StaffInfoSerializer(serializers.Serializer):
 
 class StaffDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    imgPath = serializers.CharField(max_length=128)
+    name = serializers.CharField(max_length=10)
+    status = serializers.ChoiceField(choices=Staff.Staff_Status)
+    office = serializers.CharField(max_length=128)
+    phone = serializers.CharField(max_length=16)
+    email = serializers.CharField(max_length=32)
+    position = serializers.CharField(max_length=32)
+    degree = serializers.CharField(max_length=32)
+    professionalTitle = serializers.CharField(max_length=32)
+    profession = serializers.ChoiceField(choices=['博士导师', '硕士导师'])
+    area = serializers.CharField(max_length=64)
+    link = serializers.CharField(max_length=256)
     interesting = serializers.CharField(max_length=1024 * 1024 * 8)
     biography = serializers.CharField(max_length=1024 * 1024 * 8)
     project = serializers.CharField(max_length=1024 * 1024 * 8)
@@ -75,6 +87,16 @@ class StudentInfoSerializer(serializers.Serializer):
 
 class StudentDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    imgPath = serializers.CharField(max_length=128)
+    name = serializers.CharField(max_length=10)
+    enrollmentTime = serializers.CharField(max_length=20)
+    graduationTime = serializers.CharField(max_length=20)
+    type = serializers.ChoiceField(choices=['硕士', '博士', '本科生'])
+    graduateStatus = serializers.ChoiceField(choices=['在读', '毕业'])
+    supervisor = serializers.ChoiceField(choices=['刘志明教授', '赖红副教授', '叶明副教授'])
+    supervisorLink = serializers.CharField(max_length=256)
+    email = serializers.CharField(max_length=32)
+    area = serializers.CharField(max_length=64)
     biography = serializers.CharField(max_length=1024 * 1024 * 8)
     project = serializers.CharField(max_length=1024 * 1024 * 8)
     activity = serializers.CharField(max_length=1024 * 1024 * 8)
@@ -116,6 +138,13 @@ class AdjunctProfessorInfoSerializer(serializers.Serializer):
 
 class AdjunctProfessorDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    imgPath = serializers.CharField(max_length=128)
+    name = serializers.CharField(max_length=10)
+    email = serializers.CharField(max_length=32)
+    degree = serializers.CharField(max_length=32)
+    professionalTitle = serializers.CharField(max_length=32)
+    area = serializers.CharField(max_length=64)
+    link = serializers.CharField(max_length=256)
     biography = serializers.CharField(max_length=1024 * 1024 * 8)
     create_time = serializers.DateTimeField()
 

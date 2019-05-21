@@ -33,34 +33,37 @@ def add_img(src, img_id):
 class LeaveAdmin(APIView):
     @login_required
     def post(self, request):
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        startTime = request.POST.get('startTime')
-        endTime = request.POST.get('endTime')
-        reason = request.POST.get('reason')
-        leave = Leave.objects.create(name=name, email=email, startTime=startTime, endTime=endTime, reason=reason)
-        emailTemplate = get_template('EmailTemplate.html')
-        context = {
-            'reason': reason,
-            'startTime': startTime.replace('T', ' '),
-            'endTime': endTime.replace('T', ' '),
-            'id': leave.id,
-        }
-        path = os.getcwd()
-        path_use = path.replace('\\', '/')
-        title = name + " Ask For Leave"
-        from_mail = settings.EMAIL_HOST_USER
-        recipient_list = settings.EMAIL_RECEIVE_LEAVE_USER
-        html_content = emailTemplate.render(context)
-        msg = mail.EmailMessage(title, html_content, from_mail, recipient_list)
-        # image_agree = add_img(path_use + '/static/images/agree.png', 'test_cid1')
-        # image_disagree = add_img(path_use + '/static/images/disagree.png', 'test_cid2')
-        msg.content_subtype = 'html'
-        msg.encoding = 'utf-8'
-        # msg.attach(image_agree)
-        # msg.attach(image_disagree)
-        msg.send()
-        return self.success(LeaveSerializer(leave).data)
+        try:
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            startTime = request.POST.get('startTime')
+            endTime = request.POST.get('endTime')
+            reason = request.POST.get('reason')
+            leave = Leave.objects.create(name=name, email=email, startTime=startTime, endTime=endTime, reason=reason)
+            emailTemplate = get_template('EmailTemplate.html')
+            context = {
+                'reason': reason,
+                'startTime': startTime.replace('T', ' '),
+                'endTime': endTime.replace('T', ' '),
+                'id': leave.id,
+            }
+            path = os.getcwd()
+            path_use = path.replace('\\', '/')
+            title = name + " Ask For Leave"
+            from_mail = settings.EMAIL_HOST_USER
+            recipient_list = settings.EMAIL_RECEIVE_LEAVE_USER
+            html_content = emailTemplate.render(context)
+            msg = mail.EmailMessage(title, html_content, from_mail, recipient_list)
+            # image_agree = add_img(path_use + '/static/images/agree.png', 'test_cid1')
+            # image_disagree = add_img(path_use + '/static/images/disagree.png', 'test_cid2')
+            msg.content_subtype = 'html'
+            msg.encoding = 'utf-8'
+            # msg.attach(image_agree)
+            # msg.attach(image_disagree)
+            msg.send()
+            return self.success(LeaveSerializer(leave).data)
+        except Exception:
+            return self.error("Error!")
 
     def get(self, request):
         leave_id = request.GET.get('id')

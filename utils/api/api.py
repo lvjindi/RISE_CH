@@ -135,11 +135,11 @@ class APIView(View):
         :return:
         """
         try:
-            limit = int(request.GET.get("limit", "30"))
+            limit = int(request.GET.get("limit", "70"))
         except ValueError:
-            limit = 30
+            limit = 70
         if limit < 0 or limit > 250:
-            limit = 30
+            limit = 70
         try:
             offset = int(request.GET.get("offset", "0"))
         except ValueError:

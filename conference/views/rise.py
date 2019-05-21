@@ -33,3 +33,4 @@ class ConferenceDetailAPI(APIView):
             return self.success(ConferenceDetailSerializer(conference).data)
         except Conference.DoesNotExist:
             return self.error('Conference does not exist')
+
