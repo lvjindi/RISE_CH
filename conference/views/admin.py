@@ -13,16 +13,19 @@ class ConferenceAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        type = request.POST.get('subType')
-        time = request.POST.get('time')
-        place = request.POST.get('place')
-        conference = Conference.objects.create(title=title, content=content, type=type, time=time, place=place)
-        news = News.objects.create(title=title, content=content, type='conference')
-        conference.news_id = news.id
-        conference.save()
-        return self.success(ConferenceSerializer(conference).data)
+        try:
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            type = request.POST.get('subType')
+            time = request.POST.get('time')
+            place = request.POST.get('place')
+            conference = Conference.objects.create(title=title, content=content, type=type, time=time, place=place)
+            news = News.objects.create(title=title, content=content, type='conference')
+            conference.news_id = news.id
+            conference.save()
+            return self.success(ConferenceSerializer(conference).data)
+        except Exception:
+            return self.error("Error")
 
     # @validate_serializer(CreateConferenceSerializer)
     @super_admin_required
@@ -42,6 +45,8 @@ class ConferenceAdminAPI(APIView):
             return self.success(ConferenceSerializer(conference).data)
         except Conference.DoesNotExist:
             return self.error("Conference does not exist")
+        except Exception:
+            return self.error("Error")
 
     @login_required
     def get(self, request):

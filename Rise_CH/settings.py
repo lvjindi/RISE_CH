@@ -89,10 +89,10 @@ WSGI_APPLICATION = 'Rise_CH.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'liubocqswu.gotoftp1.com',
-        'NAME': 'liubocqswu',
-        'USER': 'liubocqswu',
-        'PASSWORD': 'rise123456',
+        'HOST': '39.105.199.229',
+        'NAME': 'rise',
+        'USER': 'rise',
+        'PASSWORD': '71295208rise1001',
         'OPTIONS': {
             'isolation_level': None,
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

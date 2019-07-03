@@ -11,11 +11,14 @@ class ContactAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        contact = Contact.objects.create(title=title, content=content)
-        contact.save()
-        return self.success(ContactSerializer(contact).data)
+        try:
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            contact = Contact.objects.create(title=title, content=content)
+            contact.save()
+            return self.success(ContactSerializer(contact).data)
+        except Exception:
+            return self.error("Error")
 
     # @validate_serializer(CreateConferenceSerializer)
     @super_admin_required
@@ -31,6 +34,8 @@ class ContactAdminAPI(APIView):
             return self.success(ContactSerializer(contact).data)
         except Contact.DoesNotExist:
             return self.error("Contact does not exist")
+        except Exception:
+            return self.error("Error")
 
     @login_required
     def get(self, request):

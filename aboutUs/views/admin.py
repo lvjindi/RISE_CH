@@ -11,11 +11,14 @@ class AboutUsAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        aboutUs = AboutUs.objects.create(title=title, content=content)
-        aboutUs.save()
-        return self.success(AboutUsSerializer(aboutUs).data)
+        try:
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            aboutUs = AboutUs.objects.create(title=title, content=content)
+            aboutUs.save()
+            return self.success(AboutUsSerializer(aboutUs).data)
+        except Exception:
+            return self.error("error")
 
     # @validate_serializer(CreateConferenceSerializer)
     @super_admin_required
@@ -31,6 +34,8 @@ class AboutUsAdminAPI(APIView):
             return self.success(AboutUsSerializer(aboutUs).data)
         except AboutUs.DoesNotExist:
             return self.error("AboutUs does not exist")
+        except Exception:
+            return self.error("Error")
 
     @login_required
     def get(self, request):

@@ -29,7 +29,7 @@ class ProjectListAPI(APIView):
     def get(self, request):
         projects = Projects.objects.all().order_by('id')
         for item in projects:
-            item.abstract=item.abstract[:200]
+            item.abstract = item.abstract[:200]
         return self.success(self.paginate_data(request, projects, ProjectListSerializer))
 
 
@@ -54,7 +54,7 @@ class PublicationAPI(APIView):
             publications = Publications.objects.filter(public_time=public_time)
             return self.success(self.paginate_data(request, publications, PublicationSerializer))
         else:
-            publications = Publications.objects.all()
+            publications = Publications.objects.all().order_by('-year')
             return self.success(self.paginate_data(request, publications, PublicationSerializer))
 
 
