@@ -915,7 +915,6 @@ function news_delete(id) {
     var managementIndex = url.indexOf('management');
     url = url.substr(0, managementIndex - 1);
     url = url + '?id=' + id;
-    alert(url)
     if (confirm("确定要删除吗？")) {
         $.ajax({
             url: url,

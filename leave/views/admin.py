@@ -51,7 +51,8 @@ class LeaveAdmin(APIView):
             path_use = path.replace('\\', '/')
             title = name + " Ask For Leave"
             from_mail = settings.EMAIL_HOST_USER
-            recipient_list = settings.EMAIL_RECEIVE_LEAVE_USER
+            recipient_list = []
+            recipient_list.extend(settings.EMAIL_RECEIVE_LEAVE_USER)
             html_content = emailTemplate.render(context)
             msg = mail.EmailMessage(title, html_content, from_mail, recipient_list)
             # image_agree = add_img(path_use + '/static/images/agree.png', 'test_cid1')
@@ -111,7 +112,8 @@ class ReplyAdmin(APIView):
                     'status': status,
                     'reply': recipient.reply,
                 }
-                recipient_list = settings.EMAIL_RECEIVE_LEAVE_USER
+                recipient_list = []
+                recipient_list.extend(settings.EMAIL_RECEIVE_LEAVE_USER)
                 recipient_list.append(recipient.email)
                 html_content = emailReplyTemplate.render(context)
                 msg = mail.EmailMessage(title, html_content, from_mail, recipient_list)
