@@ -14,7 +14,11 @@ class ContactAdminAPI(APIView):
         try:
             title = request.POST.get('title')
             content = request.POST.get('content')
-            contact = Contact.objects.create(title=title, content=content)
+            create_time = request.POST.get('create_time')
+            if create_time == '':
+                contact = Contact.objects.create(title=title, content=content)
+            else:
+                contact = Contact.objects.create(title=title, content=content, create_time=create_time)
             contact.save()
             return self.success(ContactSerializer(contact).data)
         except Exception:
@@ -28,7 +32,7 @@ class ContactAdminAPI(APIView):
             contact = Contact.objects.get(id=data['id'])
             setattr(contact, 'content', data['content'])
             setattr(contact, 'title', data['title'])
-
+            setattr(contact, 'create_time', data['create_time'])
             contact.save()
 
             return self.success(ContactSerializer(contact).data)

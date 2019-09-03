@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Category(object):
@@ -14,7 +15,7 @@ class Introduction(models.Model):
     title = models.TextField(null=True)
     content = models.TextField(null=True)
     views_number = models.IntegerField(default=0)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(default=timezone.now())
     last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -31,7 +32,7 @@ class Projects(models.Model):
     abstract = models.TextField()
     keywords = models.TextField(null=True)
     views_number = models.IntegerField(default=0)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(default=timezone.now())
     last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -44,7 +45,7 @@ class Publications(models.Model):
     place = models.TextField()
     year = models.TextField()
     other = models.TextField(null=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(default=timezone.now())
     last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -59,7 +60,7 @@ class Reports(models.Model):
     year = models.TextField(null=True)
     pdf_path = models.FileField(null=True)
     other = models.TextField(null=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(default=timezone.now())
     last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:

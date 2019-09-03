@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
 
 from Rise_CH import settings
@@ -11,14 +12,17 @@ class NewsAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        news = News.objects.create(title=title, content=content)
-        # fname = settings.MEDIA_ROOT + "/image/" + image.name
-        # with open(fname, 'wb') as pic:
-        #     for c in image.chunks():
-        #         pic.write(c)
-        return self.success(NewsDetailSerializer(news).data)
+        try:
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            create_time = request.POST.get('create_time')
+            if create_time == '':
+                news = News.objects.create(title=title, content=content)
+            else:
+                news = News.objects.create(title=title, content=content, create_time=create_time)
+            return self.success(NewsDetailSerializer(news).data)
+        except ValidationError as e:
+            return self.error(msg=str(e))
 
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
@@ -26,9 +30,9 @@ class NewsAdminAPI(APIView):
         data = request.data
         try:
             news = News.objects.get(id=data['id'])
-            print(data)
             setattr(news, 'title', data['title'])
             setattr(news, 'content', data['content'])
+            setattr(news, 'create_time', data['create_time'])
             # for k, v in data.items:
             #     setattr(news, k, v)
             news.save()

@@ -1,8 +1,10 @@
+import logging
 import os
 from email.mime.image import MIMEImage
 from os import path
 
 from django.core import mail
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -10,10 +12,12 @@ from django.template import Context, loader
 from django.template.loader import get_template
 
 from Rise_CH import settings
-from account.decorators import login_required, super_admin_required
+from account.decorators import login_required, super_admin_required, auto_log
 from leave.models import Leave
 from leave.serializers import LeaveSerializer
 from utils.api.api import APIView
+
+logg = logging.getLogger('django')
 
 
 def add_img(src, img_id):
@@ -33,6 +37,7 @@ def add_img(src, img_id):
 class LeaveAdmin(APIView):
     @login_required
     def post(self, request):
+
         try:
             name = request.POST.get('name')
             email = request.POST.get('email')
@@ -62,9 +67,13 @@ class LeaveAdmin(APIView):
             # msg.attach(image_agree)
             # msg.attach(image_disagree)
             msg.send()
-            return self.success(LeaveSerializer(leave).data)
-        except Exception:
-            return self.error("Error!")
+            return self.success("发送成功，请注意查收邮件回复")
+        except ValidationError as e:
+            logg.error('提交请假失败：' + str(e))
+            return self.error(msg=str(e))
+        except Exception as e:
+            logg.error('提交请假失败：' + str(e))
+            return self.error(msg=str(e))
 
     def get(self, request):
         leave_id = request.GET.get('id')
@@ -123,6 +132,8 @@ class ReplyAdmin(APIView):
                 return self.success("Send reply email successfully!")
         except Leave.DoesNotExist:
             return self.error("Leave does not exist")
+        except Exception as e:
+            logg.error("审批失败：" + str(e))
 
 
 # class DisAgreeReplyAdmin(APIView):

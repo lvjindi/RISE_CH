@@ -14,7 +14,7 @@ body {
     /*/ / background-color: #2ba2e6;*/
     font-family: "微软雅黑";
     font-size: 14px;
-    background-color: #F4F4F4 ;
+    background-color: #F4F4F4;
 
 }
 
@@ -52,12 +52,14 @@ body {
     line-height: 35px;
     font-size: 16px;
     margin-top: 30px;
+    cursor: pointer;
 }
 
 #exit img {
 
     vertical-align: middle;
     margin-right: 5px;
+
 }
 
 #login {
@@ -68,6 +70,7 @@ body {
     font-size: 16px;
     margin-top: 30px;
     color: white;
+    cursor: pointer;
 }
 
 #Banner {
@@ -189,9 +192,7 @@ body {
 }
 
 .tableStyle thead th {
-    background-color:
-
-#E0E0E0;
+    background-color: #E0E0E0;
     margin-top: 20px;
     color: #4F4F4F;
 

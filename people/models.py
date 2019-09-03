@@ -53,6 +53,7 @@ class Student(models.Model):
         ('叶明', u'叶明副教授'),
     )
     name = models.TextField()
+    pinyin = models.TextField(null=True)
     email = models.TextField(null=True)
     enrollmentTime = models.TextField(null=True, default=None)
     graduationTime = models.TextField(null=True, default=None)

@@ -14,8 +14,13 @@ class JoinAdminAPI(APIView):
     def post(self, request):
         title = request.POST.get('title')
         content = request.POST.get('content')
-        join = Join.objects.create(title=title, content=content)
-        news = News.objects.create(title=title, content=content, type="join")
+        create_time = request.POST.get('create_time')
+        if create_time == '':
+            join = Join.objects.create(title=title, content=content)
+            news = News.objects.create(title=title, content=content, type="join")
+        else:
+            join = Join.objects.create(title=title, content=content, create_time=create_time)
+            news = News.objects.create(title=title, content=content, create_time=create_time, type="join")
         join.news_id = news.id
         join.save()
         return self.success(JoinDetailSerializer(join).data)
@@ -29,8 +34,10 @@ class JoinAdminAPI(APIView):
             news = News.objects.get(id=join.news_id)
             setattr(join, 'title', data['title'])
             setattr(join, 'content', data['content'])
+            setattr(join, 'create_time', data['create_time'])
             setattr(news, 'title', data['title'])
             setattr(news, 'content', data['content'])
+            setattr(news, 'create_time', data['create_time'])
             join.save()
             news.save()
             return self.success(JoinDetailSerializer(join).data)

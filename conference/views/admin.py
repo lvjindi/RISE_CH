@@ -19,8 +19,14 @@ class ConferenceAdminAPI(APIView):
             type = request.POST.get('subType')
             time = request.POST.get('time')
             place = request.POST.get('place')
-            conference = Conference.objects.create(title=title, content=content, type=type, time=time, place=place)
-            news = News.objects.create(title=title, content=content, type='conference')
+            create_time = request.POST.get('create_time')
+            if create_time == '':
+                conference = Conference.objects.create(title=title, content=content, type=type, time=time, place=place)
+                news = News.objects.create(title=title, content=content, type='conference')
+            else:
+                conference = Conference.objects.create(title=title, content=content, type=type, time=time, place=place,
+                                                       create_time=create_time)
+                news = News.objects.create(title=title, content=content, type='conference', create_time=create_time)
             conference.news_id = news.id
             conference.save()
             return self.success(ConferenceSerializer(conference).data)
@@ -38,8 +44,10 @@ class ConferenceAdminAPI(APIView):
             setattr(conference, 'title', data['title'])
             setattr(conference, 'place', data['place'])
             setattr(conference, 'type', data['type'])
+            setattr(conference, 'create_time', data['create_time'])
             setattr(news, 'content', data['content'])
             setattr(news, 'title', data['title'])
+            setattr(news, 'create_time', data['create_time'])
             conference.save()
             news.save()
             return self.success(ConferenceSerializer(conference).data)

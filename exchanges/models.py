@@ -1,7 +1,8 @@
 from django.db import models
 
-
 # Create your models here.
+from django.utils import timezone
+
 
 class Exchange(models.Model):
     ExchangeType = (
@@ -15,7 +16,7 @@ class Exchange(models.Model):
     sliderFlag = models.BooleanField(default=False)
     type = models.CharField(choices=ExchangeType, max_length=10)
     news_id = models.IntegerField(null=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(default=timezone.now())
     last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:

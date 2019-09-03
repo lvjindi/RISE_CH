@@ -14,7 +14,11 @@ class AboutUsAdminAPI(APIView):
         try:
             title = request.POST.get('title')
             content = request.POST.get('content')
-            aboutUs = AboutUs.objects.create(title=title, content=content)
+            create_time = request.POST.get('create_time')
+            if create_time == '':
+                aboutUs = AboutUs.objects.create(title=title, content=content)
+            else:
+                aboutUs = AboutUs.objects.create(title=title, content=content, create_time=create_time)
             aboutUs.save()
             return self.success(AboutUsSerializer(aboutUs).data)
         except Exception:

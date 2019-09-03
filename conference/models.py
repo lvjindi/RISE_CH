@@ -1,7 +1,8 @@
 from django.db import models
 
-
 # Create your models here.
+from django.utils import timezone
+
 
 class Conference(models.Model):
     ConferenceType = (
@@ -17,7 +18,7 @@ class Conference(models.Model):
     news_id = models.IntegerField(null=True)
     time = models.DateField(null=True)
     place = models.TextField(null=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(default=timezone.now())
     last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:

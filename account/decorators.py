@@ -1,4 +1,6 @@
 import functools
+import logging
+import traceback
 
 from django.http import HttpResponse
 from rest_framework.utils import json
@@ -37,3 +39,25 @@ class super_admin_required(BasePermissionDecorator):
     def check_permission(self):
         user = self.request.user
         return user.is_authenticated and user.is_super_admin()
+
+
+logger = logging.getLogger('django')
+
+
+def auto_log(func):
+    """
+    自动记录日志的装饰器：
+    :param func:
+    :return:
+    """
+
+    @functools.wraps(func)
+    def _deco(*args, **kwargs):
+        try:
+            real_func = func(*args, **kwargs)
+            return real_func
+        except Exception as e:
+            logger.error(traceback.format_exc())
+            return False, e.__str__()
+
+    return _deco

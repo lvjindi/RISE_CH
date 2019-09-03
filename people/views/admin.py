@@ -4,6 +4,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.shortcuts import render
+from uuslug import slugify
 
 from Rise_CH import settings
 from account.decorators import super_admin_required, login_required
@@ -157,6 +158,8 @@ class StudentAdminAPI(APIView):
                                              project=project, supervisorLink=supervisorLink,
                                              activity=activity, publication=publication
                                              )
+            student.pinyin = slugify(student.name)
+            student.save()
             return self.success(StudentSerializer(student).data)
         except Exception:
             return self.error("Error")
@@ -210,7 +213,7 @@ class StudentAdminAPI(APIView):
             elif student_status:
                 student = Student.objects.filter(graduateStatus=student_status)
             else:
-                student = Student.objects.all().order_by('type', 'id')
+                student = Student.objects.all().order_by('type', 'pinyin')
             for item in student:
                 item.type = item.get_type_display()
                 item.graduateStatus = item.get_graduateStatus_display()

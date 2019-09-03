@@ -30,6 +30,7 @@ class MessageFromDrSerializer(serializers.Serializer):
     image = serializers.CharField(max_length=64)
     imagePath = serializers.CharField(max_length=64)
     create_time = serializers.DateTimeField()
+    last_update_time = serializers.DateTimeField()
 
 
 class CreateMessageSerializer(serializers.Serializer):

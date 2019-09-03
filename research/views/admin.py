@@ -18,7 +18,11 @@ class ResearchAdminAPI(APIView):
         "publish research"
         title = request.POST.get('title')
         content = request.POST.get('content')
-        research = Introduction.objects.create(title=title, content=content)
+        create_time = request.POST.get('create_time')
+        if create_time == '':
+            research = Introduction.objects.create(title=title, content=content)
+        else:
+            research = Introduction.objects.create(title=title, content=content, create_time=create_time)
         return self.success(IntroductionSerializer(research).data)
 
     # @validate_serializer(EditIntroductionSerializer)
@@ -69,10 +73,17 @@ class ProjectAdminAPI(APIView):
         other = request.POST.get('other')
         abstract = request.POST.get('abstract')
         keywords = request.POST.get('keywords')
-        project = Projects.objects.create(title=title, author=author,
-                                          project_code=code, project_fund=fund,
-                                          project_schedule=schedule, other=other,
-                                          abstract=abstract, keywords=keywords)
+        create_time = request.POST.get('create_time')
+        if create_time == '':
+            project = Projects.objects.create(title=title, author=author,
+                                              project_code=code, project_fund=fund,
+                                              project_schedule=schedule, other=other,
+                                              abstract=abstract, keywords=keywords)
+        else:
+            project = Projects.objects.create(title=title, author=author,
+                                              project_code=code, project_fund=fund,
+                                              project_schedule=schedule, other=other,
+                                              abstract=abstract, keywords=keywords, create_time=create_time)
         return self.success(ProjectDetailSerializer(project).data)
 
     # @validate_serializer(CreateProjectSerializer)
@@ -126,7 +137,13 @@ class PublicationAdminAPI(APIView):
         place = request.POST.get('place')
         year = request.POST.get('year')
         other = request.POST.get('other')
-        publication = Publications.objects.create(title=title, author=author, place=place, year=year, other=other)
+        create_time = request.POST.get('create_time')
+        if create_time == '':
+            publication = Publications.objects.create(title=title, author=author, place=place, year=year, other=other)
+
+        else:
+            publication = Publications.objects.create(title=title, author=author, place=place, year=year, other=other,
+                                                      create_time=create_time)
         return self.success(PublicationSerializer(publication).data)
 
     # @validate_serializer(CreatePublicationSerializer)
@@ -184,8 +201,13 @@ class ReportAdminAPI(APIView):
         year = request.POST.get('year')
         other = request.POST.get('other')
         time = request.POST.get('time')
-        report = Reports.objects.create(title=title, author=author, place=place, time=time, year=year, other=other,
-                                        pdf_path=pdf)
+        create_time = request.POST.get('create_time')
+        if create_time == '':
+            report = Reports.objects.create(title=title, author=author, place=place, time=time, year=year, other=other,
+                                            pdf_path=pdf)
+        else:
+            report = Reports.objects.create(title=title, author=author, place=place, time=time, year=year, other=other,
+                                            pdf_path=pdf, create_time=create_time)
         return self.success(ReportSerializer(report).data)
 
     # @validate_serializer(CreateReportSerializer)

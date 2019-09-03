@@ -15,9 +15,14 @@ class ExchangeAdminAPI(APIView):
     def post(self, request):
         title = request.POST.get('title')
         content = request.POST.get('content')
+        create_time = request.POST.get('create_time')
         type = request.POST.get('subType')
-        exchange = Exchange.objects.create(title=title, content=content, type=type)
-        news = News.objects.create(title=title, content=content, type='exchange')
+        if create_time == '':
+            exchange = Exchange.objects.create(title=title, content=content, type=type)
+            news = News.objects.create(title=title, content=content, type='exchange')
+        else:
+            exchange = Exchange.objects.create(title=title, content=content, create_time=create_time, type=type)
+            news = News.objects.create(title=title, content=content, create_time=create_time, type='exchange')
         exchange.news_id = news.id
         exchange.save()
         return self.success(ExchangeSerializer(exchange).data)
@@ -32,8 +37,10 @@ class ExchangeAdminAPI(APIView):
             setattr(exchange, 'content', data['content'])
             setattr(exchange, 'title', data['title'])
             setattr(exchange, 'type', data['type'])
+            setattr(exchange, 'create_time', data['create_time'])
             setattr(news, 'content', data['content'])
             setattr(news, 'title', data['title'])
+            setattr(news, 'create_time', data['create_time'])
             exchange.save()
             news.save()
             return self.success(ExchangeSerializer(exchange).data)

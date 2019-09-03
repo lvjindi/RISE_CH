@@ -16,14 +16,18 @@ class SeminarAdminAPI(APIView):
     # @validate_serializer(CreateNewsSerializer)
     @super_admin_required
     def post(self, request):
-
         title = request.POST.get('title')
         content = request.POST.get('content')
         place = request.POST.get('place')
         time = request.POST.get('time')
         speaker = request.POST.get('speaker')
-        seminar = Seminars.objects.create(title=title, content=content, place=place, time=time, speaker=speaker)
-        news = News.objects.create(title=title, content=content, type='seminar')
+        create_time = request.POST.get('create_time')
+        if create_time == '':
+            seminar = Seminars.objects.create(title=title, content=content, place=place, time=time, speaker=speaker)
+        else:
+            seminar = Seminars.objects.create(title=title, content=content, place=place, time=time, speaker=speaker,
+                                              create_time=create_time)
+        news = News.objects.create(title=title, content=content, type='seminar', create_time=create_time)
         seminar.news_id = news.id
         seminar.save()
         return self.success(SeminarsSerializer(seminar).data)
@@ -40,8 +44,10 @@ class SeminarAdminAPI(APIView):
             setattr(seminar, 'speaker', data['speaker'])
             setattr(seminar, 'title', data['title'])
             setattr(seminar, 'content', data['content'])
+            setattr(seminar, 'create_time', data['create_time'])
             setattr(news, 'title', data['title'])
             setattr(news, 'content', data['content'])
+            setattr(news, 'create_time', data['create_time'])
             seminar.save()
             news.save()
             return self.success(SeminarsSerializer(seminar).data)

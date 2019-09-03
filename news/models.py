@@ -1,7 +1,9 @@
 from django.db import models
 
-
 # Create your models here.
+from django.utils import timezone
+
+
 class News(models.Model):
     title = models.TextField()
     content = models.TextField(null=True)
@@ -9,7 +11,7 @@ class News(models.Model):
     image = models.ImageField(upload_to='image/')
     sliderFlag = models.BooleanField(default=False)
     type = models.TextField(null=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(default=timezone.now())
     last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:

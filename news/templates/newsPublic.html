@@ -18,7 +18,7 @@
 <body onload="NavLink(),checkLogin()">
 <!--HeadBegin-->
 <div id="Head">
-    <div id="Title"><img src="/static/images/logo.png"/>RISE网站后台管理系统
+    <div id="Title"><img src="/static/images/logo.png"/>RISE中文网站后台管理系统
         <div id="login"></div>
         <div id="exit"></div>
     </div>
@@ -39,7 +39,7 @@
         <div id="articleEditor">
             <form id="newsForm" method="post" action="/" enctype="multipart/form-data">
                 <span>标题</span><input type="text" name="articleTitle" id="articleTitle"><br>
-
+                <span>创建时间</span><input type="datetime-local" id="createTime">
                 <div id="selectPart" style="">
                     <span>分类</span>
                     <select id="type" name="articleClass" onchange="showSubclass(this.value);">
@@ -47,7 +47,7 @@
                         <option value="seminar">学术报告</option>
                         <option value="conference">学术会议</option>
                         <option value="exchange">学术交流</option>
-                        <option value="research">科学研究</option>
+                        <option value="research">科学s研究</option>
                         <option value="join">招纳贤士</option>
                         <option value="aboutUs">关于我们</option>
                         <option value="contact">联系我们</option>

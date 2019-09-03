@@ -328,11 +328,12 @@ function leavePublic() {
         processData: false,
         success: function (data) {
             if (!data.error) {
-                alert("发送成功")
-                location.reload('/api/admin/leave_public')
+                alert("发送成功！请注意查收回复邮件")
+                location.reload()
                 console.log(data)
             } else {
-                alert("发送失败: " + data.error)
+                alert("发送失败: " + data.data)
+                location.reload()
             }
 
 
@@ -526,10 +527,10 @@ function newsPublic() {
     var formData = new FormData();
     if (document.getElementById('type').value == 'news') {
         url = '/api/admin/news';
-
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
+        formData.append('create_time', $('#createTime').val());
     }
     if (document.getElementById('type').value == 'seminar') {
         url = '/api/admin/seminar';
@@ -539,6 +540,7 @@ function newsPublic() {
         formData.append('speaker', $('#speaker').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
+        formData.append('create_time', $('#createTime').val());
     }
     if (document.getElementById('type').value == 'conference') {
         url = '/api/admin/conference';
@@ -547,12 +549,14 @@ function newsPublic() {
         formData.append('time', $('#time').val());
         formData.append('place', $('#place').val());
         formData.append('content', ue.getContent());
+        formData.append('create_time', $('#createTime').val());
     }
     if (document.getElementById('type').value == 'exchange') {
         url = '/api/admin/exchange';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
+        formData.append('create_time', $('#createTime').val());
     }
     if (document.getElementById('type').value == 'research') {
         if ($('#subSelect').val() == 'introduction') {
@@ -560,6 +564,7 @@ function newsPublic() {
             formData.append('subType', $('#subSelect').val());
             formData.append('title', $('#articleTitle').val());
             formData.append('content', ue.getContent());
+            formData.append('create_time', $('#createTime').val());
         }
         if ($('#subSelect').val() == 'project') {
             url = '/api/admin/project';
@@ -572,6 +577,7 @@ function newsPublic() {
             formData.append('abstract', $('#abstract').val());
             formData.append('keywords', $('#keywords').val());
             formData.append('other', $('#other').val());
+            formData.append('create_time', $('#createTime').val());
         }
         if ($('#subSelect').val() == 'publication') {
             url = '/api/admin/publication';
@@ -581,6 +587,7 @@ function newsPublic() {
             formData.append('place', $('#place').val());
             formData.append('year', $('#year').val());
             formData.append('other', $('#other').val());
+            formData.append('create_time', $('#createTime').val());
         }
         if ($('#subSelect').val() == 'report') {
             url = '/api/admin/report';
@@ -592,6 +599,7 @@ function newsPublic() {
             formData.append('place', $('#place').val());
             formData.append('year', $('#year').val());
             formData.append('other', $('#other').val());
+            formData.append('create_time', $('#createTime').val());
         }
 
     }
@@ -600,18 +608,21 @@ function newsPublic() {
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
+        formData.append('create_time', $('#createTime').val());
     }
     if (document.getElementById('type').value == 'aboutUs') {
         url = '/api/admin/aboutUs';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
+        formData.append('create_time', $('#createTime').val());
     }
     if (document.getElementById('type').value == 'contact') {
         url = '/api/admin/contact';
         formData.append('subType', $('#subSelect').val());
         formData.append('title', $('#articleTitle').val());
         formData.append('content', ue.getContent());
+        formData.append('create_time', $('#createTime').val());
     }
     $.ajax({
         type: 'POST',
@@ -1274,13 +1285,15 @@ function message_edit(id) {
             if (data.error) {
                 alert(data.error)
             }
-            var tb = document.getElementById("tableStyle");
-            var rowNum = tb.rows.length;
-            for (i = 0; i < rowNum; i++) {
-                tb.deleteRow(i);
-                rowNum = rowNum - 1;
-                i = i - 1;
-            }
+            var tb = document.getElementById("tdTable");
+            var parent = tb.parentNode;
+            parent.removeChild(tb);
+            // var rowNum = tb.rows.length;
+            // for (i = 0; i < rowNum; i++) {
+            //     tb.deleteRow(i);
+            //     rowNum = rowNum - 1;
+            //     i = i - 1;
+            // }
             str = ' <form id="newsForm" method="post" action="/" enctype="multipart/form-data" style="margin-left: 30px;margin-top: 20px">\n' +
                 '                <span>标题</span><input type="text" name="articleTitle" id="articleTitle" value=\'' + data.title + '\'><br>\n' +
                 '                <div id="lable" style="margin-top: 20px">新闻内容</div>\n' +
@@ -1339,6 +1352,7 @@ function news_edit(id) {
             //   添加编辑内容
             var strfont = ' <form id="newsForm" method="put" action="/" enctype="multipart/form-data" style="margin-left: 30px;margin-top: 20px">\n' +
                 '                <span>标题</span><input type="text" name="articleTitle" id="articleTitle" ><br>\n' +
+                '                <span>创建时间</span><input type="datetime-local" id="createTime">\n' +
                 '\n' +
                 '                \n' +
                 '                <br>\n';
@@ -1350,6 +1364,7 @@ function news_edit(id) {
                 '                        serverUrl: "/api/controller/"\n' +
                 '                    });//实例化编辑\n' +
                 '  document.getElementById(\'articleTitle\').value = \'' + data.title + '\';\n' +
+                '  document.getElementById(\'createTime\').value = \'' + data.create_time + '\';\n' +
                 '            var timer = setTimeout(function () {\n' +
                 '                ue.setContent(\'' + data.content + '\');\n' +
                 '            }, 100);' +
@@ -1748,25 +1763,41 @@ function newsEditSubmit(url, id) {
     var urltype = url.split('/');
     var newstype = urltype[urltype.length - 1]
     var title = $('#articleTitle').val();
+    var create_time = $('#createTime').val();
     var content = ue.getContent();
     var data;
     var type;
     if (newstype.startsWith('seminar')) {
         var place = $('#place').val();
         var speaker = $('#speaker').val();
-        data = {'id': id, 'title': title, 'content': content, 'place': place, 'speaker': speaker};
+
+        data = {
+            'id': id,
+            'title': title,
+            'create_time': create_time,
+            'content': content,
+            'place': place,
+            'speaker': speaker
+        };
     }
     if (newstype.startsWith('news') || newstype.startsWith('introduction') || newstype.startsWith('join') || newstype.startsWith('aboutUs') || newstype.startsWith('contact')) {
-        data = {'id': id, 'title': title, 'content': content};
+        data = {'id': id, 'title': title, 'content': content, 'create_time': create_time,};
     }
     if (newstype.startsWith('exchange')) {
         type = $('#subSelect').val()
-        data = {'id': id, 'title': title, 'content': content, 'type': type};
+        data = {'id': id, 'title': title, 'content': content, 'type': type, 'create_time': create_time,};
     }
     if (newstype.startsWith('conference')) {
         type = $('#subSelect').val()
         var place = $('#place').val();
-        data = {'id': id, 'title': title, 'content': content, 'type': type, 'place': place};
+        data = {
+            'id': id,
+            'title': title,
+            'content': content,
+            'type': type,
+            'place': place,
+            'create_time': create_time,
+        };
     }
     $.ajax({
         url: url,
